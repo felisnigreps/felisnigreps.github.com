@@ -89,7 +89,7 @@ var _hmt = _hmt || [];
 </div>
     </header>
     <div id="container" class="clearfix">
-      <div id="main" class="Java" itemscope itemprop="blogPost">
+      <div id="main" class="post" itemscope itemprop="blogPost">
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
   <h1 itemprop="name">
@@ -137,8 +137,7 @@ var _hmt = _hmt || [];
 <p>多说一句，这些提交的线程被存放在一个无界队列里，这个无界队列是一个有序队列。（BlockingQueue）</p>
 <h3 id="2-Semaphore"><a href="#2-Semaphore" class="headerlink" title="2. Semaphore"></a>2. Semaphore</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestSemaphore</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line">    <span class="comment">//latrine问题 一次只能容纳2个人 有10个人在排队 每个人都需要占用一会 等10个人使用结束后进行清扫</span></div><div class="line">    <span class="keyword">int</span> id;</div><div class="line">    <span class="comment">//创建信号量</span></div><div class="line">    Semaphore limit;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TestSemaphore</span><span class="params">(<span class="keyword">int</span> id, Semaphore limit)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.id = id;</div><div class="line">        <span class="keyword">this</span>.limit = limit;</div><div class="line">    &#125;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            limit.acquire();</div><div class="line">            System.out.println(<span class="keyword">this</span>.id + <span class="string">"is using...."</span>);</div><div class="line">            Thread.sleep(<span class="number">2000</span>);</div><div class="line">            System.out.println(<span class="keyword">this</span>.id + <span class="string">"is done here"</span>);</div><div class="line">            limit.release();</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        ExecutorService service = Executors.newCachedThreadPool();</div><div class="line">        Semaphore semaphore = <span class="keyword">new</span> Semaphore(<span class="number">2</span>);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">            service.submit(<span class="keyword">new</span> TestSemaphore(i, semaphore));</div><div class="line">        &#125;</div><div class="line">        service.shutdown();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="3"><a href="#3" class="headerlink" title="3."></a>3.</h3><h3 id="4"><a href="#4" class="headerlink" title="4."></a>4.</h3><h3 id="5"><a href="#5" class="headerlink" title="5."></a>5.</h3><h3 id="6"><a href="#6" class="headerlink" title="6."></a>6.</h3><h3 id="7"><a href="#7" class="headerlink" title="7."></a>7.</h3><h3 id="8-CountDownLatch"><a href="#8-CountDownLatch" class="headerlink" title="8. CountDownLatch"></a>8. CountDownLatch</h3><p>下方代码简单的模拟了多人跑步，等所有人到达终点后发出信息的过程：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnotherCountDownLatchDemo</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="comment">//设置一个开始信号，一个结束信号</span></div><div class="line">        CountDownLatch start = <span class="keyword">new</span> CountDownLatch(<span class="number">1</span>);</div><div class="line">        CountDownLatch end = <span class="keyword">new</span> CountDownLatch(<span class="number">100</span>);</div><div class="line">        </div><div class="line">        <span class="comment">//创建100个线程并start</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</div><div class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Player(<span class="string">"CG"</span>+i,start,end)).start();</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//开始</span></div><div class="line">        start.countDown();</div><div class="line">        <span class="comment">//等待结束</span></div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            end.await();</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//都结束了打印</span></div><div class="line">        System.out.println(<span class="string">"we all done here"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Player</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line">        <span class="keyword">private</span> String name;</div><div class="line">        <span class="keyword">private</span> CountDownLatch startSignal;</div><div class="line">        <span class="keyword">private</span> CountDownLatch endSignal;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Player</span><span class="params">(String name, CountDownLatch startSignal, CountDownLatch endSignal)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>.name = name;</div><div class="line">            <span class="keyword">this</span>.startSignal = startSignal;</div><div class="line">            <span class="keyword">this</span>.endSignal = endSignal;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                <span class="comment">//等待起跑信号</span></div><div class="line">                startSignal.await();</div><div class="line">                play();</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;<span class="keyword">finally</span> &#123;</div><div class="line">                <span class="comment">//跑完了减1</span></div><div class="line">                endSignal.countDown();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span></span>&#123;</div><div class="line">            System.out.println(<span class="keyword">this</span>.name+<span class="string">"done!"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h3 id="9"><a href="#9" class="headerlink" title="9."></a>9.</h3><h3 id="10"><a href="#10" class="headerlink" title="10."></a>10.</h3><h3 id="11"><a href="#11" class="headerlink" title="11."></a>11.</h3><p>标签： Java基础 concurrent</p>
-  
+<h3 id="9"><a href="#9" class="headerlink" title="9."></a>9.</h3><h3 id="10"><a href="#10" class="headerlink" title="10."></a>10.</h3><h3 id="11"><a href="#11" class="headerlink" title="11."></a>11.</h3>  
 	</div>
 		<footer class="article-footer clearfix">
 
@@ -181,52 +180,6 @@ var _hmt = _hmt || [];
 
 
 </div>  
-      <div id="asidepart">
-<div id="authorInfo">
-	
-		<div class="author-logo"></div>		
-	
-	
-	<section class="author-info">
-		
-			<p> Levon</p>
-		
-		
-			<p>	大自然爱好者</p>
-		
-	</section>
-	 
-	<div class="social-font" class="clearfix">
-		
-		
-		
-		<a href="https://github.com/felisnigreps" target="_blank" title="github"></a>
-		
-		
-	</div>
-</div>
-<aside class="clearfix">
-
-
-  
-
-  
-<div class="tagslist">
-	<p class="asidetitle">Tags</p>
-		<ul class="clearfix">
-		
-			<li><a href="/tags/Java基础/" title="Java基础">Java基础<sup>1</sup></a></li>
-		
-		</ul>
-</div>
-
-
-  <div class="rsspart">
-	<a href="/Tinnypp/atom.xml" target="_blank" title="rss">RSS</a>
-</div>
-
-</aside>
-</div>
     </div>
     <footer><div id="footer" >
 	<div class="copyright">
@@ -340,8 +293,69 @@ $(document).ready(function(){
 </script>
 
 
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
 
 
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tiltcat"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';    //change to ds.src = '/js/embed.js'; to add useragent for duoshuo
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
 
 <script type="text/javascript">
   function footerPosition() {
@@ -359,4 +373,4 @@ $(document).ready(function(){
 
 
   </body>
- </html>
+</html>
