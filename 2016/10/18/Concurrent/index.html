@@ -43,7 +43,7 @@ Executors   ">
 				<h1 class="site-name"><a href="/" title="Let&#39;s do this!">Let&#39;s do this!</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -56,7 +56,7 @@ Executors   ">
 					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yoursite.com">
 					</form>
 					
@@ -80,7 +80,7 @@ Executors   ">
     </p>
   <p class="article-time">
     <time datetime="2016-10-18T13:20:37.000Z" itemprop="datePublished">2016-10-18</time>
-    更新日期:<time datetime="2016-10-20T13:48:42.000Z" itemprop="dateModified">2016-10-20</time>
+    Updated:<time datetime="2016-10-20T13:48:42.000Z" itemprop="dateModified">2016-10-20</time>
     
   </p>
 </header>
@@ -88,7 +88,7 @@ Executors   ">
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目錄</strong>
+			<strong class="toc-title">Contents</strong>
 		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#初识-Java-util-concurrent"><span class="toc-number">1.</span> <span class="toc-text">初识 Java.util.concurrent</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Excutors"><span class="toc-number">1.0.1.</span> <span class="toc-text">1. Excutors</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Semaphore"><span class="toc-number">1.0.2.</span> <span class="toc-text">2. Semaphore</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-ReentrantLock"><span class="toc-number">1.0.3.</span> <span class="toc-text">3. ReentrantLock:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-BlockingQueue"><span class="toc-number">1.0.4.</span> <span class="toc-text">4. BlockingQueue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5"><span class="toc-number">1.0.5.</span> <span class="toc-text">5.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6"><span class="toc-number">1.0.6.</span> <span class="toc-text">6.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7"><span class="toc-number">1.0.7.</span> <span class="toc-text">7.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-CountDownLatch"><span class="toc-number">1.0.8.</span> <span class="toc-text">8. CountDownLatch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9"><span class="toc-number">1.0.9.</span> <span class="toc-text">9.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10"><span class="toc-number">1.0.10.</span> <span class="toc-text">10.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11"><span class="toc-number">1.0.11.</span> <span class="toc-text">11.</span></a></li></ol></li></ol></li></ol>
 		</div>
 		
@@ -169,23 +169,27 @@ Executors   ">
 </nav>
 
 	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目錄</strong>
+  <strong class="toc-title">Contents</strong>
   <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#初识-Java-util-concurrent"><span class="toc-number">1.</span> <span class="toc-text">初识 Java.util.concurrent</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Excutors"><span class="toc-number">1.0.1.</span> <span class="toc-text">1. Excutors</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Semaphore"><span class="toc-number">1.0.2.</span> <span class="toc-text">2. Semaphore</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-ReentrantLock"><span class="toc-number">1.0.3.</span> <span class="toc-text">3. ReentrantLock:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-BlockingQueue"><span class="toc-number">1.0.4.</span> <span class="toc-text">4. BlockingQueue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5"><span class="toc-number">1.0.5.</span> <span class="toc-text">5.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6"><span class="toc-number">1.0.6.</span> <span class="toc-text">6.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7"><span class="toc-number">1.0.7.</span> <span class="toc-text">7.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-CountDownLatch"><span class="toc-number">1.0.8.</span> <span class="toc-text">8. CountDownLatch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9"><span class="toc-number">1.0.9.</span> <span class="toc-text">9.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10"><span class="toc-number">1.0.10.</span> <span class="toc-text">10.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11"><span class="toc-number">1.0.11.</span> <span class="toc-text">11.</span></a></li></ol></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 
   
 <div class="tagslist">
-	<p class="asidetitle">標簽</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			<li><a href="/tags/Java基础/" title="Java基础">Java基础<sup>1</sup></a></li>
@@ -195,7 +199,7 @@ Executors   ">
 
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS 訂閱</a>
+	<a href="null" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
@@ -332,6 +336,18 @@ $(document).ready(function(){
 });     
 </script>
 
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"tiltcat"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
 
 
 
