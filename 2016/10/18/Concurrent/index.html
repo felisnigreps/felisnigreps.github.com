@@ -1,0 +1,341 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>初识 Java.util.concurrent | Let&#39;s do this!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="tiltcat">
+    
+    <meta name="description" content="初识 Java.util.concurrent
+
+concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解给描述的清晰一点，内容比较浅，初识嘛，问题不大~
+
+有部分细节文中没有提到，请查询 API
+
+
+Executors   ">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Let&#39;s do this!" title="Let&#39;s do this!"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Let&#39;s do this!">Let&#39;s do this!</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/10/18/Concurrent/" title="初识 Java.util.concurrent" itemprop="url">初识 Java.util.concurrent</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="tiltcat">tiltcat</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-10-18T13:20:37.000Z" itemprop="datePublished">2016-10-18</time>
+    更新日期:<time datetime="2016-10-20T13:48:42.000Z" itemprop="dateModified">2016-10-20</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#初识-Java-util-concurrent"><span class="toc-number">1.</span> <span class="toc-text">初识 Java.util.concurrent</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Excutors"><span class="toc-number">1.0.1.</span> <span class="toc-text">1. Excutors</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Semaphore"><span class="toc-number">1.0.2.</span> <span class="toc-text">2. Semaphore</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-ReentrantLock"><span class="toc-number">1.0.3.</span> <span class="toc-text">3. ReentrantLock:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-BlockingQueue"><span class="toc-number">1.0.4.</span> <span class="toc-text">4. BlockingQueue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5"><span class="toc-number">1.0.5.</span> <span class="toc-text">5.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6"><span class="toc-number">1.0.6.</span> <span class="toc-text">6.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7"><span class="toc-number">1.0.7.</span> <span class="toc-text">7.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-CountDownLatch"><span class="toc-number">1.0.8.</span> <span class="toc-text">8. CountDownLatch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9"><span class="toc-number">1.0.9.</span> <span class="toc-text">9.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10"><span class="toc-number">1.0.10.</span> <span class="toc-text">10.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11"><span class="toc-number">1.0.11.</span> <span class="toc-text">11.</span></a></li></ol></li></ol></li></ol>
+		</div>
+		
+		<h1 id="初识-Java-util-concurrent"><a href="#初识-Java-util-concurrent" class="headerlink" title="初识 Java.util.concurrent"></a>初识 Java.util.concurrent</h1><hr>
+<blockquote>
+<p>concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解给描述的清晰一点，内容比较浅，初识嘛，问题不大~</p>
+</blockquote>
+<p>有部分细节文中没有提到，请查询 <a href="http://tool.oschina.net/apidocs/apidoc?api=jdk-zh" target="_blank" rel="external">API</a></p>
+<blockquote>
+<ul>
+<li>Executors                  </li>
+<li>ExecutorService          </li>
+<li>Semaphore                </li>
+<li>ReentrantLock            </li>
+<li>Future                    </li>
+<li>BlockingQueue             </li>
+<li>CompletionService         </li>
+<li>CountDownLatch            </li>
+<li>CyclicBarrier             </li>
+<li>Future           </li>
+<li>ConcurrentHashMap</li>
+</ul>
+</blockquote>
+<h3 id="1-Excutors"><a href="#1-Excutors" class="headerlink" title="1. Excutors"></a>1. Excutors</h3><blockquote>
+<p> 主要方法：</p>
+<ul>
+<li>newCachedThreadPool: 可重用的固定线程数量的线程池 </li>
+<li>newFixedThreadPool:  无界的按需创建的线程池，60s自动回收未被使用的线程。</li>
+<li>newSingleThreadExcutor: 单个线程的Executor</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyExecutor</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line">    <span class="comment">//创建一个fix线程池 含有5个线程 执行10个命令 每个命令打印一句话 休眠一段时间 看执行效果</span></div><div class="line">    <span class="keyword">private</span> String name;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyExecutor</span><span class="params">(String name)</span></span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            System.out.println(<span class="string">"Hi! I'm "</span>+<span class="keyword">this</span>.name+<span class="string">"， look at me!"</span>);</div><div class="line">            Thread.sleep(<span class="number">3000</span>);</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        ExecutorService service = Executors.newFixedThreadPool(<span class="number">5</span>);</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</div><div class="line">                service.execute(<span class="keyword">new</span> MyExecutor(<span class="string">"Mr.Meese"</span>+i));</div><div class="line">        &#125;</div><div class="line">        service.shutdown();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到包含了5个线程的线程池只能执行5个线程，只有前5个线程执行完毕，才能继续执行。</p>
+<p>多说一句，这些提交的线程被存放在一个无界队列里，这个无界队列是一个有序队列。（BlockingQueue）</p>
+<h3 id="2-Semaphore"><a href="#2-Semaphore" class="headerlink" title="2. Semaphore"></a>2. Semaphore</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestSemaphore</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line">    <span class="comment">//latrine问题 一次只能容纳2个人 有10个人在排队 每个人都需要占用一会 等10个人使用结束后进行清扫</span></div><div class="line">    <span class="keyword">int</span> id;</div><div class="line">    <span class="comment">//创建信号量</span></div><div class="line">    Semaphore limit;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TestSemaphore</span><span class="params">(<span class="keyword">int</span> id, Semaphore limit)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.id = id;</div><div class="line">        <span class="keyword">this</span>.limit = limit;</div><div class="line">    &#125;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            limit.acquire();</div><div class="line">            System.out.println(<span class="keyword">this</span>.id + <span class="string">"is using...."</span>);</div><div class="line">            Thread.sleep(<span class="number">2000</span>);</div><div class="line">            System.out.println(<span class="keyword">this</span>.id + <span class="string">"is done here"</span>);</div><div class="line">            limit.release();</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        ExecutorService service = Executors.newCachedThreadPool();</div><div class="line">        Semaphore semaphore = <span class="keyword">new</span> Semaphore(<span class="number">2</span>);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">            service.submit(<span class="keyword">new</span> TestSemaphore(i, semaphore));</div><div class="line">        &#125;</div><div class="line">        service.shutdown();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="3-ReentrantLock"><a href="#3-ReentrantLock" class="headerlink" title="3. ReentrantLock:"></a>3. ReentrantLock:</h3><blockquote>
+<p>一个可重入的互斥锁。 可重入就代表某一个线程可以多次获得一个锁。可以理解为加强版的synchronized。</p>
+</blockquote>
+<p>先看API上的例子</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> </span>&#123;</div><div class="line">  <span class="keyword">private</span> <span class="keyword">final</span> ReentrantLock lock = <span class="keyword">new</span> ReentrantLock();</div><div class="line">  <span class="comment">// ...</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">m</span><span class="params">()</span> </span>&#123; </div><div class="line">    lock.lock();  <span class="comment">// block until condition holds</span></div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">      <span class="comment">// ... method body</span></div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">      lock.unlock()</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>一个线程申请锁，如果这个锁没有被其他线程占用呢，那么就立即返回。如果这个锁已经被当前线程占用了呢，那么就将保持计数加1，如果被别的进程占用了的话，大部分情况下这个锁就处于休眠状态，然后等待获取锁，锁的个数可以通过 <code>getHoldCount()</code>方法来查看。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReentrantLockDemo</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</div><div class="line">    <span class="keyword">private</span> ReentrantLock lock;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ReentrantLockDemo</span><span class="params">(<span class="keyword">int</span> id, ReentrantLock lock)</span></span>&#123;</div><div class="line">        <span class="keyword">this</span>.id = id;</div><div class="line">        <span class="keyword">this</span>.lock = lock;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        lock.lock();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            Thread.sleep(<span class="number">1000</span>);</div><div class="line">            System.out.println(<span class="keyword">this</span>.id+<span class="string">" go go go!"</span>);</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        System.out.println(<span class="keyword">this</span>.id+<span class="string">" is done."</span>);</div><div class="line">        lock.unlock();</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        ExecutorService service = Executors.newCachedThreadPool();</div><div class="line">        ReentrantLock lock = <span class="keyword">new</span> ReentrantLock();</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">7</span>;i++)&#123;</div><div class="line">            service.execute(<span class="keyword">new</span> ReentrantLockDemo(i,lock));</div><div class="line">        &#125;</div><div class="line">        service.shutdown();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>简单的应用就是加个锁，没啥可说的。</p>
+<h3 id="4-BlockingQueue"><a href="#4-BlockingQueue" class="headerlink" title="4. BlockingQueue"></a>4. BlockingQueue</h3><h3 id="5"><a href="#5" class="headerlink" title="5."></a>5.</h3><h3 id="6"><a href="#6" class="headerlink" title="6."></a>6.</h3><h3 id="7"><a href="#7" class="headerlink" title="7."></a>7.</h3><h3 id="8-CountDownLatch"><a href="#8-CountDownLatch" class="headerlink" title="8. CountDownLatch"></a>8. CountDownLatch</h3><p>下方代码简单的模拟了多人跑步，等所有人到达终点后发出信息的过程：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnotherCountDownLatchDemo</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="comment">//设置一个开始信号，一个结束信号</span></div><div class="line">        CountDownLatch start = <span class="keyword">new</span> CountDownLatch(<span class="number">1</span>);</div><div class="line">        CountDownLatch end = <span class="keyword">new</span> CountDownLatch(<span class="number">100</span>);</div><div class="line">        </div><div class="line">        <span class="comment">//创建100个线程并start</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</div><div class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Player(<span class="string">"CG"</span>+i,start,end)).start();</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//开始</span></div><div class="line">        start.countDown();</div><div class="line">        <span class="comment">//等待结束</span></div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            end.await();</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//都结束了打印</span></div><div class="line">        System.out.println(<span class="string">"we all done here"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Player</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line">        <span class="keyword">private</span> String name;</div><div class="line">        <span class="keyword">private</span> CountDownLatch startSignal;</div><div class="line">        <span class="keyword">private</span> CountDownLatch endSignal;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Player</span><span class="params">(String name, CountDownLatch startSignal, CountDownLatch endSignal)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>.name = name;</div><div class="line">            <span class="keyword">this</span>.startSignal = startSignal;</div><div class="line">            <span class="keyword">this</span>.endSignal = endSignal;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                <span class="comment">//等待起跑信号</span></div><div class="line">                startSignal.await();</div><div class="line">                play();</div><div class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;<span class="keyword">finally</span> &#123;</div><div class="line">                <span class="comment">//跑完了减1</span></div><div class="line">                endSignal.countDown();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">play</span><span class="params">()</span></span>&#123;</div><div class="line">            System.out.println(<span class="keyword">this</span>.name+<span class="string">"done!"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="9"><a href="#9" class="headerlink" title="9."></a>9.</h3><h3 id="10"><a href="#10" class="headerlink" title="10."></a>10.</h3><h3 id="11"><a href="#11" class="headerlink" title="11."></a>11.</h3><p>标签： Java基础 concurrent</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java基础/">Java基础</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2016/10/18/Concurrent/" data-title="初识 Java.util.concurrent | Let&#39;s do this!" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/10/18/hello-world/"  title="Hello World">
+ <strong>NEXT:</strong><br/> 
+ <span>Hello World
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#初识-Java-util-concurrent"><span class="toc-number">1.</span> <span class="toc-text">初识 Java.util.concurrent</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Excutors"><span class="toc-number">1.0.1.</span> <span class="toc-text">1. Excutors</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Semaphore"><span class="toc-number">1.0.2.</span> <span class="toc-text">2. Semaphore</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-ReentrantLock"><span class="toc-number">1.0.3.</span> <span class="toc-text">3. ReentrantLock:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-BlockingQueue"><span class="toc-number">1.0.4.</span> <span class="toc-text">4. BlockingQueue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5"><span class="toc-number">1.0.5.</span> <span class="toc-text">5.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6"><span class="toc-number">1.0.6.</span> <span class="toc-text">6.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7"><span class="toc-number">1.0.7.</span> <span class="toc-text">7.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-CountDownLatch"><span class="toc-number">1.0.8.</span> <span class="toc-text">8. CountDownLatch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9"><span class="toc-number">1.0.9.</span> <span class="toc-text">9.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10"><span class="toc-number">1.0.10.</span> <span class="toc-text">10.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11"><span class="toc-number">1.0.11.</span> <span class="toc-text">11.</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/Java基础/" title="Java基础">Java基础<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yoursite.com" target="_blank" title="tiltcat">tiltcat</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+
+
+
+
+  </body>
+</html>
