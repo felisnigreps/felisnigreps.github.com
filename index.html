@@ -256,8 +256,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/10/18/concurrent/" itemprop="url">
-                  初识 Java.util.concurrent
+                <a class="post-title-link" href="/2016/10/27/我们说说Spring AOP/" itemprop="url">
+                  我们说说Spring AOP
                 </a>
               
             
@@ -270,8 +270,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">post.posted</span>
-            <time itemprop="dateCreated" datetime="2016-10-18T21:20:37+08:00" content="2016-10-18">
-              2016-10-18
+            <time itemprop="dateCreated" datetime="2016-10-27T00:02:30+08:00" content="2016-10-27">
+              2016-10-27
             </time>
           </span>
 
@@ -284,8 +284,8 @@
               <span class="post-meta-item-text">post.in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
                   </a>
                 </span>
 
@@ -300,8 +300,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/10/18/concurrent/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/18/concurrent/" itemprop="commentsCount"></span>
+                <a href="/2016/10/27/我们说说Spring AOP/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/27/我们说说Spring AOP/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -325,11 +325,23 @@
 
       
         
-          <h2 id="初识-Java-util-concurrent"><a href="#初识-Java-util-concurrent" class="headerlink" title="初识 Java.util.concurrent"></a>初识 Java.util.concurrent</h2><hr>
+          <h1 id="我们说说Spring-AOP"><a href="#我们说说Spring-AOP" class="headerlink" title="我们说说Spring AOP"></a>我们说说Spring AOP</h1><hr>
 <blockquote>
-<p>concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~<br>
+<p>本文的内容几乎都来自于Pro.Spring.4.<br>具体讨论以下几点：</p>
+<ul>
+<li>AOP基础</li>
+<li>AOP种类：静态AOP(AspectJ)和动态AOP(Spring AOP)</li>
+<li>AOP in Spring</li>
+<li>Spring AOP的通知和切入点</li>
+<li>AOP的代理：JDK动态代理&amp;CGLIB代理</li>
+<li>AOP的使用</li>
+<li>Pointcuts的高级使用：组合切入点和控制流的切入点</li>
+<li>AOP框架服务：Spring完全支持声明&amp;透明的配置，我们会使用三种方式（ProxyFactoryBean，aop命名空间，@AspectJ注解）来为你的应用来进行AOP应用</li>
+<li>整合AspectJ</li>
+</ul>
+</blockquote>
           <div class="post-more-link text-center">
-            <a class="btn" href="/2016/10/18/concurrent/#more" rel="contents">
+            <a class="btn" href="/2016/10/27/我们说说Spring AOP/#more" rel="contents">
               post.read_more &raquo;
             </a>
           </div>
@@ -380,8 +392,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/10/18/hello-world/" itemprop="url">
-                  Hello World
+                <a class="post-title-link" href="/2016/10/18/concurrent/" itemprop="url">
+                  初识 Java.util.concurrent
                 </a>
               
             
@@ -394,7 +406,7 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">post.posted</span>
-            <time itemprop="dateCreated" datetime="2016-10-18T21:16:01+08:00" content="2016-10-18">
+            <time itemprop="dateCreated" datetime="2016-10-18T21:20:37+08:00" content="2016-10-18">
               2016-10-18
             </time>
           </span>
@@ -408,8 +420,8 @@
               <span class="post-meta-item-text">post.in</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/2/" itemprop="url" rel="index">
-                    <span itemprop="name">2</span>
+                  <a href="/categories/Java基础/" itemprop="url" rel="index">
+                    <span itemprop="name">Java基础</span>
                   </a>
                 </span>
 
@@ -424,8 +436,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/10/18/hello-world/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/18/hello-world/" itemprop="commentsCount"></span>
+                <a href="/2016/10/18/concurrent/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/18/concurrent/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -449,18 +461,14 @@
 
       
         
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-          
+          <h2 id="初识-Java-util-concurrent"><a href="#初识-Java-util-concurrent" class="headerlink" title="初识 Java.util.concurrent"></a>初识 Java.util.concurrent</h2><hr>
+<blockquote>
+<p>concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/10/18/concurrent/#more" rel="contents">
+              post.read_more &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -545,7 +553,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">state.tags</span>
               </a>
             </div>
