@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Java基础," />
+  <meta name="keywords" content="Java.util.concurrent," />
 
 
 
@@ -86,41 +86,20 @@
 
 <meta name="description" content="初识 Java.util.concurrent
 
-concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~
-
-部分细节文中没有提到，请查询 API
-
-
-Executors                  
-Semaphore                
-ReentrantL">
+concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~">
 <meta property="og:type" content="article">
 <meta property="og:title" content="初识 Java.util.concurrent">
 <meta property="og:url" content="http://tiltcat.com/2016/10/18/concurrent/index.html">
 <meta property="og:site_name" content="Let's do this">
 <meta property="og:description" content="初识 Java.util.concurrent
 
-concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~
-
-部分细节文中没有提到，请查询 API
-
-
-Executors                  
-Semaphore                
-ReentrantL">
-<meta property="og:updated_time" content="2016-10-25T14:59:41.000Z">
+concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~">
+<meta property="og:updated_time" content="2016-10-26T14:34:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识 Java.util.concurrent">
 <meta name="twitter:description" content="初识 Java.util.concurrent
 
-concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~
-
-部分细节文中没有提到，请查询 API
-
-
-Executors                  
-Semaphore                
-ReentrantL">
+concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~">
 
 
 
@@ -132,8 +111,8 @@ ReentrantL">
     fancybox: true,
     motion: true,
     duoshuo: {
-      userId: '0',
-      author: 'author'
+      userId: '6343196196877633000',
+      author: 'tiltcat'
     }
   };
 </script>
@@ -200,6 +179,8 @@ ReentrantL">
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
             首页
           </a>
         </li>
@@ -208,13 +189,37 @@ ReentrantL">
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
             归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
           </a>
         </li>
       
         
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
             标签
           </a>
@@ -276,8 +281,34 @@ ReentrantL">
           </span>
 
           
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">post.in</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
 
           
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/18/concurrent/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/18/concurrent/" itemprop="commentsCount"></span>
+                </a>
+              </span>
             
           
 
@@ -300,10 +331,7 @@ ReentrantL">
       
         <h2 id="初识-Java-util-concurrent"><a href="#初识-Java-util-concurrent" class="headerlink" title="初识 Java.util.concurrent"></a>初识 Java.util.concurrent</h2><hr>
 <blockquote>
-<p>concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~</p>
-</blockquote>
-<p>部分细节文中没有提到，请查询 <a href="http://tool.oschina.net/apidocs/apidoc?api=jdk-zh" target="_blank" rel="external">API</a></p>
-<blockquote>
+<p>concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~<br><a id="more"></a><br>部分细节文中没有提到，请查询 <a href="http://tool.oschina.net/apidocs/apidoc?api=jdk-zh" target="_blank" rel="external">API</a></p>
 <ul>
 <li>Executors                  </li>
 <li>Semaphore                </li>
@@ -381,7 +409,7 @@ ReentrantL">
       
         <div class="post-tags">
           
-            <a href="/tags/Java基础/" rel="tag">#Java基础</a>
+            <a href="/tags/Java-util-concurrent/" rel="tag">#Java.util.concurrent</a>
           
         </div>
       
@@ -422,6 +450,10 @@ ReentrantL">
           
   <div class="comments" id="comments">
     
+      <div class="ds-thread" data-thread-key="2016/10/18/concurrent/"
+           data-title="初识 Java.util.concurrent" data-url="http://tiltcat.com/2016/10/18/concurrent/">
+      </div>
+    
   </div>
 
 
@@ -456,7 +488,7 @@ ReentrantL">
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/images/avatar.gif"
+               src="/images/avatar.jpg"
                alt="tiltcat" />
           <p class="site-author-name" itemprop="name">tiltcat</p>
           <p class="site-description motion-element" itemprop="description">记录一些知识</p>
@@ -469,6 +501,13 @@ ReentrantL">
             </a>
           </div>
 
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">state.categories</span>
+              </a>
+            </div>
           
 
           
@@ -485,6 +524,35 @@ ReentrantL">
         
 
         <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/felisnigreps" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/cool5231" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
           
         </div>
 
@@ -624,9 +692,30 @@ ReentrantL">
 
   
 
+  
+    
+  
 
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"tiltcat"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
 
   
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
 
 
 
