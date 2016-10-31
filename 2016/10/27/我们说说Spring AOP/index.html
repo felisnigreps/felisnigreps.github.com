@@ -84,43 +84,40 @@
 
 
 
-<meta name="description" content="本文的内容几乎都来自于Pro.Spring.4.  testtest具体讨论以下几点：
+<meta name="description" content="本文的内容几乎都来自于Pro.Spring.4, 但是有些内容不太好理解，说着说的非常细，我这就多说说常用的，需要深度了解的小伙伴们，可以参考更多详尽的资料。具体讨论以下几点：
+
 
 AOP基础
 AOP种类：静态AOP(AspectJ)和动态AOP(Spring AOP)
 AOP in Spring
 Spring AOP的通知和切入点
 AOP的代理：JDK动态代理&amp;amp;CGLIB代理
-AOP的使用
-Pointcuts的高级使用：组合切入点和控制流的切入点
-AOP框架服务：Spring">
+AOP的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="我们说说Spring AOP">
 <meta property="og:url" content="http://tiltcat.com/2016/10/27/我们说说Spring AOP/index.html">
 <meta property="og:site_name" content="Let's do this">
-<meta property="og:description" content="本文的内容几乎都来自于Pro.Spring.4.  testtest具体讨论以下几点：
+<meta property="og:description" content="本文的内容几乎都来自于Pro.Spring.4, 但是有些内容不太好理解，说着说的非常细，我这就多说说常用的，需要深度了解的小伙伴们，可以参考更多详尽的资料。具体讨论以下几点：
+
 
 AOP基础
 AOP种类：静态AOP(AspectJ)和动态AOP(Spring AOP)
 AOP in Spring
 Spring AOP的通知和切入点
 AOP的代理：JDK动态代理&amp;amp;CGLIB代理
-AOP的使用
-Pointcuts的高级使用：组合切入点和控制流的切入点
-AOP框架服务：Spring">
-<meta property="og:updated_time" content="2016-10-31T12:19:05.000Z">
+AOP的">
+<meta property="og:updated_time" content="2016-10-31T12:21:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我们说说Spring AOP">
-<meta name="twitter:description" content="本文的内容几乎都来自于Pro.Spring.4.  testtest具体讨论以下几点：
+<meta name="twitter:description" content="本文的内容几乎都来自于Pro.Spring.4, 但是有些内容不太好理解，说着说的非常细，我这就多说说常用的，需要深度了解的小伙伴们，可以参考更多详尽的资料。具体讨论以下几点：
+
 
 AOP基础
 AOP种类：静态AOP(AspectJ)和动态AOP(Spring AOP)
 AOP in Spring
 Spring AOP的通知和切入点
 AOP的代理：JDK动态代理&amp;amp;CGLIB代理
-AOP的使用
-Pointcuts的高级使用：组合切入点和控制流的切入点
-AOP框架服务：Spring">
+AOP的">
 
 
 
@@ -350,8 +347,8 @@ AOP框架服务：Spring">
       
 
       
-        <blockquote>
-<p>本文的内容几乎都来自于Pro.Spring.4.  testtest<br>具体讨论以下几点：</p>
+        <p> 本文的内容几乎都来自于Pro.Spring.4, 但是有些内容不太好理解，说着说的非常细，我这就多说说常用的，需要深度了解的小伙伴们，可以参考更多详尽的资料。<br>具体讨论以下几点：</p>
+<blockquote>
 <ul>
 <li>AOP基础</li>
 <li>AOP种类：静态AOP(AspectJ)和动态AOP(Spring AOP)</li>
@@ -364,15 +361,18 @@ AOP框架服务：Spring">
 <li>整合AspectJ</li>
 </ul>
 </blockquote>
-<a id="more"></a> 
-<h2 id="AOP基础"><a href="#AOP基础" class="headerlink" title="AOP基础"></a>AOP基础</h2><p>让我们先看看AOP的专业名词吧：</p>
+<a id="more"></a>
+<h2 id="AOP基础"><a href="#AOP基础" class="headerlink" title="AOP基础"></a>AOP基础</h2><p>AOP的专业名词不是很直观，所以在这边记住名词为辅，主要是理解意思：</p>
 <blockquote>
 <ul>
-<li>Jointpoints: 连接点是程序执行过程中的某一行为，包括方法的调用，方法对自己的反射，类的实例化和对象的实例化。是AOP中非常重要的一个概念。</li>
-<li>Advice: 通知。在连接点上执行的逻辑就是通知。有很多种通知，before/after…之后我们会详细的提到。</li>
-<li>Pointcuts: 切入点。比如我们要进行权限验证，那么在哪验证呢？这个”哪”就是我们所说的这个点。切入点是Jointpoints的集合，你可以在切入点上定义通知什么时候被执行，被怎么执行。你能对你应用中的通知得到粗粒度的控制权。</li>
-<li>Aspect： 切面是通知和切入点的集合，就是说可以描述<em>在哪，干嘛</em>的一个定义。</li>
-<li>Weacing：织入。这是一个把切面插入到应用合适位置的过程。</li>
+<li>Jointpoint: 连接点是程序执行过程中的某一行为，在Spring可以理解成方法。是AOP中非常重要的一个概念。</li>
+<li>Advice: 通知。在jointpoint上特定时刻执行的操作，有几种不同的类型（before/after…），以后会更仔细的讨论。</li>
+<li><p>Pointcuts: 切入点。比如我们要进行权限验证，那么在哪验证呢？这个”哪”就是我们所说的这个点。切入点是Jointpoints的集合（就是一组符合条件的Joinpoint），通常用pointcut表达式来定义jointpoint. Spring中默认使用 AspectJ pointcut language expression.</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="meta">@Pointcut</span>(value = <span class="string">"execution(* service.impl.*.say(..)) &amp;&amp; args(ops)"</span>,argNames = <span class="string">"ops"</span>)</div></pre></td></tr></table></figure>
+</li>
+<li><p>Aspect： 切面是通知和切入点的集合，就是说可以描述<em>在哪，干嘛</em>的一个定义。</p>
+</li>
+<li>Weaving：织入。这是一个把切面插入到应用合适位置的过程。</li>
 <li>Target : 目标对象。被一个或者多个切面所通知的对象。</li>
 </ul>
 </blockquote>
@@ -390,12 +390,13 @@ AOP框架服务：Spring">
 <h3 id="AOP初始–Rick-and-Morty"><a href="#AOP初始–Rick-and-Morty" class="headerlink" title="AOP初始–Rick and Morty"></a>AOP初始–Rick and Morty</h3><p>在我们开始之前，先来一个简单的小程序。这个小程序会输出 and, 然后让我们用AOP在前面加上Rick,后面加上Morty.<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MessageWriter</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeMessage</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.print(<span class="string">" and "</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>在方法的前后都加上advice,那么呢<code>around</code>就是我们要找的，看下面代码吧。</p>
 <blockquote>
-<p>除了顾名思义外，那么到底什么是<a href="http://tool.oschina.net/apidocs/apidoc?api=Spring-3.1.1" target="_blank" rel="external">around</a>呢？<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MessageDecorator</span> <span class="keyword">implements</span> <span class="title">MethodInterceptor</span> </span>&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(MethodInvocation invocation)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">        System.out.print(<span class="string">"Rick "</span>);</div><div class="line">        Object retVal = invocation.proceed();</div><div class="line">        System.out.print(<span class="string">"Morty"</span>);</div><div class="line">        <span class="keyword">return</span> retVal;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>除了顾名思义外，那么到底什么是<a href="http://tool.oschina.net/apidocs/apidoc?api=Spring-3.1.1" target="_blank" rel="external">around</a>呢？</p>
 </blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MessageDecorator</span> <span class="keyword">implements</span> <span class="title">MethodInterceptor</span> </span>&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(MethodInvocation invocation)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">        System.out.print(<span class="string">"Rick "</span>);</div><div class="line">        Object retVal = invocation.proceed();</div><div class="line">        System.out.print(<span class="string">"Morty"</span>);</div><div class="line">        <span class="keyword">return</span> retVal;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><code>MethodInterceptor</code>接口是一个实现around通知的<a href="http://aopalliance.sourceforge.net/" target="_blank" rel="external">AOP联盟</a>接口，这个接口可以实现jointpoints的调用。MethodInvocation对象就是那个需要被advise的对象，使用这个对象，我们可以控制什么时候对方法进行调用。在此例中我们需要的是around，所以呢我们需要这个方法在<code>执行之前</code>和<code>执行之后但是并没有返回</code>被调用。</p>
 <p>在上面的代码中，我们仅仅是写了两个sout,然后在中间调用了MethodInvocation.要实现我们的目的，最后一步就是<code>MessageDecorator</code>(就是其中的invoke()方法)织入到我们的<code>MessageWriter</code>中去,那该怎么做呢？ </p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AdultSwimAOPExample</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        MessageWriter target = <span class="keyword">new</span> MessageWriter();</div><div class="line">        ProxyFactory pf = <span class="keyword">new</span> ProxyFactory();</div><div class="line">        pf.addAdvice(<span class="keyword">new</span> MessageDecorator());</div><div class="line">        pf.setTarget(target);</div><div class="line">        MessageWriter proxy = (MessageWriter) pf.getProxy();</div><div class="line">        target.writeMessage();</div><div class="line">        System.out.println(<span class="string">""</span>);</div><div class="line">        proxy.writeMessage();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>让我们简单瞅瞅这代码啊，new一个代理，把advice加进去，然后把我们的target也加进去，然后就生成了我们想要的代理，然后就调用方法就行了。</p>
+<p>让我们简单瞅瞅这代码啊，new一个代理，把advice加进去，然后把我们的target也加进去，然后就生成了我们想要的代理，然后就调用方法就行了。补充一下，这个是CGLIB的动态代理。</p>
 <p>跑一下，不出意外，Rick &amp; Morty.</p>
 <blockquote>
 <p>Rick and Morty 100 years Rick and Morty, Rick and Morty forever 100 times Rick and Mory, www.RickandMorty.com Rick and Morty……. </p>
@@ -405,11 +406,21 @@ AOP框架服务：Spring">
 <p>现在到了proSpring安利Spring的时间：</p>
 </blockquote>
 <p>就像你所见到的，在没有处理过的方法上调用<code>writeMessage()</code>只输出&amp;，当我们加了代理呢，Rick and Morty就出来了。从刚才的例子看来，没有任何关于Spring或者AOP联盟的依赖，通常来说，你想怎么advise，就能怎么advise，无论原来的类有没有AOP，加个代理，完活。不过呢，如果那个类是final类，那就不行了，因为final不能被覆写，当然也就不能被代理啦。</p>
-<h3 id="Spring-AOP的结构"><a href="#Spring-AOP的结构" class="headerlink" title="Spring AOP的结构"></a>Spring AOP的结构</h3><p>Spring AOP的核心就是代理，当你想给一个类加通知的时候，你就得弄一个代理。但是在实际的情况中呢，你并不用自己去写一个代理，你可以使用Spring提供的声明式的AOP，简单快捷。 但是呢，知道这个原理是非常重要的。</p>
+<h2 id="Spring-AOP的结构"><a href="#Spring-AOP的结构" class="headerlink" title="Spring AOP的结构"></a>Spring AOP的结构</h2><p>Spring AOP的核心就是代理，当你想给一个类加通知的时候，你就得弄一个代理。但是在实际的情况中呢，你并不用自己去写一个代理，你可以使用Spring提供的声明式的AOP，简单快捷。 但是呢，知道这个原理是非常重要的。</p>
 <p>在运行期，Spring会解析在ApplicationContext定义的横切点，根据具体情况(joinpoint,ponitcut,adcive,etc.)来准确的织入。</p>
-<p>说道代理， Spring有两种实现方式，JDK的动态代理和CGLIB代理。</p>
-<p>Internally, Spring has two proxy implementations: JDK dynamic proxies and CGLIB proxies. By default, when the<br>target object to be advised implements an interface, Spring will use a JDK dynamic proxy to create proxy instances<br>of the target. However, when the advised target object doesn’t implement an interface (for example, it’s a concrete<br>class), CGLIB will be used for proxy instance creation. One major reason is that JDK dynamic proxy supports only the<br>proxying of interfaces. We discuss proxies in detail in the section “Understanding Proxies.”</p>
-<p>Joinpoints in Spring<br>One of the more noticeable simplifications in Spring AOP is that it supports only one joinpoint type: method<br>invocation. At first glance, this might seem like a severe limitation if you are familiar with other AOP implementations<br>such as AspectJ, which supports many more joinpoints, but in fact this makes Spring more accessible.<br>The Method Invocation joinpoint is by far the most useful joinpoint available, and using it, you can achieve many<br>of the tasks that make AOP useful in day-to-day programming. Remember that if you need to advise some code at a<br>joinpoint other than a method invocation, you can always use Spring and AspectJ together.<br>Aspects in Spring<br>In Spring AOP, an aspect is represented by an instance of a class that implements the Advisor interface. Spring<br>provides convenience Advisor implementations that you can reuse in your applications, thus removing the need<br>for you to create custom Advisor implementations. There are two subinterfaces of Advisor: PointcutAdvisor and<br>IntroductionAdvisor.<br>The PointcutAdvisor interface is implemented by all Advisor implementations that use pointcuts to control<br>the advice applied to joinpoints. In Spring, introductions are treated as special kinds of advice, and by using the<br>IntroductionAdvisor interface, you can control those classes to which an introduction applies.<br>We discuss PointcutAdvisor implementations in detail in the upcoming section “Advisors and Pointcuts in Spring.</p>
+<p>说道代理， Spring有两种实现方式，JDK的动态代理和CGLIB代理。默认情况下Spring会使用JDK动态代理去创建你对象的代理，但是你的对象没有实现任何接口（比如是一个具体类），那么就会启用CGLIB代理。这是因为JDK动态代理只是针对接口的，关于这个细节呢，我们下面会具体讲。<br>（可以点开源码看看，就算不是全懂，也能分析个大概）</p>
+<h3 id="Spring中的连接点"><a href="#Spring中的连接点" class="headerlink" title="Spring中的连接点"></a>Spring中的连接点</h3><p>在Spring AOP中一个更明显的简化是他只支持一个连接点的类型：方法调用。如果你熟悉其他AOP的实现，比如说AspectJ, 你会觉得只支持一个连接点会出现问题，AspectJ就有各种各样的连接点，但是事实上这样会让Spring更加的容易理解和使用。因为方法上的连接点可以解决大部分的问题，但是如果你真需要用到方法之外的通知，那就 Spring + AspectJ.</p>
+<h2 id="Spring中的Advice"><a href="#Spring中的Advice" class="headerlink" title="Spring中的Advice"></a>Spring中的Advice</h2><p>前面说了下Advice，Spring Advice常用的有五种:</p>
+<blockquote>
+<ul>
+<li>Before advice:  执行在joinpoint之前的advice,但是它不能阻止jointpoint的执行流程，除非抛出了一个异常（exception）。</li>
+<li>After returning advice: 执行在joinpoint这个方法返回之后的advice。</li>
+<li>After throwing advice: 执行在joinpoint抛出异常之后的advice。</li>
+<li>After(finally) advice: 执行在joinpoint返回之后或者抛出异常之后的advice，通常用来释放所使用的资源。</li>
+<li>Around advice: 执行在joinpoint这个方法执行之前与之后的advice。</li>
+</ul>
+</blockquote>
+<p>标签： Spring AOP</p>
 <p>标签： Spring AOP</p>
 
       
@@ -601,7 +612,7 @@ AOP框架服务：Spring">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP基础"><span class="nav-number">1.</span> <span class="nav-text">AOP基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP种类"><span class="nav-number">2.</span> <span class="nav-text">AOP种类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#静态AOP"><span class="nav-number">2.1.</span> <span class="nav-text">静态AOP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态AOP"><span class="nav-number">2.2.</span> <span class="nav-text">动态AOP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOP方式的取舍"><span class="nav-number">2.3.</span> <span class="nav-text">AOP方式的取舍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP-in-Spring"><span class="nav-number">3.</span> <span class="nav-text">AOP in Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AOP初始–Rick-and-Morty"><span class="nav-number">3.1.</span> <span class="nav-text">AOP初始–Rick and Morty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-AOP的结构"><span class="nav-number">3.2.</span> <span class="nav-text">Spring AOP的结构</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP基础"><span class="nav-number">1.</span> <span class="nav-text">AOP基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP种类"><span class="nav-number">2.</span> <span class="nav-text">AOP种类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#静态AOP"><span class="nav-number">2.1.</span> <span class="nav-text">静态AOP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态AOP"><span class="nav-number">2.2.</span> <span class="nav-text">动态AOP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOP方式的取舍"><span class="nav-number">2.3.</span> <span class="nav-text">AOP方式的取舍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP-in-Spring"><span class="nav-number">3.</span> <span class="nav-text">AOP in Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AOP初始–Rick-and-Morty"><span class="nav-number">3.1.</span> <span class="nav-text">AOP初始–Rick and Morty</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-AOP的结构"><span class="nav-number">4.</span> <span class="nav-text">Spring AOP的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring中的连接点"><span class="nav-number">4.1.</span> <span class="nav-text">Spring中的连接点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring中的Advice"><span class="nav-number">5.</span> <span class="nav-text">Spring中的Advice</span></a></li></ol></div>
             
           </div>
         </section>
