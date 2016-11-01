@@ -84,40 +84,43 @@
 
 
 
-<meta name="description" content="本文的内容几乎都来自于Pro.Spring.4, 但是有些内容不太好理解，说着说的非常细，我这就多说说常用的，需要深度了解的小伙伴们，可以参考更多详尽的资料。具体讨论以下几点：
+<meta name="description" content="本文的内容来自网络/书籍/API, 涉及被容比较初级, 主要讨论AspectJ的使用，基于Schema的后期会补充。具体讨论以下几点：
 
 
 AOP基础
 AOP种类：静态AOP(AspectJ)和动态AOP(Spring AOP)
 AOP in Spring
 Spring AOP的通知和切入点
-AOP的代理：JDK动态代理&amp;amp;CGLIB代理
-AOP的使">
+AOP的使用（AspectJ）
+切入点语法
+通知参数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="我们说说Spring AOP">
 <meta property="og:url" content="http://tiltcat.com/2016/10/27/SpringAOP/index.html">
 <meta property="og:site_name" content="Let's do this">
-<meta property="og:description" content="本文的内容几乎都来自于Pro.Spring.4, 但是有些内容不太好理解，说着说的非常细，我这就多说说常用的，需要深度了解的小伙伴们，可以参考更多详尽的资料。具体讨论以下几点：
+<meta property="og:description" content="本文的内容来自网络/书籍/API, 涉及被容比较初级, 主要讨论AspectJ的使用，基于Schema的后期会补充。具体讨论以下几点：
 
 
 AOP基础
 AOP种类：静态AOP(AspectJ)和动态AOP(Spring AOP)
 AOP in Spring
 Spring AOP的通知和切入点
-AOP的代理：JDK动态代理&amp;amp;CGLIB代理
-AOP的使">
-<meta property="og:updated_time" content="2016-10-31T13:00:37.000Z">
+AOP的使用（AspectJ）
+切入点语法
+通知参数">
+<meta property="og:updated_time" content="2016-11-01T10:53:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我们说说Spring AOP">
-<meta name="twitter:description" content="本文的内容几乎都来自于Pro.Spring.4, 但是有些内容不太好理解，说着说的非常细，我这就多说说常用的，需要深度了解的小伙伴们，可以参考更多详尽的资料。具体讨论以下几点：
+<meta name="twitter:description" content="本文的内容来自网络/书籍/API, 涉及被容比较初级, 主要讨论AspectJ的使用，基于Schema的后期会补充。具体讨论以下几点：
 
 
 AOP基础
 AOP种类：静态AOP(AspectJ)和动态AOP(Spring AOP)
 AOP in Spring
 Spring AOP的通知和切入点
-AOP的代理：JDK动态代理&amp;amp;CGLIB代理
-AOP的使">
+AOP的使用（AspectJ）
+切入点语法
+通知参数">
 
 
 
@@ -347,30 +350,29 @@ AOP的使">
       
 
       
-        <p>本文的内容几乎都来自于Pro.Spring.4, 但是有些内容不太好理解，说着说的非常细，我这就多说说常用的，需要深度了解的小伙伴们，可以参考更多详尽的资料。<br>具体讨论以下几点：</p>
+        <p>本文的内容来自网络/书籍/API, 涉及被容比较初级, 主要讨论AspectJ的使用，基于Schema的后期会补充。<br>具体讨论以下几点：</p>
 <blockquote>
 <ul>
 <li>AOP基础</li>
 <li>AOP种类：静态AOP(AspectJ)和动态AOP(Spring AOP)</li>
 <li>AOP in Spring</li>
 <li>Spring AOP的通知和切入点</li>
-<li>AOP的代理：JDK动态代理&amp;CGLIB代理</li>
-<li>AOP的使用</li>
-<li>Pointcuts的高级使用：组合切入点和控制流的切入点</li>
-<li>AOP框架服务：Spring完全支持声明&amp;透明的配置，我们会使用三种方式（ProxyFactoryBean，aop命名空间，@AspectJ注解）来为你的应用来进行AOP应用</li>
-<li>整合AspectJ</li>
+<li>AOP的使用（AspectJ）</li>
+<li>切入点语法</li>
+<li>通知参数</li>
 </ul>
 </blockquote>
 <a id="more"></a>
-<h2 id="AOP基础"><a href="#AOP基础" class="headerlink" title="AOP基础"></a>AOP基础</h2><p>AOP的专业名词不是很直观，所以在这边记住名词为辅，主要是理解意思：</p>
+<h2 id="AOP基础"><a href="#AOP基础" class="headerlink" title="AOP基础"></a>AOP基础</h2><p>AOP的意思是面向切面编程，Aspect Oriented Programing,在不修改源代码的基础上进行一些逻辑操作，比如日志记录，权限验证等。AOP是OOP的一个补充。</p>
+<p>AOP的专业名词不是很直观，所以在这边记住名词为辅，主要是理解意思：</p>
 <blockquote>
 <ul>
-<li>Jointpoint: 连接点是程序执行过程中的某一行为，在Spring可以理解成方法。是AOP中非常重要的一个概念。</li>
+<li>Jointpoint: 连接点是程序执行过程中的某一行为，在Spring中可以理解成方法。是AOP中非常重要的一个概念。</li>
 <li>Advice: 通知。在jointpoint上特定时刻执行的操作，有几种不同的类型（before/after…），以后会更仔细的讨论。</li>
-<li><p>Pointcuts: 切入点。比如我们要进行权限验证，那么在哪验证呢？这个”哪”就是我们所说的这个点。切入点是Jointpoints的集合（就是一组符合条件的Joinpoint），通常用pointcut表达式来定义jointpoint. Spring中默认使用 AspectJ pointcut language expression.</p>
+<li><p>Pointcuts: 切入点。切入点是Jointpoint的集合（就是一组符合条件的Joinpoint），通常用pointcut表达式来定义jointpoint. Spring中默认使用 AspectJ pointcut language expression.</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="meta">@Pointcut</span>(value = <span class="string">"execution(* service.impl.*.say(..)) &amp;&amp; args(ops)"</span>,argNames = <span class="string">"ops"</span>)</div></pre></td></tr></table></figure>
 </li>
-<li><p>Aspect： 切面是通知和切入点的集合，就是说可以描述<em>在哪，干嘛</em>的一个定义。</p>
+<li><p>Aspect： 切面是通知和切入点的组合，在有些时候被称作为Advisor。</p>
 </li>
 <li>Weaving：织入。这是一个把切面插入到应用合适位置的过程。</li>
 <li>Target : 目标对象。被一个或者多个切面所通知的对象。</li>
@@ -379,14 +381,11 @@ AOP的使">
 <p>如果你感觉到这些概念很难理解也没关系，在后面会有更多的例子帮助你理解，我们也会更加深入的讨论Spring AOP.</p>
 <h2 id="AOP种类"><a href="#AOP种类" class="headerlink" title="AOP种类"></a>AOP种类</h2><p>就像我们早先说的，有两种AOP,静态的和动态的。他们的区别就在于织入这个动作是在什么时候发生的，这个过程是如何实现的。</p>
 <h3 id="静态AOP"><a href="#静态AOP" class="headerlink" title="静态AOP"></a>静态AOP</h3><p>如果使用的是静态AOP，那么织入就会在整个应用建立的时候多创建一步。从Java的方面来讲，实现静态的织入相当于改变了Java代码的为二进制码，然后被执行。这个好处是先改，改好了再执行，那么在运行期间我们就不需要做其他的操作了。但是缺点就是当你做了一点微小的更改，哪怕是加了一个Jointpoint，你也需要重新编译整个应用。<br>AspectJ的编译期织入是一个静态AOP的绝好的例子。</p>
-<h3 id="动态AOP"><a href="#动态AOP" class="headerlink" title="动态AOP"></a>动态AOP</h3><p>动态AOP的实现，比如说Spring的AOP，区别顾名思义就是织入的操作发生在运行期。但是这个代理是怎么实现的呢？ Spring会为每一个有通知的对象通过反射生成一个代理。name那么缺点呢? 它的效率不如静态的好（都生成代理了肯定效率低），但是表现会越来越稳定。好处呢？就是你可以根据需求随意的进行织入，而并不需要重新编译整个yi</p>
-<h3 id="AOP方式的取舍"><a href="#AOP方式的取舍" class="headerlink" title="AOP方式的取舍"></a>AOP方式的取舍</h3><p>刚刚说了两种方法，那么问题就来了~我们该选择那种比较好呢？我们刚刚比较了优点和缺点，各有优劣是我们的答案，也是我们在开发中必须要考虑到的，那么各位看官，答案来了：具体情况，具体分析。<br>总的来说，静态AOP的存在了很久，也有更好的社区支持，同时也提供了更多可用的连接点。 如果效率对你来说至关重要或者你不用Spring，那么好，AspectJ一定是你的不二选择。</p>
-<p>而在其他的情况当中，Spring的AOP是更加理想的选择。要记住这一点，许多依靠AOP的解决方案（比如：Spring事务管理）使用的都是Spring的AOP，所以当你准备放弃Spring AOP的时候想一想，这个框架有多么强大吧！（好一波安利，我记得这书的作者和Spring的开发团队有点啥关系,一查Rob Harrop，果然在Spring Reference Documentation的作者栏里面，这帮人真牛啊~）</p>
+<h3 id="动态AOP"><a href="#动态AOP" class="headerlink" title="动态AOP"></a>动态AOP</h3><p>动态AOP的实现，比如说Spring的AOP，区别顾名思义就是织入的操作发生在运行期。但是这个代理是怎么实现的呢？ Spring会为每一个有通知的对象通过反射生成一个代理。那么缺点呢? 它的效率不如静态的好（都生成代理了肯定效率低），但是表现会越来越稳定。好处呢？就是你可以根据需求随意的进行织入，而并不需要重新编译整个应用。</p>
+<h3 id="AOP方式的取舍"><a href="#AOP方式的取舍" class="headerlink" title="AOP方式的取舍"></a>AOP方式的取舍</h3><p>刚刚说了两种方法，那么用那种比较好呢？答案是：具体情况，具体分析。<br>总的来说，静态AOP的存在了很久，也有更好的社区支持，同时也提供了更多可用的连接点。 如果效率对你来说至关重要或者你不用Spring，那么好，AspectJ一定是你的不二选择。</p>
+<p>而在其他的情况当中，Spring的AOP是更加理想的选择。要记住这一点，许多依靠AOP的解决方案（比如：Spring事务管理）使用的都是Spring的AOP，所以当你准备放弃Spring AOP的时候想一想，这个框架有多么强大吧！</p>
 <p>总的说来，具体情况，具体分析，不过呢Spring AOP相对于AspectJ要简单一些，不要再犹豫，用Spring AOP吧！ </p>
 <h2 id="AOP-in-Spring"><a href="#AOP-in-Spring" class="headerlink" title="AOP in Spring"></a>AOP in Spring</h2><p>Spring的AOP实现可以分成两个部分，第一个是AOP core, 它提供全解耦的，程序化编程的AOP方法。 第二个呢就是框架的实现，他可以让你更加简单的使用Spring AOP。 除此之外，其他的组件，比如说transaction manager, EJB helper classes等，都会提供全面的AOP支持来帮助你开发你的应用程序。</p>
-<blockquote>
-<p>这篇文章就是介绍Spring AOP的，这章自然而然的就变得比较重要。</p>
-</blockquote>
 <h3 id="AOP初始–Rick-and-Morty"><a href="#AOP初始–Rick-and-Morty" class="headerlink" title="AOP初始–Rick and Morty"></a>AOP初始–Rick and Morty</h3><p>在我们开始之前，先来一个简单的小程序。这个小程序会输出 and, 然后让我们用AOP在前面加上Rick,后面加上Morty.<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MessageWriter</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeMessage</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.print(<span class="string">" and "</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>在方法的前后都加上advice,那么呢<code>around</code>就是我们要找的，看下面代码吧。</p>
 <blockquote>
@@ -396,31 +395,65 @@ AOP的使">
 <p><code>MethodInterceptor</code>接口是一个实现around通知的<a href="http://aopalliance.sourceforge.net/" target="_blank" rel="external">AOP联盟</a>接口，这个接口可以实现jointpoints的调用。MethodInvocation对象就是那个需要被advise的对象，使用这个对象，我们可以控制什么时候对方法进行调用。在此例中我们需要的是around，所以呢我们需要这个方法在<code>执行之前</code>和<code>执行之后但是并没有返回</code>被调用。</p>
 <p>在上面的代码中，我们仅仅是写了两个sout,然后在中间调用了MethodInvocation.要实现我们的目的，最后一步就是<code>MessageDecorator</code>(就是其中的invoke()方法)织入到我们的<code>MessageWriter</code>中去,那该怎么做呢？ </p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AdultSwimAOPExample</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        MessageWriter target = <span class="keyword">new</span> MessageWriter();</div><div class="line">        ProxyFactory pf = <span class="keyword">new</span> ProxyFactory();</div><div class="line">        pf.addAdvice(<span class="keyword">new</span> MessageDecorator());</div><div class="line">        pf.setTarget(target);</div><div class="line">        MessageWriter proxy = (MessageWriter) pf.getProxy();</div><div class="line">        target.writeMessage();</div><div class="line">        System.out.println(<span class="string">""</span>);</div><div class="line">        proxy.writeMessage();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>让我们简单瞅瞅这代码啊，new一个代理，把advice加进去，然后把我们的target也加进去，然后就生成了我们想要的代理，然后就调用方法就行了。补充一下，这个是CGLIB的动态代理。</p>
+<p>让我们简单瞅瞅这代码啊，new一个代理，把advice加进去，然后把我们的target也加进去，然后就生成了我们想要的代理，然后就调用方法就行了。</p>
 <p>跑一下，不出意外，Rick &amp; Morty.</p>
 <blockquote>
 <p>Rick and Morty 100 years Rick and Morty, Rick and Morty forever 100 times Rick and Mory, www.RickandMorty.com Rick and Morty……. </p>
-</blockquote>
 <p>安利一部动画片啊，Rick and Morty.</p>
-<blockquote>
-<p>现在到了proSpring安利Spring的时间：</p>
 </blockquote>
 <p>就像你所见到的，在没有处理过的方法上调用<code>writeMessage()</code>只输出&amp;，当我们加了代理呢，Rick and Morty就出来了。从刚才的例子看来，没有任何关于Spring或者AOP联盟的依赖，通常来说，你想怎么advise，就能怎么advise，无论原来的类有没有AOP，加个代理，完活。不过呢，如果那个类是final类，那就不行了，因为final不能被覆写，当然也就不能被代理啦。</p>
 <h2 id="Spring-AOP的结构"><a href="#Spring-AOP的结构" class="headerlink" title="Spring AOP的结构"></a>Spring AOP的结构</h2><p>Spring AOP的核心就是代理，当你想给一个类加通知的时候，你就得弄一个代理。但是在实际的情况中呢，你并不用自己去写一个代理，你可以使用Spring提供的声明式的AOP，简单快捷。 但是呢，知道这个原理是非常重要的。</p>
 <p>在运行期，Spring会解析在ApplicationContext定义的横切点，根据具体情况(joinpoint,ponitcut,adcive,etc.)来准确的织入。</p>
-<p>说道代理， Spring有两种实现方式，JDK的动态代理和CGLIB代理。默认情况下Spring会使用JDK动态代理去创建你对象的代理，但是你的对象没有实现任何接口（比如是一个具体类），那么就会启用CGLIB代理。这是因为JDK动态代理只是针对接口的，关于这个细节呢，我们下面会具体讲。<br>（可以点开源码看看，就算不是全懂，也能分析个大概）</p>
-<h3 id="Spring中的连接点"><a href="#Spring中的连接点" class="headerlink" title="Spring中的连接点"></a>Spring中的连接点</h3><p>在Spring AOP中一个更明显的简化是他只支持一个连接点的类型：方法调用。如果你熟悉其他AOP的实现，比如说AspectJ, 你会觉得只支持一个连接点会出现问题，AspectJ就有各种各样的连接点，但是事实上这样会让Spring更加的容易理解和使用。因为方法上的连接点可以解决大部分的问题，但是如果你真需要用到方法之外的通知，那就 Spring + AspectJ.</p>
+<p>说到代理，Spring有两种实现方式，JDK的动态代理和CGLIB代理。默认情况下Spring会使用JDK动态代理去创建你对象的代理，但是你的对象没有实现任何接口（比如是一个具体类），那么就会启用CGLIB代理。这是因为JDK动态代理只是针对接口的，关于这个细节呢，我们下面会具体讲。<br>（可以点开源码看看，就算不是全懂，也能分析个大概）</p>
 <h2 id="Spring中的Advice"><a href="#Spring中的Advice" class="headerlink" title="Spring中的Advice"></a>Spring中的Advice</h2><p>前面说了下Advice，Spring Advice常用的有五种:</p>
 <blockquote>
 <ul>
-<li>Before advice:  执行在joinpoint之前的advice,但是它不能阻止jointpoint的执行流程，除非抛出了一个异常（exception）。</li>
-<li>After returning advice: 执行在joinpoint这个方法返回之后的advice。</li>
-<li>After throwing advice: 执行在joinpoint抛出异常之后的advice。</li>
-<li>After(finally) advice: 执行在joinpoint返回之后或者抛出异常之后的advice，通常用来释放所使用的资源。</li>
-<li>Around advice: 执行在joinpoint这个方法执行之前与之后的advice。</li>
+<li><p>Before advice:  执行在joinpoint之前的advice,但是它不能阻止jointpoint的执行流程，除非抛出了一个异常（exception）。</p>
+</li>
+<li><p>After advice: 执行在joinpoint返回之后或者抛出异常之后的advice，包含以下几种</p>
+<blockquote>
+<ul>
+<li>After returning advice: 在Jointpoint正常执行完毕时返回的通知，必须不能抛出异常。</li>
+<li>After throwing advice: 在jointpoint执行抛出异常之后指向性</li>
+<li>After finally advice: 在jointpoint返回后执行，无论是否抛出异常。</li>
 </ul>
 </blockquote>
-<p>标签： Spring AOP</p>
+</li>
+<li><p>Around advice: 执行在joinpoint这个方法执行之前与之后的advice。</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="Spring-AOP的使用"><a href="#Spring-AOP的使用" class="headerlink" title="Spring AOP的使用"></a>Spring AOP的使用</h2><p>我们可以通过三种方式来实现AOP, @AspectJ-based(Annotation),Schema-based(XML),以及底层的Spring AOP API.</p>
+<blockquote>
+<p>其实前半部分都是参照Pro.Spring来的，后来发现讲的不是很….接地气？ 有找了些资料，所以这块看起来比较突兀，不是很流畅。 </p>
+</blockquote>
+<p>AspectJ是最常用的方式，首先我们要声明对AspectJ Annontation的支持，我们首先要在Spring的配置文件中声明：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line">&lt;aop:aspectj-autoproxy/&gt;</div></pre></td></tr></table></figure></p>
+<p>然后，要在Aspect类上加上Annotation<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="meta">@org</span>.aspectj.lang.annotation.Aspect</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Aspect</span> </span>&#123;</div><div class="line">...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>定义切入点</p>
+<blockquote>
+<p>关于切入点这块呢， 有同学会问了，这是啥啊？ 关于切入点语法后面会解释，现在呢，先简单理解下。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="comment">//这边可以加参数，也可以不加，加了的话写起来比较繁琐，建议不加</span></div><div class="line">    <span class="meta">@Pointcut</span>(<span class="string">"execution(* com.bala.bocall.*.*(..))"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSome</span><span class="params">( )</span> </span>&#123;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line"><span class="comment">//对应的advice如下</span></div><div class="line">    <span class="meta">@Before</span>(value = <span class="string">"doSome()&amp;&amp; args(ops)"</span>,argNames = <span class="string">"ops"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(String ops)</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"--- before service --- "</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//如果要加的话,那么就像如下的形式，代码量明显多了，而且所有实现的通知都需要参数了，不够灵活，如果博主有没理解到位的地方请指正.</span></div><div class="line">    <span class="meta">@Pointcut</span>(value = <span class="string">"execution(* com.bala.bocall.*.*(..)) &amp;&amp; args(ops)"</span>, argNames = <span class="string">"ops"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSome</span><span class="params">(String ops)</span> </span>&#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Before</span>(value = <span class="string">"doSome(ops)"</span>,argNames = <span class="string">"ops"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(String ops)</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"--- before service --- "</span>);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>前置通知</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="meta">@Before</span>(value=<span class="string">"切入点的表达式"</span>,argNames=<span class="string">"参数的名称"</span>)</div><div class="line"><span class="meta">@Before</span>(value = <span class="string">"execution(* com.bala.bocall.*.*(..)) &amp;&amp; args(ops)"</span>,argNames = <span class="string">"ops"</span>)</div><div class="line"></div><div class="line"><span class="comment">//如果不需要参数，那么直接写切入点表达式就好</span></div><div class="line"><span class="meta">@Before</span>(value = <span class="string">"execution(* com.bala.bocall.*.*(..))）</span></div></pre></td></tr></table></figure>
+<p>实体类的代码就不贴了，可以简单运行一下看下效果：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BookStore</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addBook</span><span class="params">(String book)</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"book added"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteBook</span><span class="params">()</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"book deleted"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">editBook</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"we can't do that."</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getBook</span><span class="params">()</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"get book..."</span>);</div><div class="line">        <span class="keyword">return</span> <span class="string">"yeah, got it."</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="meta">@org</span>.aspectj.lang.annotation.Aspect</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Aspect</span> </span>&#123;</div><div class="line">    <span class="meta">@Pointcut</span>(value = <span class="string">"execution(* com.bala.bocall.*.addBook(..)) )"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSome</span><span class="params">()</span> </span>&#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Before</span>(value = <span class="string">"doSome() &amp;&amp; args(ops)"</span>,argNames = <span class="string">"ops"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(String ops)</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"--- before service --- "</span> + ops);</div><div class="line">    &#125;</div><div class="line">    <span class="meta">@After</span>(<span class="string">"doSome()"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">after</span><span class="params">()</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"--- after service ---"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@AfterReturning</span>(value = <span class="string">"execution(* com.bala.bocall.*.getBook(..))"</span>,returning = <span class="string">"ops"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterReturning</span><span class="params">(String ops)</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"--- after returning service --- "</span>+ops);</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@AfterThrowing</span>(value = <span class="string">"execution(* com.bala.bocall.*.editBook(..))"</span>,throwing = <span class="string">"e"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterThrowing</span><span class="params">(Exception e)</span></span>&#123;</div><div class="line">        System.out.println(<span class="string">"after throwing..."</span>+ e.getMessage());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Around</span>(<span class="string">"doSome()"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">around</span><span class="params">(ProceedingJoinPoint pjp)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">        System.out.println(<span class="string">"around start"</span>);</div><div class="line">        pjp.proceed();</div><div class="line">        System.out.println(<span class="string">"around end"</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">main</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        ApplicationContext ctx = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"spring-config.xml"</span>);</div><div class="line">        BookStore bookStore = ctx.getBean(<span class="string">"bookStore"</span>,BookStore.class);</div><div class="line">        bookStore.addBook(<span class="string">"bingo！"</span>);</div><div class="line">        bookStore.getBook();</div><div class="line">        bookStore.editBook();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>看下结果，最好自己简单敲一下，输出的有点乱，单个实验的话会更清晰。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line">around start</div><div class="line">--- before service --- bingo！</div><div class="line">...报错信息...</div><div class="line">book added</div><div class="line">around end</div><div class="line">--- after service ---</div><div class="line">get book...</div><div class="line">--- after returning service --- yeah, got it.</div><div class="line">after throwing...we can<span class="string">'t do that.</span></div></pre></td></tr></table></figure>
+<p>##切入点语法</p>
+<p>说实话我也只是了解常用的，全写的话篇幅比较多，不过都是不怎么需要理解，记住规则就好的东西。我就不重新抄一遍了，请看<a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#aop-pointcuts" target="_blank" rel="external">Spring文档</a>或者<a href="http://jinnianshilongnian.iteye.com/blog/1420691" target="_blank" rel="external">开涛的博客</a>。</p>
+<p>安利一下，我觉得那作者写的教程非常好。</p>
+<p>##通知参数</p>
+<p>前面已经说明了通知了，如果想在通知上获取被通知方法的一些属性，我们就可以使用Jointpoint了。他可以获取连接点数据，任何通知方法的第一个参数都可以是JoinPoint(环绕通知是ProceedingJoinPoint，JoinPoint子类)，当然第一个参数位置也可以是JoinPoint.StaticPart类型，这个只返回连接点的静态部分。</p>
+<p>话不多说，看看Joinpoint到底能干嘛吧。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">JoinPoint</span> </span>&#123;  </div><div class="line">    <span class="function">String <span class="title">toString</span><span class="params">()</span></span>;         <span class="comment">//连接点所在位置的相关信息  </span></div><div class="line">    <span class="function">String <span class="title">toShortString</span><span class="params">()</span></span>;     <span class="comment">//连接点所在位置的简短相关信息  </span></div><div class="line">    <span class="function">String <span class="title">toLongString</span><span class="params">()</span></span>;     <span class="comment">//连接点所在位置的全部相关信息  </span></div><div class="line">    <span class="function">Object <span class="title">getThis</span><span class="params">()</span></span>;         <span class="comment">//返回AOP代理对象  </span></div><div class="line">    <span class="function">Object <span class="title">getTarget</span><span class="params">()</span></span>;       <span class="comment">//返回目标对象  </span></div><div class="line">    Object[] getArgs();       <span class="comment">//返回被通知方法参数列表  </span></div><div class="line">    <span class="function">Signature <span class="title">getSignature</span><span class="params">()</span></span>;  <span class="comment">//返回当前连接点签名  </span></div><div class="line">    <span class="function">SourceLocation <span class="title">getSourceLocation</span><span class="params">()</span></span>;<span class="comment">//返回连接点方法所在类文件中的位置  </span></div><div class="line">    <span class="function">String <span class="title">getKind</span><span class="params">()</span></span>;        <span class="comment">//连接点类型  </span></div><div class="line">    <span class="function">StaticPart <span class="title">getStaticPart</span><span class="params">()</span></span>; <span class="comment">//返回连接点静态部分  </span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注释差不多了</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="comment">//咱们这么写，ops就可以得到了</span></div><div class="line">    <span class="meta">@Before</span>(value = <span class="string">"doSome() &amp;&amp; args(ops)"</span>,argNames = <span class="string">"jp,ops"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(JoinPoint jp, String ops)</span></span>&#123;</div><div class="line">        Object[] s = jp.getArgs();</div><div class="line">        <span class="keyword">for</span>(Object object:s)&#123;</div><div class="line">            System.out.println(<span class="string">"--- before service --- "</span> + object);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>只是简单的过了一下，说了说Spring AOP到底干嘛的，@AspectJ-based的该怎么写，然后介绍了一下简单的概念</p>
 <p>标签： Spring AOP</p>
 
       
@@ -608,7 +641,7 @@ AOP的使">
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP基础"><span class="nav-number">1.</span> <span class="nav-text">AOP基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP种类"><span class="nav-number">2.</span> <span class="nav-text">AOP种类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#静态AOP"><span class="nav-number">2.1.</span> <span class="nav-text">静态AOP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态AOP"><span class="nav-number">2.2.</span> <span class="nav-text">动态AOP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOP方式的取舍"><span class="nav-number">2.3.</span> <span class="nav-text">AOP方式的取舍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP-in-Spring"><span class="nav-number">3.</span> <span class="nav-text">AOP in Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AOP初始–Rick-and-Morty"><span class="nav-number">3.1.</span> <span class="nav-text">AOP初始–Rick and Morty</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-AOP的结构"><span class="nav-number">4.</span> <span class="nav-text">Spring AOP的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring中的连接点"><span class="nav-number">4.1.</span> <span class="nav-text">Spring中的连接点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring中的Advice"><span class="nav-number">5.</span> <span class="nav-text">Spring中的Advice</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP基础"><span class="nav-number">1.</span> <span class="nav-text">AOP基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP种类"><span class="nav-number">2.</span> <span class="nav-text">AOP种类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#静态AOP"><span class="nav-number">2.1.</span> <span class="nav-text">静态AOP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态AOP"><span class="nav-number">2.2.</span> <span class="nav-text">动态AOP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOP方式的取舍"><span class="nav-number">2.3.</span> <span class="nav-text">AOP方式的取舍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP-in-Spring"><span class="nav-number">3.</span> <span class="nav-text">AOP in Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AOP初始–Rick-and-Morty"><span class="nav-number">3.1.</span> <span class="nav-text">AOP初始–Rick and Morty</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-AOP的结构"><span class="nav-number">4.</span> <span class="nav-text">Spring AOP的结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring中的Advice"><span class="nav-number">5.</span> <span class="nav-text">Spring中的Advice</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-AOP的使用"><span class="nav-number">6.</span> <span class="nav-text">Spring AOP的使用</span></a></li></ol></div>
             
           </div>
         </section>
