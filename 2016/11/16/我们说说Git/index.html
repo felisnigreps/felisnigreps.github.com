@@ -1,0 +1,737 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Git," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.2" />
+
+
+
+
+
+
+<meta name="description" content="简单介绍关于Git这块大家肯定不陌生，因为目前的工作没有在用Git，我本身也就是自己了解下。（其实是因为最近工作比较累，想更新点好写，轻松的~）行吧，咱们开始了~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我们说说Git">
+<meta property="og:url" content="http://tiltcat.com/2016/11/16/我们说说Git/index.html">
+<meta property="og:site_name" content="Let's do this">
+<meta property="og:description" content="简单介绍关于Git这块大家肯定不陌生，因为目前的工作没有在用Git，我本身也就是自己了解下。（其实是因为最近工作比较累，想更新点好写，轻松的~）行吧，咱们开始了~">
+<meta property="og:updated_time" content="2016-11-16T12:20:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我们说说Git">
+<meta name="twitter:description" content="简单介绍关于Git这块大家肯定不陌生，因为目前的工作没有在用Git，我本身也就是自己了解下。（其实是因为最近工作比较累，想更新点好写，轻松的~）行吧，咱们开始了~">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '6343196196877633000',
+      author: 'tiltcat'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://tiltcat.com/2016/11/16/我们说说Git/"/>
+
+
+  <title> 我们说说Git | Let's do this </title>
+</head>
+
+<body itemscope itemtype="//schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="//schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Let's do this</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">wub lab dup dup</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                我们说说Git
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-11-16T20:17:25+08:00" content="2016-11-16">
+              2016-11-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index">
+                    <span itemprop="name">Git</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/16/我们说说Git/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/16/我们说说Git/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h2><p>关于Git这块大家肯定不陌生，因为目前的工作没有在用Git，我本身也就是自己了解下。<br>（其实是因为最近工作比较累，想更新点好写，轻松的~）<br>行吧，咱们开始了~</p>
+<a id="more"></a>
+<blockquote>
+<p>完全的教程呢，应该是从发展历史开始一直到balabala结束，不过呢我这就是简单的一随笔，所以呢，我就写点常用的，细节什么的，再补充。</p>
+</blockquote>
+<p>Git简单来说就是分布式的版本控制系统，就是大家可以一起提交版本，使teamwork变得更惬意的一工具，随之而来的还有世界上最大的同性交友网站Github。Linus Torvalds就是吊。</p>
+<p>##Git基础</p>
+<blockquote>
+<p>特点：</p>
+<ul>
+<li>记录快照，并非差异</li>
+<li>大多数操作本地执行，不需联网</li>
+</ul>
+</blockquote>
+<p>###文件的三种状态<br>在Git中， 所有的文件都只有这三种状态：已提交(committed)，已暂存(staged)，已更改(modified)。</p>
+<p>已提交代表文件已经保存到本地的数据库这中了。<br>已暂存表示已经把修改的文件添加到了下次提交保存的名单中。<br>已更改表示已经修改了某文件，但是还没有提交保存。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">working directoy-&gt;staging area: stage files</div><div class="line">respository-&gt;working directoy:check out the project</div><div class="line">staging area-&gt;respository: commit</div></pre></td></tr></table></figure>
+<p>每个项目都有一个Git目录，他是用你来保存对象元数据和对象数据库的地方，很重要。每次克隆镜像仓库的时候，实际上就是copy这个目录。而所谓的暂存区只不过是一个简单的文件，可以简单理解为索引文件。</p>
+<h2 id="Git使用"><a href="#Git使用" class="headerlink" title="Git使用"></a>Git使用</h2><p>###安装git<br>我使用的是Mac,建议先安装Homebrew，然后安装Git。具体的简单查一下就行。</p>
+<p>###常用的一些操作</p>
+<p>mkdir adultswim<br>cd adultswim<br>git init</p>
+<p>然后我们搞了个文件， 想把它push上去，比如说我们加了个readme.txt</p>
+<p>我们要用 git add readme.txt 这样就是告诉git，我们加了这么个东西。加完了该提交了，这么弄：git commit -m “Just add readme.txt”</p>
+<p>同样可以使用git status来查看文件修改的状态。但是如果我要是想看我到底改了些什么，那该怎么办呢？</p>
+<p>使用git diff就可以了。</p>
+<p>我们提交了很多版本，如果我们想回退到某一个版本，先用git log看下我们的提交日志，我们可以看到最新的三个日志。</p>
+<p>你会看到大约这么一串东西:</p>
+<p>$ git log<br>commit 3628164fb26d48395383f8f31179f24e0882e1e0<br>Author: Michael Liao <a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#97;&#x73;&#107;&#120;&#117;&#x65;&#102;&#101;&#110;&#x67;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#97;&#x73;&#107;&#120;&#117;&#x65;&#102;&#101;&#110;&#x67;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a><br>Date:   Tue Aug 20 15:11:49 2013 +0800</p>
+<pre><code>append GPL
+</code></pre><p>commit ea34578d5496d7dd233c827ed32a8cd576c5ee85<br>Author: Michael Liao <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#97;&#115;&#107;&#x78;&#117;&#101;&#x66;&#101;&#x6e;&#103;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;">&#97;&#115;&#107;&#x78;&#117;&#101;&#x66;&#101;&#x6e;&#103;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a><br>Date:   Tue Aug 20 14:53:12 2013 +0800</p>
+<pre><code>add distributed
+</code></pre><p>commit cb926e7ea50ad11b8f9e909c05226233bf755030<br>Author: Michael Liao <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x61;&#x73;&#107;&#x78;&#117;&#x65;&#x66;&#x65;&#x6e;&#x67;&#x40;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;">&#x61;&#x73;&#107;&#x78;&#117;&#x65;&#x66;&#x65;&#x6e;&#x67;&#x40;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;</a><br>Date:   Mon Aug 19 17:51:55 2013 +0800</p>
+<pre><code>wrote a readme file
+</code></pre><p>这里的commit后面有一个串，这个串就是你的ID,下面就是你git commit -m “里面的内容”， 你就知道你想回滚到哪个版本了。</p>
+<p>在git中, HEAD表示当前版本，上一个版本是HEAD^,再上一个版本就是HEAD^^.</p>
+<p>所以我们就可以使用：git reset –hard HEAD^,我们就到了”add distributed”.<br>再看下 git log,就剩下俩版本了</p>
+<p>commit ea34578d5496d7dd233c827ed32a8cd576c5ee85<br>Author: Michael Liao <a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#x3a;&#97;&#115;&#x6b;&#120;&#117;&#101;&#x66;&#x65;&#110;&#x67;&#x40;&#103;&#109;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#97;&#115;&#x6b;&#120;&#117;&#101;&#x66;&#x65;&#110;&#x67;&#x40;&#103;&#109;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a><br>Date:   Tue Aug 20 14:53:12 2013 +0800</p>
+<pre><code>add distributed
+</code></pre><p>commit cb926e7ea50ad11b8f9e909c05226233bf755030<br>Author: Michael Liao <a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#97;&#x73;&#x6b;&#x78;&#117;&#x65;&#102;&#101;&#110;&#x67;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#97;&#x73;&#x6b;&#x78;&#117;&#x65;&#102;&#101;&#110;&#x67;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a><br>Date:   Mon Aug 19 17:51:55 2013 +0800</p>
+<pre><code>wrote a readme file
+</code></pre><p>如果我们又想回去该怎么办？<br>使用 git reset –hard 3628164fb26d48395 就行了。 我要是不记得3628…那一串怎么办？窗口已经被我关掉了。那没问题，有个命令叫做： git reflog</p>
+<p>ea34578 HEAD@{0}: reset: moving to HEAD^<br>3628164 HEAD@{1}: commit: append GPL<br>ea34578 HEAD@{2}: commit: add distributed<br>cb926e7 HEAD@{3}: commit (initial): wrote a readme file</p>
+<p>行了，这下找到了。</p>
+<p>多说一句，结合前面说的暂存区和工作区。你用git add, 就把文件加到了暂存区。然后git commit,你就提交到了工作区。你工作的地方就叫工作区。而暂存区，就存放在你的.git目录中。</p>
+<p>如果你在工作区添加了一些东西，但是没有commit，这时候使用 <code>git checkout -- file</code>,如果你commit了，那么先回退到上一个版本<code>git reset HEAD file</code>,然后再<code>git checkout -- file</code></p>
+<p>创建远程仓库：</p>
+<p>我也记不住，到时候查一下就行,后面网址是你github上面那个地址,比如我这个博客的github是<a href="https://github.com/felisnigreps/felisnigreps.github.com" target="_blank" rel="external">https://github.com/felisnigreps/felisnigreps.github.com</a><br><code>$ git remote add origin git@https://github.com/felisnigreps/felisnigreps.github.com.git</code></p>
+<p>把本地内容推送到仓库<br><code>git push -u origin master</code><br>只需要第一次加上-u,以后就不用了</p>
+<p>克隆远程仓库：<br><code>git clone git@XX</code></p>
+<p>分支管理：</p>
+<p>分支这块呢，github主要用的指针，远离比较好理解，不过需要上网查一下，我这就简单写点命令。</p>
+<p>比如我要创建个dev的分支：<code>git checkout -b dev</code></p>
+<p>加上-b代表着创建并且切换，相当于下面两条命令：<code>git branch dev</code>,<code>git checkout dec</code></p>
+<p>如果你想要查看分支呢，就用<code>git branch</code>,会显示出所有分支，当前分支前面会有个*号。 然后我们就按照正常来就行了，git add, git commit balabala…</p>
+<p>然后我们需要切回到master,使用<code>git checkout master</code>就行了。Git做这些东西非常快，因为切换的都是指针。</p>
+<p>回去之后只能看到master看到的修改，行了，我们现在要把他合并，这就要使用<code>git merge dev</code>. 行了，合并完了，现在可以删除dev分支了,<code>git brance -d dev</code>, 因为创建，合并，删除分支的速度非常快，所以在一般情况下，建议大家建立新的分支来进行更改，改完了再合并，毕竟这样更安全嘛。</p>
+<p>Bug分支</p>
+<p>我们现在要改个bug，现在的分支还没写完，咋办？<code>git status</code>看下，显示还有东西没提交，保存起来用 <code>git stash</code>，在用<code>git status</code>瞅一眼，行了。完活。然后创建分支该呗，<code>git checkout master</code> <code>git checkout -b bug01</code>,然后修改，修复完了add, commit, 然后合并分支. <code>git checkout master</code> <code>git merge --no-off -m &quot;fix bug01&quot; bug01</code>,然后删除分支。<code>git branch -d bug01</code>(–no-ff参数，表示禁用Fast forward,fast forward模式删除分支后，会默认删除分支信息)。行了，现在可以回去继续工作了，<code>git checkout dev</code> <code>git status</code>发现dev的东西没有了，保存的东西去哪了？ <code>git stash list</code> 就行了，然后恢复<code>git stash apply stash@{0}</code></p>
+<blockquote>
+<p>我们来梳理一下工作流程。 你先从github colne出最新版本，然后创建自己的分支bug/feature, 做好你的更改，然后合并分支到dev.</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git/" rel="tag">#Git</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/27/SpringAOP/" rel="next" title="我们说说Spring AOP">
+                <i class="fa fa-chevron-left"></i> 我们说说Spring AOP
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/16/我们说说Junit/" rel="prev" title="我们说说Junit">
+                我们说说Junit <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/11/16/我们说说Git/"
+           data-title="我们说说Git" data-url="http://tiltcat.com/2016/11/16/我们说说Git/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="//schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="tiltcat" />
+          <p class="site-author-name" itemprop="name">tiltcat</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/felisnigreps" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/cool5231" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/your-user-name" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单介绍"><span class="nav-number">1.</span> <span class="nav-text">简单介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git使用"><span class="nav-number">2.</span> <span class="nav-text">Git使用</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tiltcat</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"tiltcat"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
