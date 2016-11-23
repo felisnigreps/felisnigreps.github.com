@@ -6,30 +6,14 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>Let&#39;s do this</title>
+  <title>Tag: HashMap | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="ConcurrentHashMap &amp;amp; HashMap
-title: ConcurrentHashMap &amp;amp; HashMapdate: 2016-10-18 21:20:37
-tags: Concurrent HashMapConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。
-本文对数据结构和原理进行了简">
-<meta property="og:type" content="article">
+  <meta property="og:type" content="website">
 <meta property="og:title" content="Let's do this">
-<meta property="og:url" content="http://tiltcat.com/2016/11/23/ConcurrentHashMap & HashMap/index.html">
+<meta property="og:url" content="http://tiltcat.com/tags/HashMap/index.html">
 <meta property="og:site_name" content="Let's do this">
-<meta property="og:description" content="ConcurrentHashMap &amp;amp; HashMap
-title: ConcurrentHashMap &amp;amp; HashMapdate: 2016-10-18 21:20:37
-tags: Concurrent HashMapConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。
-本文对数据结构和原理进行了简">
-<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/HashMap.png">
-<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/HashMapResize1.jpg">
-<meta property="og:updated_time" content="2016-11-23T13:48:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Let's do this">
-<meta name="twitter:description" content="ConcurrentHashMap &amp;amp; HashMap
-title: ConcurrentHashMap &amp;amp; HashMapdate: 2016-10-18 21:20:37
-tags: Concurrent HashMapConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。
-本文对数据结构和原理进行了简">
-<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/HashMap.png">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -142,102 +126,54 @@ tags: Concurrent HashMapConcurrentHashMap(简称CHM)是在并发情况下很常�
 </nav>
 
       <div class="body-wrap">
-        <article id="post-ConcurrentHashMap &amp; HashMap" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
+        
+  
+  
     
-      <input type="hidden" class="isFancy" />
     
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2016" class="archive-year">2016</a>
+        </div>
+        <div class="archives">
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="ConcurrentHashMap-amp-HashMap"><a href="#ConcurrentHashMap-amp-HashMap" class="headerlink" title="ConcurrentHashMap &amp; HashMap"></a>ConcurrentHashMap &amp; HashMap</h1><hr>
-<p>title: ConcurrentHashMap &amp; HashMap<br>date: 2016-10-18 21:20:37</p>
-<h2 id="tags-Concurrent-HashMap"><a href="#tags-Concurrent-HashMap" class="headerlink" title="tags: Concurrent HashMap"></a>tags: Concurrent HashMap</h2><p>ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。</p>
-<p>本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。<br>图片都是google的，出处不详。<br><a id="more"></a></p>
-<h2 id="HashMap的数据结构"><a href="#HashMap的数据结构" class="headerlink" title="HashMap的数据结构"></a>HashMap的数据结构</h2><p>先简单看下图解：</p>
-<p><img src="http://ogeojkg3t.bkt.clouddn.com/HashMap.png" alt="HashMap"></p>
-<p>当我们要put一个数据的时候，首先会算出这个值得Hash值，然后根据算法来确定Key的值（先简单理解成取模，不过源码中的代码可以减少碰撞），如果多个数据放在了同一个entry中，那么就会形成链表，当sum(数据)&gt;=lengh(table) * 加载因子，那么就会扩容。JDK1.8中的区别是在entry的长度大于8的时候会把链表转换成红黑树。</p>
-<p>我们知道HashMap是使用链表来处理哈希碰撞的，如果多个进程找到了一个bucket(table(i))上，那么根据Entry的特性，他的next只能指向一个Entry,这必然会造成线程不安全。</p>
-<p>除此之外，多个线程的扩容（rehash）也会导致线程不安全。简单来说，当put的时候发现内部元素多余threshold，那么就会进行扩容，怎么扩容呢？先把buckets扩容一倍，从每一个bucket的每一个entry开始遍历，把他的指向根据算法放到新的bucket里。如果两个线程同时扩容，那么总会有一个线程的操作会被废弃，数据也会丢失。</p>
-<p>先来个单线程扩容，我们假设就直接key mod length:</p>
-<p><img src="http://ogeojkg3t.bkt.clouddn.com/HashMapResize1.jpg" alt="resize"></p>
-<p>3,5,7在length为2的bucket里发生了碰撞，都跑到1里去了，现在rezise,从每一个bucket的每一个entry开始遍历，e指向3，next子项7. 第一步先处理3，3%4=3，放到3上。然后是7，一样，但是这块要注意要插在3前面而不是后面，这是为什么呢？因为我们更喜欢O(1)而不是）O(n). 行了，单线程的rehash没啥问题。</p>
-<p>图是网上抄的。</p>
-<h4 id="CHM的数据结构"><a href="#CHM的数据结构" class="headerlink" title="CHM的数据结构"></a>CHM的数据结构</h4><p>CHM在JDK 1.7之后发生了很大的变化，在1.7之前，是通过分段锁技术来实现同步的，建构图应该如下所示：</p>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/11/23/ConcurrentHashMap & HashMap/" class="archive-article-date">
-  	<time datetime="2016-11-23T13:48:08.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-11-23</time>
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2016/10/18/ConcurrentHashMap & HashMap/" class="archive-article-date">
+  	<time datetime="2016-10-18T13:20:37.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-18</time>
 </a>
-      
-      
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2016/10/18/ConcurrentHashMap & HashMap/">ConcurrentHashMap &amp; HashMap</a>
+    </h1>
+  
 
-      <div class="clearfix"></div>
-    </div>
+        <div class="article-info info-on-right">
+          
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Concurrent/">Concurrent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HashMap/">HashMap</a></li></ul>
+	</div>
+
+          
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
   
   
-    <a href="/2016/11/16/我们说说JVM/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">我们说说JVM</div>
-      <i class="icon-circle-right"></i>
-    </a>
+    </div></section>
   
-</nav>
 
-
-
-
-<div class="share_jia">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-		<span class="jiathis_txt">Share to: &nbsp; </span>
-		<a class="jiathis_button_facebook"></a> 
-	    <a class="jiathis_button_twitter"></a>
-	    <a class="jiathis_button_plus"></a> 
-	    <a class="jiathis_button_tsina"></a>
-		<a class="jiathis_button_cqq"></a>
-		<a class="jiathis_button_douban"></a>
-		<a class="jiathis_button_weixin"></a>
-		<a class="jiathis_button_tumblr"></a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	</div>
-	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
-	<!-- JiaThis Button END -->
-</div>
-
-
-
-
-
-
-<div class="duoshuo">
-	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="ConcurrentHashMap &amp; HashMap" data-title="" data-url="http://tiltcat.com/2016/11/23/ConcurrentHashMap &amp; HashMap/"></div>
-	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-	<!-- 多说公共JS代码 end -->
-</div>
-
-
-
+    
 
 
       </div>
@@ -260,9 +196,9 @@ tags: Concurrent HashMapConcurrentHashMap(简称CHM)是在并发情况下很常�
 		mathjax: false,
 		animate: true,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",
@@ -296,7 +232,7 @@ tags: Concurrent HashMapConcurrentHashMap(简称CHM)是在并发情况下很常�
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 10px;">Concurrent</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java-JVM/" style="font-size: 10px;">Java JVM</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 20px;">Concurrent</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Java-JVM/" style="font-size: 10px;">Java JVM</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a>
     			</div>
     	</section>
     
