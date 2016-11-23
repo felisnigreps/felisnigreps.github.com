@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="Let's do this">
   
   
-    <link rel="icon" href="/favicon.png">
+    <link rel="icon" href="/images/favicon.jpg">
   
   <link rel="stylesheet" href="/main.css">
   
@@ -48,8 +48,6 @@
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/tags/随笔">随笔</a></li>
-	        
 			</ul>
 		</nav>
 		<nav class="header-smart-menu">
@@ -66,12 +64,7 @@
     			
             
     			
-    			<a class="js-smart-menu" data-idx="2" href="javascript:void(0)">友链</a>
-    			
-    			
-            
-    			
-    			<a class="js-smart-menu" data-idx="3" href="javascript:void(0)">关于我</a>
+    			<a class="js-smart-menu" data-idx="2" href="javascript:void(0)">关于我</a>
     			
     			
             
@@ -115,8 +108,6 @@
 				
 					<li><a href="/">主页</a></li>
 		        
-					<li><a href="/tags/随笔">随笔</a></li>
-		        
 				</ul>
 			</nav>
 			<nav class="header-nav">
@@ -155,13 +146,103 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
+        <h1 id="我们说说JVM"><a href="#我们说说JVM" class="headerlink" title="我们说说JVM"></a>我们说说JVM</h1><hr>
+<blockquote>
 <p>JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 </p>
 </blockquote>
 <p>JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。</p>
-        <p class="article-more-link">
-          <a class="article-more-a"  href="/2016/11/16/我们说说JVM/#more">more >></a>
-        </p>
+<h2 id="JVM内存区域模型"><a href="#JVM内存区域模型" class="headerlink" title="JVM内存区域模型"></a>JVM内存区域模型</h2><p><img src="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg" alt=""></p>
+<blockquote>
+<ul>
+<li><p>方法区：存放类的信息，静态变量，常量，是各个线程共享的区域。可以通过-XX:PermSize=<em> 和-XX:MaxPermSize=</em> 来设置方法区的大小。默认最大64M,最小16M.<br>方法区中还有一部分叫做<code>运行时常量池</code>，class文件除了上述描述的常量变量类信息外，还有常量池来存储编译器生成的各种符号的引用。</p>
+</li>
+<li><p>虚拟机栈：描述了Java方法执行的栈，就是我们常说的栈内存。每个方法被执行的时候，都会创建一个栈帧来存储局部变量表，操作栈，方法出口等信息。线程私有。</p>
+</li>
+<li><p>本地方法栈： 和虚拟机栈类似，不过本地方法栈执行的是Java的native方法，而虚拟机栈执行的是JVM的Java方法。<br>Java的native方法为Java的本地方法，使用native修饰，Java Native Interface。一般存在两种情况，调用其他语言实现的方法或使用Java语言直接操作计算机硬件。</p>
+</li>
+<li><p>堆区域：是JVM最大的一块区域，也是被各个线程共享的内存区域。该区域存放了所有new的对象和数组。现在的收集器使用分代算法，可以通过各种参数来设置大小。现在的垃圾收集器都是采用分代收集算法。新生代主要来存放新生成的对象，老年代存放了多次GC之后还存活的新生代对象。但是有两种情况会直接分配到老年代。<br>1 大对象，可以设置-XX:PretenureSizeThreshold=1024(单位为字节，默认为0)来代表超过多大时就不在新生代分配。<br>2 大数组，且数组中没有外部引用对象。</p>
+</li>
+<li><p>程序计数器： 内存中最小的一块区域，作用是当前线程所执行字节码的行号。字节码的解释器的作用就是读取行号，来进行流程。</p>
+</li>
+</ul>
+</blockquote>
+<p>这里要再简单说一下堆区域，分为新生代，老年代和永久代。新生代中又分为Eden space, from survivor space 和 to surviver space. </p>
+<h2 id="跟踪收集器"><a href="#跟踪收集器" class="headerlink" title="跟踪收集器"></a>跟踪收集器</h2><p>刚才我们说有些新生代会转移到老年区，不过怎么判断哪些新生代要留呢？</p>
+<p>跟踪收集器会记录全局中所有的引用状态，从GC root开始一直向下搜索。当一个对象在GC root链上没有任何引用时，它就会被回收。那么问题来了，什么是GC root昵？</p>
+<blockquote>
+<ul>
+<li>虚拟机栈中引用的对象。</li>
+<li>方法区中静态变量引用的对象。</li>
+<li>方法区中常量引用的对象。</li>
+<li>本地栈中JNI引用的对象。</li>
+</ul>
+</blockquote>
+<p>找到了GC root之后，我们就会往下根据关系寻找，那些和GC root没有关系的，我们就可以清除了。那么，要怎么清除呢？一般会采用以下3种办法：</p>
+<blockquote>
+<ul>
+<li>标记清除算法：找到不需要用的地址，然后清除。缺点是有碎片，效率不高。</li>
+<li>标记整理算法：在标记清除的基础上，对对象进行移动。不会有碎片，但是效率更低了。</li>
+<li>复制算法：用一半留一半，清楚好了之后把一半移动到另一半上去。缺点是只能用一半内存。</li>
+</ul>
+</blockquote>
+<h3 id="类加载机制"><a href="#类加载机制" class="headerlink" title="类加载机制"></a>类加载机制</h3><p>JVM把class文件进行解析，校验，初始化等工作，最终形成JVM可以直接使用的java文件的过程就是类加载。</p>
+<p>类加载的声明周期分为七步，依次为：加载，验证，准备，解析，初始化，执行，卸载。</p>
+<blockquote>
+<p>这七步其实很好记，和其他熟悉的事物类比一下，比如说我玩炉石<br>加载–&gt;战网loading<br>验证–&gt;输入account登录<br>准备–&gt;选择deck<br>解析–&gt;根据级别匹配<br>初始化–&gt;开战<br>执行–&gt;被神抽打翻<br>卸载–&gt;辣鸡游戏全靠运气，毁我青春果断卸载！</p>
+</blockquote>
+<p>我们来说说各阶段的作用：</p>
+<blockquote>
+<ul>
+<li>加载：<br>1.根据类全名来获取类的二进制字节流信息。<br>2.将静态的二进制字节流转化为方法区运行时的数据结构。<br>3.在Java堆中创建一个代表这个类的java.lang.Class对象，作为数据的入口。</li>
+<li><p>验证：<br>1.文件格式严验证<br>2.元数据验证<br>3.字节码验证<br>4.符号引用验证</p>
+</li>
+<li><p>准备：</p>
+</li>
+<li>解析：</li>
+<li>初始化：</li>
+<li>执行：</li>
+<li>卸载：</li>
+</ul>
+</blockquote>
+<p>有些具体的没说，因为我觉得现在我说了也记不住，过一段时间得忘记。等啥时候理解透彻了，再回来补上吧。</p>
+<h3 id="内存调优"><a href="#内存调优" class="headerlink" title="内存调优"></a>内存调优</h3><p>下面内容复制粘贴来的：</p>
+<p>JVM调优主要是针对内存管理方面的调优，包括控制各个代的大小，GC策略。由于GC开始垃圾回收时会挂起应用线程，严重影响了性能，调优的目是为了尽量降低GC所导致的应用线程暂停时间、 减少Full GC次数。</p>
+<p>代大小调优</p>
+<p>最关键参数：-Xms、 -Xmx 、-Xmn 、-XX:SurvivorRatio、-XX:MaxTenuringThreshold、-XX:PermSize、-XX:MaxPermSize</p>
+<p>-Xms、 -Xmx 通常设置为相同的值，避免运行时要不断扩展JVM内存，这个值决定了JVM heap所能使用的最大内存。</p>
+<p>-Xmn 决定了新生代空间的大小，新生代Eden、S0、S1三个区域的比率可以通过-XX:SurvivorRatio来控制(假如值为 4  表示：Eden:S0:S1 = 4:3:3 )</p>
+<p>-XX:MaxTenuringThreshold 控制对象在经过多少次minor GC之后进入老年代，此参数只有在Serial 串行GC时有效。</p>
+<p>-XX:PermSize、-XX:MaxPermSize 用来控制方法区的大小，通常设置为相同的值。</p>
+<p>1.避免新生代大小设置过小</p>
+<p>当新生代设置过小时，会产生两种比较明显的现象，一是minor GC次数频繁，二是可能导致 minor GC对象直接进入老年代。当老年代内存不足时，会触发Full GC。</p>
+<p>2.避免新生代设置过大</p>
+<p>新生代设置过大，会带来两个问题：一是老年大变小，可能导致Full  GC频繁执行；二是 minor GC 执行回收的时间大幅度增加。</p>
+<p>3.避免Survivor区过大或过小</p>
+<p>-XX:SurvivorRatio参数的值越大，就意味着Eden区域变大，minor GC次数会降低，但两块Survivor区域变小，如果超过Survivor区域内存大小的对象在minor GC后仍没被回收，则会直接进入老年代，</p>
+<p>-XX:SurvivorRatio参数值设置过小，就意味着Eden区域变小，minor GC触发次数会增加，Survivor区域变大，意味着可以存储更多在minor GC后任存活的对象，避免其进入老年代。</p>
+<p>4.合理设置对象在新生代存活的周期</p>
+<p>新生代存活周期的值决定了新生代对象在经过多少次Minor GC后进入老年代。因此这个值要根据自己的应用来调优，Jvm参数上这个值对应的为-XX:MaxTenuringThreshold，默认值为15次。</p>
+<h3 id="GC调优"><a href="#GC调优" class="headerlink" title="GC调优"></a>GC调优</h3><p>1.GC搭配</p>
+<p>参见另一遍<a href="http://blog.csdn.net/java2000_wl/article/details/8030172" target="_blank" rel="external">垃圾收集器</a></p>
+<p>2.查看JVM参数</p>
+<p><a href="http://blog.csdn.net/java2000_wl/article/details/8042010" target="_blank" rel="external">命令行工具</a>   <a href="http://www.importnew.com/?p=22235" target="_blank" rel="external">可视化工具</a></p>
+<p>3.GC日志参数</p>
+<p>-XX:+PrintGCDetails</p>
+<p>-XX:+PrintGCTimeStamps</p>
+<p>-Xloggc:c:\Java\gc.log</p>
+<p>##对象访问</p>
+<p>##对象引用</p>
+<p>对象引用分四种：</p>
+<blockquote>
+<ul>
+<li>强引用</li>
+<li>弱引用</li>
+<li>软引用</li>
+<li>虚引用</li>
+</ul>
+</blockquote>
+<p>合理的使用引用可以帮助Java更好的管理内存。</p>
+
       
     </div>
     <div class="article-info article-info-index">
@@ -172,15 +253,10 @@
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-JVM/">Java JVM</a></li></ul>
 	</div>
 
       
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/JVM/">JVM</a>
-	</div>
-
 
       <div class="clearfix"></div>
     </div>
@@ -501,8 +577,6 @@
       <li data-hook="tools-section-tag"><span class="text">标签</span><i class="icon-price-tags"></i></li>
     
     
-      <li data-hook="tools-section-friends"><span class="text">友链</span><i class="icon-link"></i></li>
-    
     
       <li data-hook="tools-section-me"><span class="text">我</span><i class="icon-smile"></i></li>
     
@@ -516,21 +590,11 @@
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java-JVM/" style="font-size: 10px;">Java JVM</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a>
     			</div>
     	</section>
     
 
-    
-    	<section class="tools-section tools-section-friends">
-  		
-  			<div class="friends-wrap" id="js-friends">
-  			
-  	          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">友情链接1</a>
-  	        
-  	        </div>
-  		
-    	</section>
     
 
     
