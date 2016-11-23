@@ -8,41 +8,26 @@
   <link rel="dns-prefetch" href="http://tiltcat.com">
   <title>我们说说JVM | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="我们说说JVM
-
-JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
+  <meta name="description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
 
 JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。
-JVM内存区域模型
-
-
-方法区：存放类的信息，静态变量，常量，是各个线程共享的区域。可以通过-XX:PermSize= 和-XX:MaxPermSi">
+JVM内存区域模型">
 <meta property="og:type" content="article">
 <meta property="og:title" content="我们说说JVM">
 <meta property="og:url" content="http://tiltcat.com/2016/11/16/我们说说JVM/index.html">
 <meta property="og:site_name" content="Let's do this">
-<meta property="og:description" content="我们说说JVM
-
-JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
+<meta property="og:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
 
 JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。
-JVM内存区域模型
-
-
-方法区：存放类的信息，静态变量，常量，是各个线程共享的区域。可以通过-XX:PermSize= 和-XX:MaxPermSi">
+JVM内存区域模型">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg">
-<meta property="og:updated_time" content="2016-11-23T13:01:43.000Z">
+<meta property="og:updated_time" content="2016-11-23T13:15:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我们说说JVM">
-<meta name="twitter:description" content="我们说说JVM
-
-JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
+<meta name="twitter:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
 
 JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。
-JVM内存区域模型
-
-
-方法区：存放类的信息，静态变量，常量，是各个线程共享的区域。可以通过-XX:PermSize= 和-XX:MaxPermSi">
+JVM内存区域模型">
 <meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg">
   
   
@@ -174,12 +159,12 @@ JVM内存区域模型
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="我们说说JVM"><a href="#我们说说JVM" class="headerlink" title="我们说说JVM"></a>我们说说JVM</h1><hr>
-<blockquote>
+        <blockquote>
 <p>JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 </p>
 </blockquote>
 <p>JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。</p>
 <h2 id="JVM内存区域模型"><a href="#JVM内存区域模型" class="headerlink" title="JVM内存区域模型"></a>JVM内存区域模型</h2><p><img src="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg" alt=""></p>
+<a id="more"></a>
 <blockquote>
 <ul>
 <li><p>方法区：存放类的信息，静态变量，常量，是各个线程共享的区域。可以通过-XX:PermSize=<em> 和-XX:MaxPermSize=</em> 来设置方法区的大小。默认最大64M,最小16M.<br>方法区中还有一部分叫做<code>运行时常量池</code>，class文件除了上述描述的常量变量类信息外，还有常量池来存储编译器生成的各种符号的引用。</p>
