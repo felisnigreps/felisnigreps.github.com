@@ -9,21 +9,18 @@
   <title>我们说说Junit | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="本文简单的说下Junit的基本使用，通篇非常简单，如果有新的知识点会持续补充。
-##创建测试
-本文的开的IDE是IntelliJ, 首先先创建一个Maven项目，然后导入相关的dependency:&amp;lt;!-- https://mvnrepository.com/artifact/junit/junit --&amp;gt;&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;jun">
+创建测试本文的开的IDE是IntelliJ, 首先先创建一个Maven项目，然后导入相关的dependency:&amp;lt;!-- https://mvnrepository.com/artifact/junit/junit --&amp;gt;&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;junit&amp;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="我们说说Junit">
 <meta property="og:url" content="http://tiltcat.com/2016/11/16/我们说说Junit/index.html">
 <meta property="og:site_name" content="Let's do this">
 <meta property="og:description" content="本文简单的说下Junit的基本使用，通篇非常简单，如果有新的知识点会持续补充。
-##创建测试
-本文的开的IDE是IntelliJ, 首先先创建一个Maven项目，然后导入相关的dependency:&amp;lt;!-- https://mvnrepository.com/artifact/junit/junit --&amp;gt;&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;jun">
-<meta property="og:updated_time" content="2016-11-16T12:20:47.000Z">
+创建测试本文的开的IDE是IntelliJ, 首先先创建一个Maven项目，然后导入相关的dependency:&amp;lt;!-- https://mvnrepository.com/artifact/junit/junit --&amp;gt;&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;junit&amp;">
+<meta property="og:updated_time" content="2016-11-23T13:24:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我们说说Junit">
 <meta name="twitter:description" content="本文简单的说下Junit的基本使用，通篇非常简单，如果有新的知识点会持续补充。
-##创建测试
-本文的开的IDE是IntelliJ, 首先先创建一个Maven项目，然后导入相关的dependency:&amp;lt;!-- https://mvnrepository.com/artifact/junit/junit --&amp;gt;&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;jun">
+创建测试本文的开的IDE是IntelliJ, 首先先创建一个Maven项目，然后导入相关的dependency:&amp;lt;!-- https://mvnrepository.com/artifact/junit/junit --&amp;gt;&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;junit&amp;">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -155,8 +152,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>本文简单的说下Junit的基本使用，通篇非常简单，如果有新的知识点会持续补充。</p>
-<p>##创建测试</p>
-<p>本文的开的IDE是IntelliJ, 首先先创建一个Maven项目，然后导入相关的dependency:<br><figure class="highlight xml"><table><tr><td class="code"><pre><div class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/junit/junit --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h2 id="创建测试"><a href="#创建测试" class="headerlink" title="创建测试"></a>创建测试</h2><p>本文的开的IDE是IntelliJ, 首先先创建一个Maven项目，然后导入相关的dependency:<br><figure class="highlight xml"><table><tr><td class="code"><pre><div class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/junit/junit --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <a id="more"></a>
 <p>行了，咱们写个类，然后做测试。<br>普通类，没啥可说的,俩方法。<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Math</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">factorial</span><span class="params">(<span class="keyword">int</span> num)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        <span class="keyword">if</span> (num &lt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"负数没有阶乘"</span>);</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (num == <span class="number">1</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> factorial(num - <span class="number">1</span>) * num;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">fibonacci</span><span class="params">(<span class="keyword">int</span> num)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        <span class="keyword">if</span> (num == <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">"fibonacci数列项数要大于一"</span>);</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (num == <span class="number">1</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (num == <span class="number">2</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> fibonacci(num - <span class="number">1</span>) + factorial(num - <span class="number">2</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>然后你可以手动创建测试类，也可以自动创建，我建议自动创建。Ctrl+shift+T 或者右键–&gt;goto–&gt;test, 然后弹框出来一些基本信息，自己读一下，看看需不需要改，感觉没啥问题点Ok就行了。</p>
@@ -198,15 +194,10 @@
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/测试/">测试</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/单元测试/">单元测试</a></li></ul>
 	</div>
 
       
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/Junit/">Junit</a>
-	</div>
-
 
       <div class="clearfix"></div>
     </div>
@@ -338,7 +329,7 @@
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java-JVM/" style="font-size: 10px;">Java JVM</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a>
+    				<a href="/tags/Concurrent/" style="font-size: 10px;">Concurrent</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java-JVM/" style="font-size: 10px;">Java JVM</a> <a href="/tags/Spring-AOP/" style="font-size: 10px;">Spring AOP</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a>
     			</div>
     	</section>
     

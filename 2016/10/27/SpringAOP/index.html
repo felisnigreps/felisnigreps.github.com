@@ -32,7 +32,7 @@ Spring AOP的通知和切入点
 AOP的使用（AspectJ）
 切入点语法
 通知参数">
-<meta property="og:updated_time" content="2016-11-16T12:15:46.000Z">
+<meta property="og:updated_time" content="2016-11-23T13:30:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我们说说Spring AOP">
 <meta name="twitter:description" content="本文的内容来自网络/书籍/API, 涉及被容比较初级, 主要讨论AspectJ的使用，基于Schema的后期会补充。具体讨论以下几点：
@@ -279,7 +279,6 @@ AOP的使用（AspectJ）
 <p>注释差不多了</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="comment">//咱们这么写，ops就可以得到了</span></div><div class="line">    <span class="meta">@Before</span>(value = <span class="string">"doSome() &amp;&amp; args(ops)"</span>,argNames = <span class="string">"jp,ops"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(JoinPoint jp, String ops)</span></span>&#123;</div><div class="line">        Object[] s = jp.getArgs();</div><div class="line">        <span class="keyword">for</span>(Object object:s)&#123;</div><div class="line">            System.out.println(<span class="string">"--- before service --- "</span> + object);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 <p>只是简单的过了一下，说了说Spring AOP到底干嘛的，@AspectJ-based的该怎么写，然后介绍了一下简单的概念</p>
-<p>标签： Spring AOP</p>
 
       
     </div>
@@ -291,15 +290,10 @@ AOP的使用（AspectJ）
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AOP/">AOP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring-AOP/">Spring AOP</a></li></ul>
 	</div>
 
       
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/Spring/">Spring</a>
-	</div>
-
 
       <div class="clearfix"></div>
     </div>
@@ -431,7 +425,7 @@ AOP的使用（AspectJ）
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java-JVM/" style="font-size: 10px;">Java JVM</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/多线程/" style="font-size: 10px;">多线程</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a>
+    				<a href="/tags/Concurrent/" style="font-size: 10px;">Concurrent</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Java-JVM/" style="font-size: 10px;">Java JVM</a> <a href="/tags/Spring-AOP/" style="font-size: 10px;">Spring AOP</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a>
     			</div>
     	</section>
     
