@@ -21,7 +21,7 @@ JVM内存区域模型">
 JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。
 JVM内存区域模型">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg">
-<meta property="og:updated_time" content="2016-11-26T02:16:10.000Z">
+<meta property="og:updated_time" content="2016-12-05T10:42:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我们说说JVM">
 <meta name="twitter:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
@@ -167,7 +167,7 @@ JVM内存区域模型">
 <a id="more"></a>
 <blockquote>
 <ul>
-<li><p>方法区：存放类的信息，静态变量，常量，是各个线程共享的区域。可以通过-XX:PermSize=<em> 和-XX:MaxPermSize=</em> 来设置方法区的大小。默认最大64M,最小16M.<br>方法区中还有一部分叫做<code>运行时常量池</code>，class文件除了上述描述的常量变量类信息外，还有常量池来存储编译器生成的各种符号的引用。</p>
+<li><p>方法区：存放类的信息，静态变量，常量，是各个线程共享的区域。可以通过-XX:PermSize=<em> 和-XX:MaxPermSize=</em> 来设置方法区的大小。默认最大64M,最小16M.<br>方法区中还有一部分叫做<code>运行时常量池</code>，常量池里主要存储两类信息，字面量和符号引用量。字面量是Java语言层面上的常量，比如String和被final修饰的局部变量。符号引用量是操作原理测光面的东西，包括以下三点:类和接口的全限定名，方法名称和描述符，字段民称和描述符。</p>
 </li>
 <li><p>虚拟机栈：描述了Java方法执行的栈，就是我们常说的栈内存。每个方法被执行的时候，都会创建一个栈帧来存储局部变量表，操作栈，方法出口等信息。线程私有。</p>
 </li>
@@ -175,7 +175,7 @@ JVM内存区域模型">
 </li>
 <li><p>堆区域：是JVM最大的一块区域，也是被各个线程共享的内存区域。该区域存放了所有new的对象和数组。现在的收集器使用分代算法，可以通过各种参数来设置大小。现在的垃圾收集器都是采用分代收集算法。新生代主要来存放新生成的对象，老年代存放了多次GC之后还存活的新生代对象。但是有两种情况会直接分配到老年代。<br>1 大对象，可以设置-XX:PretenureSizeThreshold=1024(单位为字节，默认为0)来代表超过多大时就不在新生代分配。<br>2 大数组，且数组中没有外部引用对象。</p>
 </li>
-<li><p>程序计数器： 内存中最小的一块区域，作用是当前线程所执行字节码的行号。字节码的解释器的作用就是读取行号，来进行流程。</p>
+<li><p>程序计数器： 内存中最小的一块区域，作用是当前线程所执行字节码的行号。字节码的解释器的作用就是读取行号，来进行流程。由于Java的虚拟机是通过轮流分配处理器的时间来实现多线程的，所以一个处理器（在多核处理器中为一个内核）在一段时间内只能运行一个线程。为了实现线程的准确切换，那么程序计数器就相当重要。</p>
 </li>
 </ul>
 </blockquote>
@@ -190,6 +190,7 @@ JVM内存区域模型">
 <li>本地栈中JNI引用的对象。</li>
 </ul>
 </blockquote>
+<p>这种根据GC来判断对象是否还在被引用的算法叫可达性分析算法。</p>
 <p>找到了GC root之后，我们就会往下根据关系寻找，那些和GC root没有关系的，我们就可以清除了。那么，要怎么清除呢？一般会采用以下3种办法：</p>
 <blockquote>
 <ul>
@@ -198,6 +199,8 @@ JVM内存区域模型">
 <li>复制算法：用一半留一半，清楚好了之后把一半移动到另一半上去。缺点是只能用一半内存。</li>
 </ul>
 </blockquote>
+<p>GC日志查看</p>
+<p>-XX:+PrintGC 输出GC日志<br>-XX:+PrintGCDetails 输出GC的详细日志<br>-XX:+PrintGCTimeStamps 输出GC的时间戳（以基准时间的形式）<br>-XX:+PrintGCDateStamps 输出GC的时间戳（以日期的形式，如 2013-05-04T21:53:59.234+0800）<br>-XX:+PrintHeapAtGC 在进行GC的前后打印出堆的信息<br>-Xloggc:../logs/gc.log 日志文件的输出路径  </p>
 <h3 id="类加载机制"><a href="#类加载机制" class="headerlink" title="类加载机制"></a>类加载机制</h3><p>JVM把class文件进行解析，校验，初始化等工作，最终形成JVM可以直接使用的java文件的过程就是类加载。</p>
 <p>类加载的声明周期分为七步，依次为：加载，验证，准备，解析，初始化，执行，卸载。</p>
 <blockquote>
@@ -218,28 +221,28 @@ JVM内存区域模型">
 </ul>
 </blockquote>
 <p>有些具体的没说，因为我觉得现在我说了也记不住，过一段时间得忘记。等啥时候理解透彻了，再回来补上吧。</p>
-<h3 id="内存调优"><a href="#内存调优" class="headerlink" title="内存调优"></a>内存调优</h3><p>下面内容复制粘贴来的：</p>
-<p>JVM调优主要是针对内存管理方面的调优，包括控制各个代的大小，GC策略。由于GC开始垃圾回收时会挂起应用线程，严重影响了性能，调优的目是为了尽量降低GC所导致的应用线程暂停时间、 减少Full GC次数。</p>
+<h3 id="内存调优"><a href="#内存调优" class="headerlink" title="内存调优"></a>内存调优</h3><p>JVM调优主要是针对内存管理方面的调优，包括控制各个代的大小，GC策略。由于GC开始垃圾回收时会挂起应用线程，严重影响了性能，调优的目是为了尽量降低GC所导致的应用线程暂停时间、 减少Full GC次数。</p>
 <p>代大小调优</p>
-<p>最关键参数：-Xms、 -Xmx 、-Xmn 、-XX:SurvivorRatio、-XX:MaxTenuringThreshold、-XX:PermSize、-XX:MaxPermSize</p>
 <p>-Xms、 -Xmx 通常设置为相同的值，避免运行时要不断扩展JVM内存，这个值决定了JVM heap所能使用的最大内存。</p>
-<p>-Xmn 决定了新生代空间的大小，新生代Eden、S0、S1三个区域的比率可以通过-XX:SurvivorRatio来控制(假如值为 4  表示：Eden:S0:S1 = 4:3:3 )</p>
+<p>-Xmn 决定了新生代空间的大小.</p>
 <p>-XX:MaxTenuringThreshold 控制对象在经过多少次minor GC之后进入老年代，此参数只有在Serial 串行GC时有效。</p>
 <p>-XX:PermSize、-XX:MaxPermSize 用来控制方法区的大小，通常设置为相同的值。</p>
-<p>1.避免新生代大小设置过小</p>
-<p>当新生代设置过小时，会产生两种比较明显的现象，一是minor GC次数频繁，二是可能导致 minor GC对象直接进入老年代。当老年代内存不足时，会触发Full GC。</p>
-<p>2.避免新生代设置过大</p>
-<p>新生代设置过大，会带来两个问题：一是老年大变小，可能导致Full  GC频繁执行；二是 minor GC 执行回收的时间大幅度增加。</p>
-<p>3.避免Survivor区过大或过小</p>
-<p>-XX:SurvivorRatio参数的值越大，就意味着Eden区域变大，minor GC次数会降低，但两块Survivor区域变小，如果超过Survivor区域内存大小的对象在minor GC后仍没被回收，则会直接进入老年代，</p>
+<p>-XX:SurvivorRatio=8  设置young generation中Eden区域和每个Survivor区域的比值。在这个例子中，Eden:from:to = 8:1:1</p>
+<p>-XX:PretenureSizeThreshold=3145728 大于这个数值的对象直接进入老年代</p>
+<blockquote>
+<p>新生代GC(Minor GC): 发生在新生代的GC,速度较快也较频繁。<br>老年代GC(Full GC/Major GC):发生在老年代的GC, 一般情况下速度比Minor GC慢十倍以上。</p>
+</blockquote>
+<h4 id="避免新生代大小设置过小"><a href="#避免新生代大小设置过小" class="headerlink" title="避免新生代大小设置过小"></a>避免新生代大小设置过小</h4><p>当新生代设置过小时，会产生两种比较明显的现象，一是minor GC次数频繁，二是可能导致 minor GC对象直接进入老年代。当老年代内存不足时，会触发Full GC。</p>
+<h4 id="避免新生代设置过大"><a href="#避免新生代设置过大" class="headerlink" title="避免新生代设置过大"></a>避免新生代设置过大</h4><p>新生代设置过大，会带来两个问题：一是老年大变小，可能导致Full  GC频繁执行；二是 minor GC 执行回收的时间大幅度增加。</p>
+<h4 id="避免Survivor区过大或过小"><a href="#避免Survivor区过大或过小" class="headerlink" title="避免Survivor区过大或过小"></a>避免Survivor区过大或过小</h4><p>-XX:SurvivorRatio参数的值越大，就意味着Eden区域变大，minor GC次数会降低，但两块Survivor区域变小，如果超过Survivor区域内存大小的对象在minor GC后仍没被回收，则会直接进入老年代，</p>
 <p>-XX:SurvivorRatio参数值设置过小，就意味着Eden区域变小，minor GC触发次数会增加，Survivor区域变大，意味着可以存储更多在minor GC后任存活的对象，避免其进入老年代。</p>
-<p>4.合理设置对象在新生代存活的周期</p>
-<p>新生代存活周期的值决定了新生代对象在经过多少次Minor GC后进入老年代。因此这个值要根据自己的应用来调优，Jvm参数上这个值对应的为-XX:MaxTenuringThreshold，默认值为15次。</p>
+<h4 id="合理设置对象在新生代存活的周期"><a href="#合理设置对象在新生代存活的周期" class="headerlink" title="合理设置对象在新生代存活的周期"></a>合理设置对象在新生代存活的周期</h4><p>新生代存活周期的值决定了新生代对象在经过多少次Minor GC后进入老年代。因此这个值要根据自己的应用来调优，Jvm参数上这个值对应的为-XX:MaxTenuringThreshold，默认值为15次。</p>
 <h3 id="GC调优"><a href="#GC调优" class="headerlink" title="GC调优"></a>GC调优</h3><p>1.GC搭配</p>
 <p>参见另一篇<a href="http://blog.csdn.net/java2000_wl/article/details/8030172" target="_blank" rel="external">垃圾收集器</a></p>
 <p>2.查看JVM参数</p>
 <p><a href="http://blog.csdn.net/java2000_wl/article/details/8042010" target="_blank" rel="external">命令行工具</a>   <a href="http://www.importnew.com/?p=22235" target="_blank" rel="external">可视化工具</a></p>
 <p>3.GC日志参数</p>
+<p>-XX:+PrintGC(-verbose:gc)</p>
 <p>-XX:+PrintGCDetails</p>
 <p>-XX:+PrintGCTimeStamps</p>
 <p>-Xloggc:c:\Java\gc.log</p>
@@ -253,6 +256,12 @@ JVM内存区域模型">
 </ul>
 </blockquote>
 <p>合理的使用引用可以帮助Java更好的管理内存。</p>
+<h2 id="内存溢出异常"><a href="#内存溢出异常" class="headerlink" title="内存溢出异常"></a>内存溢出异常</h2><p>在上方我们讨论过JVM内存的设置和异常，我现在测试一下：<br>我们现在设置较小的stack size(在IDE中直接设置). </p>
+<p>-Xss200k: 设置栈大小<br>-Xmx1024m: 设置堆的最大值<br>-Xms1024m: 设置堆的最小值<br>-XX:MaxPermSize: 设置方法区的最大大小</p>
+<p>下面程序做测试，然后调整栈大小，会发现无论如何都会报出StackOverflow错误。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StackLeak</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> threadLength = <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">leakTest</span><span class="params">()</span> </span>&#123;</div><div class="line">        threadLength++;</div><div class="line">        leakTest();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">        StackLeak leak = <span class="keyword">new</span> StackLeak();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            leak.leakTest();</div><div class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</div><div class="line">            System.out.println(<span class="string">"Thread length is "</span> + leak.threadLength);</div><div class="line">            <span class="keyword">throw</span> e;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Thread length is <span class="number">2459</span></div><div class="line">Exception in thread <span class="string">"main"</span> java.lang.StackOverflowError</div><div class="line">	at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">7</span>)</div><div class="line">	at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">8</span>)</div><div class="line">	at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">8</span>)</div><div class="line">	....</div></pre></td></tr></table></figure>
+<p>结果表明， 在单线程情况下，无论虚拟机栈太小还是栈帧太大，虚拟器无法分配的时候都会报出stackOverflow异常。</p>
+<p>大对象直接进入老年代</p>
 
       
     </div>
@@ -264,7 +273,7 @@ JVM内存区域模型">
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-JVM/">Java JVM</a></li></ul>
 	</div>
 
       
@@ -390,7 +399,7 @@ JVM内存区域模型">
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 20px;">Concurrent</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 20px;">Concurrent</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Java-JVM/" style="font-size: 10px;">Java JVM</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a>
     			</div>
     	</section>
     
