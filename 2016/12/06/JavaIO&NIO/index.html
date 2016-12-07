@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://tiltcat.com">
+  <title>Java IO &amp; NIO | Let&#39;s do this</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="刚开始看IO的时候还没有这个blog,昨天用到感觉没有以前那么熟练了。在公司想找以前联系时候的源码还没找到，不过问题不大，今天过一遍复习一下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java IO & NIO">
+<meta property="og:url" content="http://tiltcat.com/2016/12/06/JavaIO&NIO/index.html">
+<meta property="og:site_name" content="Let's do this">
+<meta property="og:description" content="刚开始看IO的时候还没有这个blog,昨天用到感觉没有以前那么熟练了。在公司想找以前联系时候的源码还没找到，不过问题不大，今天过一遍复习一下。">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/JavaIO.png">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/channel&buffer.png">
+<meta property="og:updated_time" content="2016-12-07T10:51:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java IO & NIO">
+<meta name="twitter:description" content="刚开始看IO的时候还没有这个blog,昨天用到感觉没有以前那么熟练了。在公司想找以前联系时候的源码还没找到，不过问题不大，今天过一遍复习一下。">
+<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/JavaIO.png">
+  
+  
+    <link rel="icon" href="/images/favicon.jpg">
+  
+  <link rel="stylesheet" href="/main.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/images/avatar.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">tiltcat</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">wub lab dup dup</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a class="js-smart-menu" data-idx="0" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="1" href="javascript:void(0)">标签</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="2" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/felisnigreps" title="github">github</a>
+		        
+					<a class="weibo" target="_blank" href="http://weibo.com/cool5231" title="weibo">weibo</a>
+		        
+					<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/tilt-play" title="zhihu">zhihu</a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-list"></i></div>
+  		<h1 class="header-author js-mobile-header hide">tiltcat</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img src="/images/avatar.jpg" class="js-avatar">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">tiltcat</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">wub lab dup dup</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/felisnigreps" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/cool5231" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/tilt-play" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap">
+        <article id="post-JavaIO&amp;NIO" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java IO &amp; NIO
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>刚开始看IO的时候还没有这个blog,昨天用到感觉没有以前那么熟练了。在公司想找以前联系时候的源码还没找到，不过问题不大，今天过一遍复习一下。</p>
+</blockquote>
+<a id="more"></a>
+<p><img src="http://ogeojkg3t.bkt.clouddn.com/JavaIO.png" alt="JavaIO概览"></p>
+<p>以上是一些处理IO的类，我们根据情况来选择不同的方式来处理问题。</p>
+<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><h3 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h3><p>FileReader和FileInputStream</p>
+<h3 id="取文件"><a href="#取文件" class="headerlink" title="取文件"></a>取文件</h3><p>FileWriter和FileOutputStream</p>
+<h3 id="随机存取文件"><a href="#随机存取文件" class="headerlink" title="随机存取文件"></a>随机存取文件</h3><p>使用RandomAccessFile对文件进行存取，这个存取并不是‘随机’，而是可以让你跳过某些字符来进行读写。</p>
+<h3 id="文件和目录信息的获取"><a href="#文件和目录信息的获取" class="headerlink" title="文件和目录信息的获取"></a>文件和目录信息的获取</h3><p>通过File类来获取文件和目录的信息。</p>
+<p>##管道</p>
+<p>管道可以为JVM中两个线程进行通讯。管道是PipedInputStream和PipedOutputStream. 一个PIS流应该和一个POS流相关联。一个通过PIS流写入的数据可以被另一个和其相关联的POS流读取出来。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PipedStreamTest</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        PipedInputStream inputStream = <span class="keyword">new</span> PipedInputStream();</div><div class="line">        PipedOutputStream outputStream = <span class="keyword">new</span> PipedOutputStream();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            inputStream.connect(outputStream);</div><div class="line">            Thread a = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        outputStream.write(<span class="string">"wub lad dup dup"</span>.getBytes());</div><div class="line">                        outputStream.close();</div><div class="line">                    &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                        e.printStackTrace();</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">            Thread b = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        <span class="keyword">int</span> data = inputStream.read();</div><div class="line">                        <span class="keyword">while</span> (data != -<span class="number">1</span>) &#123;</div><div class="line">                            System.out.print((<span class="keyword">char</span>) data);</div><div class="line">                            data = inputStream.read();</div><div class="line">                        &#125;</div><div class="line">                        inputStream.close();</div><div class="line">                    &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                        e.printStackTrace();</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">            a.start();</div><div class="line">            b.start();</div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>尝试着用try-with-resource来关闭流，结果未遂。各种错误都有。上网搜索了一圈也未果。</p>
+<p>字节流一般用*Stream来命名，字符流一般用Reader/Writer来命名。</p>
+<h2 id="RandomAccessFile"><a href="#RandomAccessFile" class="headerlink" title="RandomAccessFile"></a>RandomAccessFile</h2><p>RAF允许你来回读写文件，也可以替换文件中的某些部分。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RandomAccessFileDemo</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        RandomAccessFile file = <span class="keyword">new</span> RandomAccessFile(<span class="string">"C:\\temp\\1.txt"</span>,<span class="string">"rw"</span>);</div><div class="line">        <span class="comment">//设置开始读取的指针</span></div><div class="line">        file.seek(<span class="number">20</span>);</div><div class="line">        <span class="comment">//获取指针</span></div><div class="line">        <span class="keyword">long</span> pointer = file.getFilePointer();</div><div class="line">        System.out.println(pointer);</div><div class="line">        <span class="comment">//读取内容</span></div><div class="line">        <span class="keyword">int</span> a = file.read();</div><div class="line">        <span class="keyword">while</span> (a!=-<span class="number">1</span>)&#123;</div><div class="line">            System.out.print((<span class="keyword">char</span>) a);</div><div class="line">            a = file.read();</div><div class="line">        &#125;</div><div class="line">        System.out.println(file.length());</div><div class="line">        <span class="comment">//指定位置写入</span></div><div class="line">        file.seek(<span class="number">66</span>);</div><div class="line">        file.write(<span class="string">"ssssssssssssssssssssssss"</span>.getBytes());</div><div class="line">        file.close();</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="BufferedInputStream"><a href="#BufferedInputStream" class="headerlink" title="BufferedInputStream"></a>BufferedInputStream</h2><p>BIS这是个好东西，他会设置一个缓冲区进行读取。快，读取大量数据的时候建议用他。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BufferedInputStreamDemo</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">    <span class="comment">//看到一个github上</span></div><div class="line">        <span class="keyword">try</span>(InputStream inputStream = <span class="keyword">new</span> BufferedInputStream(<span class="keyword">new</span> FileInputStream(<span class="string">"C:\\temp\\1.txt"</span>), <span class="number">12</span> * <span class="number">1024</span>))&#123;</div><div class="line">            <span class="keyword">int</span> a = inputStream.read();</div><div class="line">            <span class="keyword">while</span> (a!=-<span class="number">1</span>)&#123;</div><div class="line">                System.out.print((<span class="keyword">char</span>)a);</div><div class="line">                a = inputStream.read();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="DataInputStream"><a href="#DataInputStream" class="headerlink" title="DataInputStream"></a>DataInputStream</h2><p>可以按照类型读取，看看API上的方法一下就都知道了</p>
+<h2 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h2><p>IO一看也没什么太细节的东西，都是读了就了解了，咱们说说NIO.</p>
+<p>Java NIO有三个核心部分</p>
+<blockquote>
+<ul>
+<li>Selector</li>
+<li>Channel</li>
+<li>Buffer</li>
+</ul>
+</blockquote>
+<h3 id="Channel-and-Buffer"><a href="#Channel-and-Buffer" class="headerlink" title="Channel and Buffer"></a>Channel and Buffer</h3><p><img src="http://ogeojkg3t.bkt.clouddn.com/channel&amp;buffer.png" alt="C&amp;B"></p>
+<p>C和B之间和可传递数据，他们都有不同的实现</p>
+<blockquote>
+<p>Channel</p>
+<ul>
+<li>FileChannel</li>
+<li>DataGramChannel</li>
+<li>SocketChannel </li>
+<li>ServerSocketChannel</li>
+</ul>
+<p>Buffer<br>就是一些数据类型的buffer</p>
+<ul>
+<li>ByteBuffer</li>
+<li>ShortBuffer</li>
+<li>DoubleBuffer</li>
+<li>LongBuffer</li>
+<li>IntBuffer</li>
+<li>CharBuffer</li>
+<li>FloatBuffer</li>
+</ul>
+<p>Selector<br>Selector可以在单线程下管理多个channel，要使用selector,你需要向Selector注册Channel,然后调用他的seek()，这个方法会一直阻塞到他注册的通道有事件就绪，然后返回，这样线程就会处理这个事件。</p>
+</blockquote>
+<h3 id="more-about-Channel"><a href="#more-about-Channel" class="headerlink" title="more about Channel"></a>more about Channel</h3><p>既可以从Channel读数据，又可以谢数据到Channel.Channel可以进行异步的读写。Channel中的数据总是要写入一个buffer中，或者从一个buffer中读，就像上面图示的那样。</p>
+<p>我们刚说了有四种channel</p>
+<p>FileChanner: 主要负责从文件中读取数据,是阻塞IO。<br>DataGramChannel: 通过UDP读写数据<br>SocketChannel: 通过TCP读写数据<br>ServerSocketChannel: 监听新的TCP连接，每有一个连接就注册一个SocketChannel</p>
+<p>刚看buffer的代码有一点蒙，缓了那么一下，才想起来他的工作机制，buffer有几个属性，我们需要了解一下：</p>
+<blockquote>
+<ul>
+<li>capcity: buffer的容量大小，一般用buffer的子类的allocate(num)方法来定义大小。</li>
+<li>limit: buffer可用的大小。</li>
+<li>position: 下一个需要读取元素的索引。</li>
+<li>mark: 一个记录当前position的值，当使用mark()的时候会设置成mark=position,调用reset方法可以使position返回到mark的位置。</li>
+</ul>
+</blockquote>
+<h3 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h3><p>Buffer本质上是一块可以写入数据，而且可以从中读取数据的内存，被包装成了NIO对象。buffer的read()和write()方法有些容易被误解，我们说IO的时候，主语是CPU.从CPU往外写就是output,读入就是Input. 那么向buffer中写数据和读数据有以下两种方法：</p>
+<p>数据从channel到buffer的方法：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="comment">//从channel写入到buffer,并不是write,而是read。说明主语不是channel，而是括号里面的buffer. buffer read something from channel.</span></div><div class="line"><span class="keyword">int</span> byteRead = channel.read(buffer);</div><div class="line"></div><div class="line"><span class="comment">//Writes the given byte into this buffer at the current position, and then increments the position.API上写的像是说，something writes the byte to buffer.</span></div><div class="line"><span class="comment">//这里的主语又不是buffer了。而是byte,同样，还是括号中。666 put himeself to buffer.</span></div><div class="line">buffer.put(<span class="number">666</span>);</div></pre></td></tr></table></figure>
+<p>那么反过来，从buffer到channel,应该是以下两种办法:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">int</span> byteread = channel.write(buffer);</div><div class="line"></div><div class="line"><span class="keyword">int</span> byteInfo = buffer.get();</div></pre></td></tr></table></figure>
+<p>同样，主语是后面括号里的东西。get()方法无参，可以理解为something want get data from buffer.而和buffer相连的只能是channel.那么就是channel从buffer中get数据。就是数据从buffer到channel。这样理解起来就比较通顺了。</p>
+<p>还有一些常用的方法：</p>
+<blockquote>
+<ul>
+<li>flip:从写模式切换到读模式，position变为0，limit变为position</li>
+<li>mark:设定标记点，和reset一起用</li>
+<li>rewind:重读buffer中的数据，position变为0，limit保持不变</li>
+<li>clear:清空buff，但是数据还在。position变为0，limit变为captity</li>
+</ul>
+</blockquote>
+<p>看看他们吧：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="comment">//写模式切换到读模式</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">flip</span><span class="params">()</span> </span>&#123;</div><div class="line">        limit = position;</div><div class="line">        position = <span class="number">0</span>;</div><div class="line">        mark = -<span class="number">1</span>;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">    &#125;</div><div class="line"><span class="comment">//position变为0    </span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">rewind</span><span class="params">()</span> </span>&#123;</div><div class="line">        position = <span class="number">0</span>;</div><div class="line">        mark = -<span class="number">1</span>;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">    &#125;</div><div class="line"><span class="comment">//重置buffer</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">clear</span><span class="params">()</span> </span>&#123;</div><div class="line">        position = <span class="number">0</span>;</div><div class="line">        limit = capacity;</div><div class="line">        mark = -<span class="number">1</span>;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">    &#125;</div><div class="line"><span class="comment">//加个标记</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">mark</span><span class="params">()</span> </span>&#123;</div><div class="line">        mark = position;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">    &#125;</div><div class="line"><span class="comment">//把position返回到mark位置</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Buffer <span class="title">reset</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> m = mark;</div><div class="line">        <span class="keyword">if</span> (m &lt; <span class="number">0</span>)</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> InvalidMarkException();</div><div class="line">        position = m;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="scatter-amp-gather"><a href="#scatter-amp-gather" class="headerlink" title="scatter &amp; gather"></a>scatter &amp; gather</h3><p>这两个操作是将一个channel和多个buffer结合起来，scatter是channel写数据到多个buffer中，而gather是将多个buffer的数据读取到channel中。这里的主语是channel.</p>
+<p>看代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BufferDemo</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        RandomAccessFile file = <span class="keyword">new</span> RandomAccessFile(<span class="string">"fakepath"</span>, <span class="string">"rw"</span>);</div><div class="line">        FileChannel channel = file.getChannel();</div><div class="line">        ByteBuffer front = ByteBuffer.allocate(<span class="number">24</span>);</div><div class="line">        ByteBuffer end = ByteBuffer.allocate(<span class="number">48</span>);</div><div class="line">        ByteBuffer[] s = &#123;front,end&#125;;</div><div class="line">        <span class="comment">//下面方法都是按照buffer在数组中的顺序进行读写</span></div><div class="line">        <span class="comment">//scatter 分散，主语是channel. channel写数据到多个buffer中</span></div><div class="line">        channel.read(s);</div><div class="line">        <span class="comment">//gather 聚集，主语是channel. channel从多个buffer中读取数据</span></div><div class="line">        channel.write(s);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="通道之间的数据传输"><a href="#通道之间的数据传输" class="headerlink" title="通道之间的数据传输"></a>通道之间的数据传输</h3><p>有两个方法，transformFrom和transformTo,作用是在两个通道之间传输数据，比较简单，看代码。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FileTransform</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        RandomAccessFile a = <span class="keyword">new</span> RandomAccessFile(<span class="string">"C:\\temp\\fake"</span>,<span class="string">"rw"</span>);</div><div class="line">        RandomAccessFile b = <span class="keyword">new</span> RandomAccessFile(<span class="string">"C:\\temp\\fake1"</span>,<span class="string">"rw"</span>);</div><div class="line">        FileChannel from = a.getChannel();</div><div class="line">        FileChannel to = b.getChannel();</div><div class="line">        <span class="comment">//从另一个channel中读取数据</span></div><div class="line">        to.transferFrom(from,<span class="number">0</span>,from.size());</div><div class="line">        <span class="comment">//反过来</span></div><div class="line">        from.transferTo(<span class="number">0</span>,to.size(),to);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Selector"><a href="#Selector" class="headerlink" title="Selector"></a>Selector</h3><p>前面我们提过，Selector是用来管理多个channel的，那么我们使用Selector的目的是什么呢？答案就是可以通过更少的线程来管理更多的channel.</p>
+<p>Selector只能管理非阻塞Channel,我们上面说过Channel一般有四个，FileChannel是阻塞的，ServerSocketChannel是管理SocketeChannel.就剩下DataGrapChannel和SocketChannel了，ok，咱们稍微写一写，写到哪了就顺带着介绍下</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SelectorDemo</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        <span class="comment">//创建一个none block channel</span></div><div class="line">        SocketChannel c = SocketChannel.open();</div><div class="line"></div><div class="line">        <span class="comment">//创建一个selector</span></div><div class="line">        Selector selector = Selector.open();</div><div class="line"></div><div class="line">        <span class="comment">//设置channel为非阻塞模式</span></div><div class="line">        c.configureBlocking(<span class="keyword">false</span>);</div><div class="line"></div><div class="line">        <span class="comment">//注册 channel的监听事件,返回一个selectionKey</span></div><div class="line">        <span class="comment">//这个方法的第二个参数是一个interest集合，代表的意思是selector对channel的什么动作感兴趣</span></div><div class="line">        <span class="comment">//Interest集合</span></div><div class="line">        <span class="comment">//SelectionKey.OP_READ :读就绪</span></div><div class="line">        <span class="comment">//electionKey.OP_ACCEPT :接收就绪</span></div><div class="line">        <span class="comment">//SelectionKey.OP_WRITE :写就绪</span></div><div class="line">        <span class="comment">//SelectionKey.OP_CONNECT :连接就绪</span></div><div class="line">        SelectionKey key = c.register(selector, SelectionKey.OP_CONNECT);</div><div class="line"></div><div class="line">        <span class="comment">//selectionKey中还包含其他的集合</span></div><div class="line">        <span class="comment">//使用下面方法和可判断是否包含其中内容</span></div><div class="line">        <span class="comment">//其余三个一样办法</span></div><div class="line">        <span class="keyword">int</span> interestInfo = key.interestOps();</div><div class="line">        <span class="keyword">boolean</span> isRead = (interestInfo &amp; SelectionKey.OP_READ) == SelectionKey.OP_READ;</div><div class="line">        <span class="comment">// System.out.println(isRead);</span></div><div class="line">        <span class="comment">//Ready集合是通道准备就绪时的集合，可以用以下方式访问集合，进行验证</span></div><div class="line">        <span class="keyword">int</span> readyOps = key.readyOps();</div><div class="line">        key.isAcceptable();</div><div class="line">        key.isConnectable();</div><div class="line">        key.isWritable();</div><div class="line">        key.isReadable();</div><div class="line">        <span class="comment">//通过selectionKey来访问Selector和Channel十分简单</span></div><div class="line"></div><div class="line">        Channel channel = key.channel();</div><div class="line">        Selector selector1 = key.selector();</div><div class="line">        <span class="comment">//我们也可以给selectionKey添加相关对象，比如说和Channel一起使用的buffer</span></div><div class="line">        ByteBuffer byteBuffer = ByteBuffer.allocate(<span class="number">48</span>);</div><div class="line">        <span class="comment">//一次只能添加一个对象，添加第二个对象时丢弃第一个对象.也可以改变register的参数在第一次添加的时候注册对象。</span></div><div class="line">        key.attach(byteBuffer);</div><div class="line">        <span class="comment">//通过以下方法来获得添加的对象</span></div><div class="line">        ByteBuffer cache = (ByteBuffer) key.attachment();</div><div class="line"></div><div class="line">        <span class="comment">//通过select方法来返回自从上次检查后有多少个对象就绪了select会阻塞(wakeup方法可以唤醒)，selectNow直接返回</span></div><div class="line">        System.out.println(selector.selectNow());</div><div class="line">        selector.close();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="SocketChannel"><a href="#SocketChannel" class="headerlink" title="SocketChannel"></a>SocketChannel</h3><p>SocketChannel是一个连接到网络上的TCP套接字的通道。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"> <span class="comment">//创建并打开channel</span></div><div class="line"> SocketChannel channel = SocketChannel.open();</div><div class="line">channel.connect(<span class="keyword">new</span> InetSocketAddress(<span class="string">"http://jenkov.com"</span>, <span class="number">80</span>));</div></pre></td></tr></table></figure>
+<p>读写到buffer和其他channel一样。</p>
+<h3 id="ServerSocketChannel"><a href="#ServerSocketChannel" class="headerlink" title="ServerSocketChannel"></a>ServerSocketChannel</h3><p>SSC是一个可以监听新TCP连接的通道。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerSocketChannelDemo</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        ServerSocketChannel channel = ServerSocketChannel.open();</div><div class="line">        channel.socket().bind(<span class="keyword">new</span> InetSocketAddress(<span class="number">9999</span>));</div><div class="line">        <span class="comment">//阻塞模式，可以设置为非阻塞模式serverSocketChannel.configureBlocking(false),如果没有检测到那么就accpet()立即返回空</span></div><div class="line">        <span class="keyword">for</span> (; ; ) &#123;</div><div class="line">            SocketChannel socketChannel = channel.accept();</div><div class="line">            <span class="comment">//do something with the socket channel</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="DataGramChannel"><a href="#DataGramChannel" class="headerlink" title="DataGramChannel"></a>DataGramChannel</h3><p>这个是监控UDP的，操作几乎和SocketChannel一致。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>IO面向流，NIO面向缓冲。</p>
+<p>IO阻塞，NIO非阻塞。</p>
+<p>根据具体情况看API</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2016/12/06/JavaIO&NIO/" class="archive-article-date">
+  	<time datetime="2016-12-06T01:19:35.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-12-06</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IO/">IO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2016/11/16/我们说说JVM/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">我们说说JVM</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="JavaIO&amp;NIO" data-title="Java IO &amp; NIO" data-url="http://tiltcat.com/2016/12/06/JavaIO&amp;NIO/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 tiltcat
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js"></script>
+
+
+    
+<div class="tools-col">
+  <ul class="btn-wrap">
+    
+      <li class="chose" data-hook="tools-section-all"><span class="text">全部</span><i class="icon-book"></i></li>
+    
+    
+      <li data-hook="tools-section-tag"><span class="text">标签</span><i class="icon-price-tags"></i></li>
+    
+    
+    
+      <li data-hook="tools-section-me"><span class="text">我</span><i class="icon-smile"></i></li>
+    
+  </ul>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all chose">
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-tag">
+    			<div class="widget tagcloud" id="js-tagcloud">
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 20px;">Concurrent</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 10px;">Java JVM</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a>
+    			</div>
+    	</section>
+    
+
+    
+
+    
+    	<section class="tools-section tools-section-me">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>
