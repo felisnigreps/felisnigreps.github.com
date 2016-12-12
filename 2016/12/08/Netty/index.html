@@ -6,14 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>Let&#39;s do this</title>
+  <title>Netty 4.X 用户指南 | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Let's do this">
-<meta property="og:url" content="http://tiltcat.com/index.html">
+  <meta name="description" content="目前对Netty是一点不懂，但是作为NIO的框架还是很有必要学的，那么我们开始吧。
+ChannelPipeline基本介绍是一个ChannelHandlers的集合，负责处理或者拦截到达的事件和Channel发出的操作。ChannelPipeline实现了一个高等的拦截器，这个拦截器会给用户以全面的控制，包括一个事件是怎么被处理的，和其他的ChannelHandler是怎样互动的。 
+生成：每一个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty 4.X 用户指南">
+<meta property="og:url" content="http://tiltcat.com/2016/12/08/Netty/index.html">
 <meta property="og:site_name" content="Let's do this">
+<meta property="og:description" content="目前对Netty是一点不懂，但是作为NIO的框架还是很有必要学的，那么我们开始吧。
+ChannelPipeline基本介绍是一个ChannelHandlers的集合，负责处理或者拦截到达的事件和Channel发出的操作。ChannelPipeline实现了一个高等的拦截器，这个拦截器会给用户以全面的控制，包括一个事件是怎么被处理的，和其他的ChannelHandler是怎样互动的。 
+生成：每一个">
+<meta property="og:updated_time" content="2016-12-12T10:33:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Let's do this">
+<meta name="twitter:title" content="Netty 4.X 用户指南">
+<meta name="twitter:description" content="目前对Netty是一点不懂，但是作为NIO的框架还是很有必要学的，那么我们开始吧。
+ChannelPipeline基本介绍是一个ChannelHandlers的集合，负责处理或者拦截到达的事件和Channel发出的操作。ChannelPipeline实现了一个高等的拦截器，这个拦截器会给用户以全面的控制，包括一个事件是怎么被处理的，和其他的ChannelHandler是怎样互动的。 
+生成：每一个">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -126,9 +136,7 @@
 </nav>
 
       <div class="body-wrap">
-        
-  
-    <article id="post-Netty" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Netty" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -137,8 +145,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/08/Netty/">Netty 4.X 用户指南</a>
+    <h1 class="article-title" itemprop="name">
+      Netty 4.X 用户指南
     </h1>
   
 
@@ -182,417 +190,64 @@
   </div>
 </article>
 
-
-
-
-
-
-
-
-
-
   
-    <article id="post-JavaIO&amp;NIO" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/06/JavaIO&NIO/">Java IO &amp; NIO</a>
-    </h1>
   
+    <a href="/2016/12/06/JavaIO&NIO/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java IO &amp; NIO</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>刚开始看IO的时候还没有这个blog,昨天用到感觉没有以前那么熟练了。在公司想找以前联系时候的源码还没找到，不过问题不大，今天过一遍复习一下。</p>
-</blockquote>
-        <p class="article-more-link">
-          <a class="article-more-a"  href="/2016/12/06/JavaIO&NIO/#more">more >></a>
-        </p>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/12/06/JavaIO&NIO/" class="archive-article-date">
-  	<time datetime="2016-12-06T01:19:35.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-12-06</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IO/">IO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
-      
 
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
 
 
 
 
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="Netty" data-title="Netty 4.X 用户指南" data-url="http://tiltcat.com/2016/12/08/Netty/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
 
 
-
-
-
-  
-    <article id="post-我们说说JVM" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/16/我们说说JVM/">我们说说JVM</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 </p>
-</blockquote>
-<p>JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。</p>
-<h2 id="JVM内存区域模型"><a href="#JVM内存区域模型" class="headerlink" title="JVM内存区域模型"></a>JVM内存区域模型</h2><p><img src="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg" alt=""></p>
-        <p class="article-more-link">
-          <a class="article-more-a"  href="/2016/11/16/我们说说JVM/#more">more >></a>
-        </p>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/11/16/我们说说JVM/" class="archive-article-date">
-  	<time datetime="2016-11-16T12:21:08.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-11-16</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-我们说说Junit" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/16/我们说说Junit/">我们说说Junit</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文简单的说下Junit的基本使用，通篇非常简单，如果有新的知识点会持续补充。</p>
-<h2 id="创建测试"><a href="#创建测试" class="headerlink" title="创建测试"></a>创建测试</h2><p>本文的开的IDE是IntelliJ, 首先先创建一个Maven项目，然后导入相关的dependency:<br><figure class="highlight xml"><table><tr><td class="code"><pre><div class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/junit/junit --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div></pre></td></tr></table></figure></p>
-        <p class="article-more-link">
-          <a class="article-more-a"  href="/2016/11/16/我们说说Junit/#more">more >></a>
-        </p>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/11/16/我们说说Junit/" class="archive-article-date">
-  	<time datetime="2016-11-16T12:19:15.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-11-16</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/单元测试/">单元测试</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-我们说说Git" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/16/我们说说Git/">我们说说Git</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h2><p>关于Git这块大家肯定不陌生，因为目前的工作没有在用Git，我本身也就是自己了解下。<br>（其实是因为最近工作比较累，想更新点好写，轻松的~）<br>行吧，咱们开始了~</p>
-        <p class="article-more-link">
-          <a class="article-more-a"  href="/2016/11/16/我们说说Git/#more">more >></a>
-        </p>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/11/16/我们说说Git/" class="archive-article-date">
-  	<time datetime="2016-11-16T12:17:25.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-11-16</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-SpringAOP" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/27/SpringAOP/">我们说说Spring AOP</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文的内容来自网络/书籍/API, 涉及被容比较初级, 主要讨论AspectJ的使用，基于Schema的后期会补充。<br>具体讨论以下几点：</p>
-<blockquote>
-<ul>
-<li>AOP基础</li>
-<li>AOP种类：静态AOP(AspectJ)和动态AOP(Spring AOP)</li>
-<li>AOP in Spring</li>
-<li>Spring AOP的通知和切入点</li>
-<li>AOP的使用（AspectJ）</li>
-<li>切入点语法</li>
-<li>通知参数</li>
-</ul>
-</blockquote>
-        <p class="article-more-link">
-          <a class="article-more-a"  href="/2016/10/27/SpringAOP/#more">more >></a>
-        </p>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/10/27/SpringAOP/" class="archive-article-date">
-  	<time datetime="2016-10-26T16:02:30.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-27</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AOP/">AOP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-ConcurrentHashMap &amp; HashMap" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/18/ConcurrentHashMap & HashMap/">ConcurrentHashMap &amp; HashMap</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。</p>
-<p>本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。<br>图片都是google的，出处不详。<br>
-        <p class="article-more-link">
-          <a class="article-more-a"  href="/2016/10/18/ConcurrentHashMap & HashMap/#more">more >></a>
-        </p>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/10/18/ConcurrentHashMap & HashMap/" class="archive-article-date">
-  	<time datetime="2016-10-18T13:20:37.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-18</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Concurrent/">Concurrent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HashMap/">HashMap</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Java.util.concurrent" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/18/Java.util.concurrent/">初识 Java.util.concurrent</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~</p>
-</blockquote>
-<p>部分细节文中没有提到，请查询 <a href="http://tool.oschina.net/apidocs/apidoc?api=jdk-zh">API</a></p>
-<blockquote>
-<ul>
-<li>Executors                  </li>
-<li>Semaphore                </li>
-<li>ReentrantLock            </li>
-<li>BlockingQueue             </li>
-<li>CompletionService         </li>
-<li>CountDownLatch            </li>
-<li>CyclicBarrier             </li>
-<li>Future           </li>
-<li>ScheduledExecutorService</li>
-<li>ConcurrentHashMap</li>
-</ul>
-</blockquote>
-        <p class="article-more-link">
-          <a class="article-more-a"  href="/2016/10/18/Java.util.concurrent/#more">more >></a>
-        </p>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/10/18/Java.util.concurrent/" class="archive-article-date">
-  	<time datetime="2016-10-18T13:20:37.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-18</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Concurrent/">Concurrent</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-  
 
 
       </div>
@@ -614,8 +269,8 @@
 		fancybox: true,
 		mathjax: false,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

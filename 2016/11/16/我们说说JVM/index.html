@@ -21,7 +21,7 @@ JVM内存区域模型">
 JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。
 JVM内存区域模型">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg">
-<meta property="og:updated_time" content="2016-12-05T10:42:05.000Z">
+<meta property="og:updated_time" content="2016-12-12T10:32:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我们说说JVM">
 <meta name="twitter:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
@@ -223,12 +223,6 @@ JVM内存区域模型">
 <p>有些具体的没说，因为我觉得现在我说了也记不住，过一段时间得忘记。等啥时候理解透彻了，再回来补上吧。</p>
 <h3 id="内存调优"><a href="#内存调优" class="headerlink" title="内存调优"></a>内存调优</h3><p>JVM调优主要是针对内存管理方面的调优，包括控制各个代的大小，GC策略。由于GC开始垃圾回收时会挂起应用线程，严重影响了性能，调优的目是为了尽量降低GC所导致的应用线程暂停时间、 减少Full GC次数。</p>
 <p>代大小调优</p>
-<p>-Xms、 -Xmx 通常设置为相同的值，避免运行时要不断扩展JVM内存，这个值决定了JVM heap所能使用的最大内存。</p>
-<p>-Xmn 决定了新生代空间的大小.</p>
-<p>-XX:MaxTenuringThreshold 控制对象在经过多少次minor GC之后进入老年代，此参数只有在Serial 串行GC时有效。</p>
-<p>-XX:PermSize、-XX:MaxPermSize 用来控制方法区的大小，通常设置为相同的值。</p>
-<p>-XX:SurvivorRatio=8  设置young generation中Eden区域和每个Survivor区域的比值。在这个例子中，Eden:from:to = 8:1:1</p>
-<p>-XX:PretenureSizeThreshold=3145728 大于这个数值的对象直接进入老年代</p>
 <blockquote>
 <p>新生代GC(Minor GC): 发生在新生代的GC,速度较快也较频繁。<br>老年代GC(Full GC/Major GC):发生在老年代的GC, 一般情况下速度比Minor GC慢十倍以上。</p>
 </blockquote>
@@ -258,8 +252,14 @@ JVM内存区域模型">
 <p>合理的使用引用可以帮助Java更好的管理内存。</p>
 <h2 id="内存溢出异常"><a href="#内存溢出异常" class="headerlink" title="内存溢出异常"></a>内存溢出异常</h2><p>在上方我们讨论过JVM内存的设置和异常，我现在测试一下：<br>我们现在设置较小的stack size(在IDE中直接设置). </p>
 <p>-Xss200k: 设置栈大小<br>-Xmx1024m: 设置堆的最大值<br>-Xms1024m: 设置堆的最小值<br>-XX:MaxPermSize: 设置方法区的最大大小</p>
+<p>-Xms、 -Xmx 通常设置为相同的值，避免运行时要不断扩展JVM内存，这个值决定了JVM heap所能使用的最大内存。</p>
+<p>-Xmn 决定了新生代空间的大小.</p>
+<p>-XX:MaxTenuringThreshold 控制对象在经过多少次minorGC之后进入老年代，此参数只有在Serial 串行GC时有效。</p>
+<p>-XX:PermSize、-XX:MaxPermSize 用来控制方法区的大小，通常设置为相同的值。</p>
+<p>-XX:SurvivorRatio=8  设置young generation中Eden区域和每个Survivor区域的比值。在这个例子中，Eden:from:to = 8:1:1</p>
+<p>-XX:PretenureSizeThreshold=3145728 大于这个数值的对象直接进入老年代</p>
 <p>下面程序做测试，然后调整栈大小，会发现无论如何都会报出StackOverflow错误。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StackLeak</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> threadLength = <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">leakTest</span><span class="params">()</span> </span>&#123;</div><div class="line">        threadLength++;</div><div class="line">        leakTest();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">        StackLeak leak = <span class="keyword">new</span> StackLeak();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            leak.leakTest();</div><div class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</div><div class="line">            System.out.println(<span class="string">"Thread length is "</span> + leak.threadLength);</div><div class="line">            <span class="keyword">throw</span> e;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Thread length is <span class="number">2459</span></div><div class="line">Exception in thread <span class="string">"main"</span> java.lang.StackOverflowError</div><div class="line">	at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">7</span>)</div><div class="line">	at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">8</span>)</div><div class="line">	at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">8</span>)</div><div class="line">	....</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StackLeak</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> threadLength = <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">leakTest</span><span class="params">()</span> </span>&#123;</div><div class="line">        threadLength++;</div><div class="line">        leakTest();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">        StackLeak leak = <span class="keyword">new</span> StackLeak();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            leak.leakTest();</div><div class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</div><div class="line">            System.out.println(<span class="string">"Thread length is "</span> + leak.threadLength);</div><div class="line">            <span class="keyword">throw</span> e;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Thread length is <span class="number">2459</span></div><div class="line">Exception in thread <span class="string">"main"</span> java.lang.StackOverflowError</div><div class="line">    at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">7</span>)</div><div class="line">    at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">8</span>)</div><div class="line">    at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">8</span>)</div><div class="line">    ....</div></pre></td></tr></table></figure>
 <p>结果表明， 在单线程情况下，无论虚拟机栈太小还是栈帧太大，虚拟器无法分配的时候都会报出stackOverflow异常。</p>
 <p>大对象直接进入老年代</p>
 
@@ -273,7 +273,7 @@ JVM内存区域模型">
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java-JVM/">Java JVM</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
 	</div>
 
       
@@ -408,7 +408,7 @@ JVM内存区域模型">
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 20px;">Concurrent</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/Java-JVM/" style="font-size: 10px;">Java JVM</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a>
     			</div>
     	</section>
     
