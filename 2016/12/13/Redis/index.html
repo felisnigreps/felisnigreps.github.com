@@ -6,24 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>ConcurrentHashMap &amp; HashMap | Let&#39;s do this</title>
+  <title>初识Redis | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。
-本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。图片都是google的，出处不详。">
+  <meta name="description" content="let’s get it startedRedis是一种持久化的存储器内存储(in-memory persistent store)
+先输入这么一条命令：
+set users:Feli {name:Feli,planet:moon,like:[talk]}get users:Feli
+对于Redis来讲，关键字就是一切，而值没有任何意义，你不太可能通过值来查哪些用户在moon上。这对我们来说感觉有">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ConcurrentHashMap & HashMap">
-<meta property="og:url" content="http://tiltcat.com/2016/10/18/ConcurrentHashMap & HashMap/index.html">
+<meta property="og:title" content="初识Redis">
+<meta property="og:url" content="http://tiltcat.com/2016/12/13/Redis/index.html">
 <meta property="og:site_name" content="Let's do this">
-<meta property="og:description" content="ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。
-本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。图片都是google的，出处不详。">
-<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/HashMap.png">
-<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/HashMapResize1.jpg">
-<meta property="og:updated_time" content="2016-11-23T14:00:57.000Z">
+<meta property="og:description" content="let’s get it startedRedis是一种持久化的存储器内存储(in-memory persistent store)
+先输入这么一条命令：
+set users:Feli {name:Feli,planet:moon,like:[talk]}get users:Feli
+对于Redis来讲，关键字就是一切，而值没有任何意义，你不太可能通过值来查哪些用户在moon上。这对我们来说感觉有">
+<meta property="og:updated_time" content="2016-12-28T12:31:08.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ConcurrentHashMap & HashMap">
-<meta name="twitter:description" content="ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。
-本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。图片都是google的，出处不详。">
-<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/HashMap.png">
+<meta name="twitter:title" content="初识Redis">
+<meta name="twitter:description" content="let’s get it startedRedis是一种持久化的存储器内存储(in-memory persistent store)
+先输入这么一条命令：
+set users:Feli {name:Feli,planet:moon,like:[talk]}get users:Feli
+对于Redis来讲，关键字就是一切，而值没有任何意义，你不太可能通过值来查哪些用户在moon上。这对我们来说感觉有">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -136,7 +139,7 @@
 </nav>
 
       <div class="body-wrap">
-        <article id="post-ConcurrentHashMap &amp; HashMap" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Redis" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -146,7 +149,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      ConcurrentHashMap &amp; HashMap
+      初识Redis
     </h1>
   
 
@@ -154,30 +157,43 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。</p>
-<p>本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。<br>图片都是google的，出处不详。<br><a id="more"></a></p>
-<h2 id="HashMap的数据结构"><a href="#HashMap的数据结构" class="headerlink" title="HashMap的数据结构"></a>HashMap的数据结构</h2><p>先简单看下图解：</p>
-<p><img src="http://ogeojkg3t.bkt.clouddn.com/HashMap.png" alt="HashMap"></p>
-<p>当我们要put一个数据的时候，首先会算出这个值得Hash值，然后根据算法来确定Key的值（先简单理解成取模，不过源码中的代码可以减少碰撞），如果多个数据放在了同一个entry中，那么就会形成链表，当sum(数据)&gt;=lengh(table) * 加载因子，那么就会扩容。JDK1.8中的区别是在entry的长度大于8的时候会把链表转换成红黑树。</p>
-<p>我们知道HashMap是使用链表来处理哈希碰撞的，如果多个进程找到了一个bucket(table(i))上，那么根据Entry的特性，他的next只能指向一个Entry,这必然会造成线程不安全。</p>
-<p>除此之外，多个线程的扩容（rehash）也会导致线程不安全。简单来说，当put的时候发现内部元素多余threshold，那么就会进行扩容，怎么扩容呢？先把buckets扩容一倍，从每一个bucket的每一个entry开始遍历，把他的指向根据算法放到新的bucket里。如果两个线程同时扩容，那么总会有一个线程的操作会被废弃，数据也会丢失。</p>
-<p>先来个单线程扩容，我们假设就直接key mod length:</p>
-<p><img src="http://ogeojkg3t.bkt.clouddn.com/HashMapResize1.jpg" alt="resize"></p>
-<p>3,5,7在length为2的bucket里发生了碰撞，都跑到1里去了，现在rezise,从每一个bucket的每一个entry开始遍历，e指向3，next子项7. 第一步先处理3，3%4=3，放到3上。然后是7，一样，但是这块要注意要插在3前面而不是后面，这是为什么呢？因为我们更喜欢O(1)而不是）O(n). 行了，单线程的rehash没啥问题。</p>
-<p>图是网上抄的。</p>
-<h4 id="CHM的数据结构"><a href="#CHM的数据结构" class="headerlink" title="CHM的数据结构"></a>CHM的数据结构</h4><p>CHM在JDK 1.7之后发生了很大的变化，在1.7之前，是通过分段锁技术来实现同步的，建构图应该如下所示：</p>
+        <h2 id="let’s-get-it-started"><a href="#let’s-get-it-started" class="headerlink" title="let’s get it started"></a>let’s get it started</h2><p>Redis是一种持久化的存储器内存储(in-memory persistent store)</p>
+<p>先输入这么一条命令：</p>
+<p>set users:Feli {name:Feli,planet:moon,like:[talk]}<br>get users:Feli</p>
+<p>对于Redis来讲，关键字就是一切，而值没有任何意义，你不太可能通过值来查哪些用户在moon上。这对我们来说感觉有些不完善，但是Redis并不是一种通用方案，他只是为了某种特定的场景而生。</p>
+<p>setbit 和 getbit</p>
+<p>典型的命令如下：</p>
+<p>setbit mykey 66666 1<br>getbit mykey</p>
+<p>刚开始的时候不理解，这到底是什么？可以这么理解，有一个2的32次幂长的bit数组，每个数组上写的是0 or 1，通过这个命令，你可以给这个数组的某个位置设置一个值。怎么使用，存取异常之快，怎么用，发挥你的想象力吧。</p>
+<p>Redis是单线程执行的，所以会保持原子性。</p>
+<p>5大数据类型：</p>
+<blockquote>
+<ul>
+<li>String</li>
+<li>Set(列表):String类型的无需集合,不可重复,maxLengh为pow(2,32),是通过hashtable来实现的所以删除查找复杂度都为O(1).</li>
+<li>list(集合)：其实就是每个元素都是String的双向链表,maxLengh为pow(2,32)</li>
+<li>sorted set(有序列表):在set基础上增加了一个顺序属性（double score），这个属性在添加元素的时候可以指定。添加了一周zset会重新排序。</li>
+<li>hashes(哈希表): String类型的field和value的映射表，添加删除的复杂度O(1)</li>
+</ul>
+</blockquote>
+<p>Redis支持乐观锁，通过版本好来控制。版本号不符合则取消回滚。（提交版本必须大于记录版本)</p>
+<p>但是如果一个事务中某一部分出错了，他只回滚错误的那部分。而执行正确的不会回滚。</p>
+<h2 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h2><p>Redis是一个支持持久化的数据库，有两种方式可以支持Redis持久化。<br>Snapshotting:默认方式。简单说下原理。可以设置每隔多少秒有多少次修改就进行持久化。<br>save 900 1      #900s内有一次改变，下方同理。<br>save 300 10<br>save 60 10000</p>
+<p>当开始持久化的时候redis调用fork，创建子线程。然后使用CoW的方式进行持久化，会吧二进制文件保存在.dump文件中。如你所见，RDB如果意外崩溃的话，那么你会丢失一小部分的数据，如果你想避免这种情况，我们来看第二种持久化方式。</p>
+<p>AOF:Redis在接收到命令的时候会把每一个写命令追加到文件中(默认appendonly.aof)，然后启动的时候再重新写入。当然，这样的问题就是会有大量的命令。比如我们使用了incr test 10000次，那么会有10000条命令。直接就相当于 incrby test 100000. </p>
+<p>Redis提供了bgrewriteaof命令，</p>
 
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2016/10/18/ConcurrentHashMap & HashMap/" class="archive-article-date">
-  	<time datetime="2016-10-18T13:20:37.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-18</time>
+      <a href="/2016/12/13/Redis/" class="archive-article-date">
+  	<time datetime="2016-12-13T06:39:30.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-12-13</time>
 </a>
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Concurrent/">Concurrent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HashMap/">HashMap</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
 	</div>
 
       
@@ -190,18 +206,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2016/10/27/Netty/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          (no title)
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/10/18/Java.util.concurrent/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">初识 Java.util.concurrent</div>
+    <a href="/2016/12/06/JavaIO&NIO/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java IO &amp; NIO</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -235,7 +242,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="ConcurrentHashMap &amp; HashMap" data-title="ConcurrentHashMap &amp; HashMap" data-url="http://tiltcat.com/2016/10/18/ConcurrentHashMap &amp; HashMap/"></div>
+	<div class="ds-thread" data-thread-key="Redis" data-title="初识Redis" data-url="http://tiltcat.com/2016/12/13/Redis/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
