@@ -21,7 +21,7 @@
 弄明白这几个概念比较重要，同步和异步是针对应用程序和内核而言的。同步指的是当用户触发IO操作后等待或者轮询操作是否完成，由用户自发的去查看。异步指的是当用户请求之后就开始忙别的事情，当任务处理完毕后内核会给用户反馈结果。
 阻塞和非阻塞是针对用户访问数据而言">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/AbstractChannelHandlerContext.png">
-<meta property="og:updated_time" content="2016-12-29T13:13:20.000Z">
+<meta property="og:updated_time" content="2016-12-29T13:52:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Netty in action">
 <meta name="twitter:description" content="目前对Netty是一点不懂，但是作为NIO的框架还是很有必要学的，那么我们开始吧。
@@ -163,6 +163,7 @@
 <h2 id="再开始之前"><a href="#再开始之前" class="headerlink" title="再开始之前"></a>再开始之前</h2><p>我们先说说常见的概念，同步/异步，阻塞/非阻塞。</p>
 <p>弄明白这几个概念比较重要，同步和异步是针对应用程序和内核而言的。<br>同步指的是当用户触发IO操作后等待或者轮询操作是否完成，由用户自发的去查看。<br>异步指的是当用户请求之后就开始忙别的事情，当任务处理完毕后内核会给用户反馈结果。</p>
 <p>阻塞和非阻塞是针对用户访问数据而言的，说白了是根据状态不同来进行不同的操作。阻塞状态下读取或者写入会一直等待，而非阻塞方式下，读取或者写入会立即返回一个状态值。</p>
+<a id="more"></a>
 <h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><p>Channel是Netty最核心的接口，一个Channel就是一个连接Socket的通道，通过Channel，你可以对Socket做各种操作。<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Channel</span> <span class="keyword">extends</span> <span class="title">AttributeMap</span>, <span class="title">Comparable</span>&lt;<span class="title">Channel</span>&gt;</span></div></pre></td></tr></table></figure></p>
 <p>一个网络的连接，或者是一个能够进行操作I/0操作的组件。比如说，读、写、连接、绑定。</p>
 <h3 id="通道提供的功能："><a href="#通道提供的功能：" class="headerlink" title="通道提供的功能："></a>通道提供的功能：</h3><blockquote>
