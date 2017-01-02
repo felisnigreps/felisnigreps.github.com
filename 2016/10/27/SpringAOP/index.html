@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>Spring AOP | Let&#39;s do this</title>
+  <title>我们说说Spring AOP | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="本文的内容来自网络/书籍/API, 涉及被容比较初级, 主要讨论AspectJ的使用，基于Schema的后期会补充。具体讨论以下几点：
 
@@ -19,7 +19,7 @@ AOP的使用（AspectJ）
 切入点语法
 通知参数">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spring AOP">
+<meta property="og:title" content="我们说说Spring AOP">
 <meta property="og:url" content="http://tiltcat.com/2016/10/27/SpringAOP/index.html">
 <meta property="og:site_name" content="Let's do this">
 <meta property="og:description" content="本文的内容来自网络/书籍/API, 涉及被容比较初级, 主要讨论AspectJ的使用，基于Schema的后期会补充。具体讨论以下几点：
@@ -32,9 +32,9 @@ Spring AOP的通知和切入点
 AOP的使用（AspectJ）
 切入点语法
 通知参数">
-<meta property="og:updated_time" content="2016-12-29T13:13:42.000Z">
+<meta property="og:updated_time" content="2017-01-02T06:47:19.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spring AOP">
+<meta name="twitter:title" content="我们说说Spring AOP">
 <meta name="twitter:description" content="本文的内容来自网络/书籍/API, 涉及被容比较初级, 主要讨论AspectJ的使用，基于Schema的后期会补充。具体讨论以下几点：
 
 
@@ -167,7 +167,7 @@ AOP的使用（AspectJ）
         
   
     <h1 class="article-title" itemprop="name">
-      Spring AOP
+      我们说说Spring AOP
     </h1>
   
 
@@ -276,7 +276,141 @@ AOP的使用（AspectJ）
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">JoinPoint</span> </span>&#123;  </div><div class="line">    <span class="function">String <span class="title">toString</span><span class="params">()</span></span>;         <span class="comment">//连接点所在位置的相关信息  </span></div><div class="line">    <span class="function">String <span class="title">toShortString</span><span class="params">()</span></span>;     <span class="comment">//连接点所在位置的简短相关信息  </span></div><div class="line">    <span class="function">String <span class="title">toLongString</span><span class="params">()</span></span>;     <span class="comment">//连接点所在位置的全部相关信息  </span></div><div class="line">    <span class="function">Object <span class="title">getThis</span><span class="params">()</span></span>;         <span class="comment">//返回AOP代理对象  </span></div><div class="line">    <span class="function">Object <span class="title">getTarget</span><span class="params">()</span></span>;       <span class="comment">//返回目标对象  </span></div><div class="line">    Object[] getArgs();       <span class="comment">//返回被通知方法参数列表  </span></div><div class="line">    <span class="function">Signature <span class="title">getSignature</span><span class="params">()</span></span>;  <span class="comment">//返回当前连接点签名  </span></div><div class="line">    <span class="function">SourceLocation <span class="title">getSourceLocation</span><span class="params">()</span></span>;<span class="comment">//返回连接点方法所在类文件中的位置  </span></div><div class="line">    <span class="function">String <span class="title">getKind</span><span class="params">()</span></span>;        <span class="comment">//连接点类型  </span></div><div class="line">    <span class="function">StaticPart <span class="title">getStaticPart</span><span class="params">()</span></span>; <span class="comment">//返回连接点静态部分  </span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>注释差不多了</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="comment">//咱们这么写，ops就可以得到了</span></div><div class="line">    <span class="meta">@Before</span>(value = <span class="string">"doSome() &amp;&amp; args(ops)"</span>,argNames = <span class="string">"jp,ops"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span><span class="params">(JoinPoint jp, String ops)</span></span>&#123;</div><div class="line">        Object[] s = jp.getArgs();</div><div class="line">        <span class="keyword">for</span>(Object object:s)&#123;</div><div class="line">            System.out.println(<span class="string">"--- before service --- "</span> + object);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<p>只是简单的过了一下，说了说Spring AOP到底干嘛的，@AspectJ-based的该怎么写，然后介绍了一下简单的概念</p>
+<h2 id="AspectJ切入点语法"><a href="#AspectJ切入点语法" class="headerlink" title="AspectJ切入点语法"></a>AspectJ切入点语法</h2><blockquote>
+<ul>
+<li>* : 匹配任意字符，如Java.lang.*</li>
+<li>..(两个点):匹配任何数量字符的重复，比如在类型模式中匹配任意数量子包，参数模式中匹配任何数量的参数 </li>
+<li>+ : 匹配任意类型的子类型，仅能作为后缀放在类型的后面，Java.lange.Number+</li>
+</ul>
+</blockquote>
+<h3 id="execution：使用“execution-方法表达式-”匹配方法执行；"><a href="#execution：使用“execution-方法表达式-”匹配方法执行；" class="headerlink" title="execution：使用“execution(方法表达式)”匹配方法执行；"></a>execution：使用“execution(方法表达式)”匹配方法执行；</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">模式</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">public <em> </em>(..)</td>
+<td style="text-align:left">任何公共方法的执行</td>
+</tr>
+<tr>
+<td style="text-align:left">* cn.javass..IPointcutService.*()</td>
+<td style="text-align:left">cn.javass包及所有子包下IPointcutService接口中的任何无参方法</td>
+</tr>
+<tr>
+<td style="text-align:left">* cn.javass..<em>.</em>(..)</td>
+<td style="text-align:left">cn.javass包及所有子包下任何类的任何方法</td>
+</tr>
+<tr>
+<td style="text-align:left">* cn.javass..IPointcutService.*(*)</td>
+<td style="text-align:left">cn.javass包及所有子包下IPointcutService接口的任何只有一个参数方法</td>
+</tr>
+<tr>
+<td style="text-align:left">* (!cn.javass..IPointcutService+).*(..)</td>
+<td style="text-align:left">非“cn.javass包及所有子包下IPointcutService接口及子类型”的任何方法</td>
+</tr>
+<tr>
+<td style="text-align:left">* cn.javass..IPointcutService+.*()</td>
+<td style="text-align:left">cn.javass包及所有子包下IPointcutService接口及子类型的的任何无参方法</td>
+</tr>
+<tr>
+<td style="text-align:left">* cn.javass..IPointcut*.test*(java.util.Date)</td>
+<td style="text-align:left">cn.javass包及所有子包下IPointcut前缀类型的的以test开头的只有一个参数类型为java.util.Date的方法，注意该匹配是根据方法签名的参数类型进行匹配的，而不是根据执行时传入的参数类型决定的。如定义方法：public void test(Object obj)，即使执行时传入java.util.Date，也不会匹配的</td>
+</tr>
+<tr>
+<td style="text-align:left">* cn.javass..IPointcut*.test*(..)  throws IllegalArgumentException, ArrayIndexOutOfBoundsException</td>
+<td style="text-align:left">cn.javass包及所有子包下IPointcut前缀类型的的任何方法，且抛出IllegalArgumentException和ArrayIndexOutOfBoundsException异常</td>
+</tr>
+<tr>
+<td style="text-align:left">* (cn.javass..IPointcutService+&amp;&amp; java.io.Serializable+).*(..)</td>
+<td style="text-align:left">任何实现了cn.javass包及所有子包下IPointcutService接口和java.io.Serializable接口的类型的任何方法</td>
+</tr>
+<tr>
+<td style="text-align:left">@java.lang.Deprecated * *(..)</td>
+<td style="text-align:left">任何持有@java.lang.Deprecated注解的方法</td>
+</tr>
+<tr>
+<td style="text-align:left">@java.lang.Deprecated @cn.javass..Secure  * *(..)</td>
+<td style="text-align:left">任何持有@java.lang.Deprecated和@cn.javass..Secure注解的方法</td>
+</tr>
+<tr>
+<td style="text-align:left">@(java.lang.Deprecated</td>
+<td style="text-align:left"></td>
+<td>cn.javass..Secure) * *(..)</td>
+<td>任何持有@java.lang.Deprecated或@ cn.javass..Secure注解的方法</td>
+</tr>
+<tr>
+<td style="text-align:left">(@cn.javass..Secure  *)  *(..)</td>
+<td style="text-align:left">任何返回值类型持有@cn.javass..Secure的方法</td>
+</tr>
+<tr>
+<td style="text-align:left">*  (@cn.javass..Secure *).*(..)</td>
+<td style="text-align:left">任何定义方法的类型持有@cn.javass..Secure的方法</td>
+</tr>
+<tr>
+<td style="text-align:left">* *(@cn.javass..Secure (*) , @cn.javass..Secure (*))</td>
+<td style="text-align:left">任何签名带有两个参数的方法，且这个两个参数都被@ Secure标记了，如public void test(@Secure String str1, @Secure String str1);</td>
+</tr>
+<tr>
+<td style="text-align:left">* *((@ cn.javass..Secure *))或* *(@ cn.javass..Secure *)</td>
+<td style="text-align:left">任何带有一个参数的方法，且该参数类型持有@ cn.javass..Secure；如public void test(Model model);且Model类上持有@Secure注解</td>
+</tr>
+<tr>
+<td style="text-align:left">* *(@cn.javass..Secure (@cn.javass..Secure *) ,@ cn.javass..Secure (@cn.javass..Secure *))</td>
+<td style="text-align:left">任何带有两个参数的方法，且这两个参数都被@ cn.javass..Secure标记了；且这两个参数的类型上都持有@ cn.javass..Secure；</td>
+</tr>
+<tr>
+<td style="text-align:left">* *(java.util.Map &lt;cn.javass..Model, cn.javass..Model&gt;, ..)</td>
+<td style="text-align:left">任何带有一个java.util.Map参数的方法，且该参数类型是以&lt; cn.javass..Model,cn.javass..Model&gt;为泛型参数；注意只匹配第一个参数为java.util.Map,不包括子类型；如public void test(HashMap&lt;Model, Model&gt; map, String str);将不匹配，必须使用“* *(java.util.HashMap&lt;cn.javass..Model,cn.javass..Model&gt;, ..)”进行匹配；而public void test(Map map, int i);也将不匹配，因为泛型参数不匹配</td>
+</tr>
+<tr>
+<td style="text-align:left">* *(java.util.Collection&lt;@cn.javass..Secure *&gt;)</td>
+<td style="text-align:left">任何带有一个参数（类型为java.util.Collection）的方法，且该参数类型是有一个泛型参数，该泛型参数类型上持有@cn.javass..Secure注解；如public void test(Collection&lt;Model&gt; collection);Model类型上持有@cn.javass..Secure</td>
+</tr>
+</tbody>
+</table>
+<h3 id="within：使用“within-类型表达式-”匹配指定类型内的方法执行"><a href="#within：使用“within-类型表达式-”匹配指定类型内的方法执行" class="headerlink" title="within：使用“within(类型表达式)”匹配指定类型内的方法执行"></a>within：使用“within(类型表达式)”匹配指定类型内的方法执行</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">within(cn.javass..*)</td>
+<td style="text-align:left">javass包以及所有子包下的任意方法</td>
+</tr>
+<tr>
+<td style="text-align:left">within(cn.javass..IPointcutService+)</td>
+<td style="text-align:left">javass包及其子包下IPointService类型及其子类型的所有方法</td>
+</tr>
+<tr>
+<td style="text-align:left">within(@cn.javass..Secure *)</td>
+<td style="text-align:left">持有声明@cn.javass..Secure注解的方法，必须是在目标对象上声明这个注解，在接口上声明的对它不起作用</td>
+</tr>
+</tbody>
+</table>
+<h3 id="this：使用“this-类型全限定名-”匹配当前AOP代理对象类型的执行方法；注意是AOP代理对象的类型匹配，这样就可能包括引入接口方法也可以匹配；注意this中使用的表达式必须是类型全限定名，不支持通配符；"><a href="#this：使用“this-类型全限定名-”匹配当前AOP代理对象类型的执行方法；注意是AOP代理对象的类型匹配，这样就可能包括引入接口方法也可以匹配；注意this中使用的表达式必须是类型全限定名，不支持通配符；" class="headerlink" title="this：使用“this(类型全限定名)”匹配当前AOP代理对象类型的执行方法；注意是AOP代理对象的类型匹配，这样就可能包括引入接口方法也可以匹配；注意this中使用的表达式必须是类型全限定名，不支持通配符；"></a>this：使用“this(类型全限定名)”匹配当前AOP代理对象类型的执行方法；注意是AOP代理对象的类型匹配，这样就可能包括引入接口方法也可以匹配；注意this中使用的表达式必须是类型全限定名，不支持通配符；</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">this(cn.javass.spring.chapter6.service.IPointcutService)</td>
+<td style="text-align:left">当前AOP对象实现了 IPointcutService接口的任何方法</td>
+</tr>
+<tr>
+<td style="text-align:left">this(cn.javass.spring.chapter6.service.IIntroductionService)</td>
+<td style="text-align:left">当前AOP对象实现了 IIntroductionService接口的任何方法也可能是引入接口</td>
+</tr>
+</tbody>
+</table>
 
       
     </div>
@@ -346,7 +480,7 @@ AOP的使用（AspectJ）
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="SpringAOP" data-title="Spring AOP" data-url="http://tiltcat.com/2016/10/27/SpringAOP/"></div>
+	<div class="ds-thread" data-thread-key="SpringAOP" data-title="我们说说Spring AOP" data-url="http://tiltcat.com/2016/10/27/SpringAOP/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
