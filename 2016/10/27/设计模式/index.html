@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://tiltcat.com">
+  <title>Let&#39;s do this</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="设计模式
+title: 设计模式date: 2017-1-20 15:27:48tags:
+- Design Pattern设计模式的六大原则在详细探讨设计模式之前，我们先说下基本的设计模式规则：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Let's do this">
+<meta property="og:url" content="http://tiltcat.com/2016/10/27/设计模式/index.html">
+<meta property="og:site_name" content="Let's do this">
+<meta property="og:description" content="设计模式
+title: 设计模式date: 2017-1-20 15:27:48tags:
+- Design Pattern设计模式的六大原则在详细探讨设计模式之前，我们先说下基本的设计模式规则：">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Builder%20pattern.jpg">
+<meta property="og:updated_time" content="2017-02-08T10:07:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Let's do this">
+<meta name="twitter:description" content="设计模式
+title: 设计模式date: 2017-1-20 15:27:48tags:
+- Design Pattern设计模式的六大原则在详细探讨设计模式之前，我们先说下基本的设计模式规则：">
+<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/Builder%20pattern.jpg">
+  
+  
+    <link rel="icon" href="/images/favicon.jpg">
+  
+  <link rel="stylesheet" href="/main.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/images/avatar.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">tiltcat</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">wub lab dup dup</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a class="js-smart-menu" data-idx="0" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="1" href="javascript:void(0)">标签</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="2" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/felisnigreps" title="github">github</a>
+		        
+					<a class="weibo" target="_blank" href="http://weibo.com/cool5231" title="weibo">weibo</a>
+		        
+					<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/tilt-play" title="zhihu">zhihu</a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-list"></i></div>
+  		<h1 class="header-author js-mobile-header hide">tiltcat</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img src="/images/avatar.jpg" class="js-avatar">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">tiltcat</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">wub lab dup dup</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/felisnigreps" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/cool5231" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/tilt-play" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap">
+        <article id="post-设计模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h1><hr>
+<p>title: 设计模式<br>date: 2017-1-20 15:27:48<br>tags:</p>
+<h2 id="Design-Pattern"><a href="#Design-Pattern" class="headerlink" title="- Design Pattern"></a>- Design Pattern</h2><h2 id="设计模式的六大原则"><a href="#设计模式的六大原则" class="headerlink" title="设计模式的六大原则"></a>设计模式的六大原则</h2><p>在详细探讨设计模式之前，我们先说下基本的设计模式规则：</p>
+<a id="more"></a>
+<h3 id="单一模式原则"><a href="#单一模式原则" class="headerlink" title="单一模式原则"></a>单一模式原则</h3><p>每个类都只应该负责单一的功能，切忌在一个类中插入太多功能。</p>
+<h3 id="里氏替换原则"><a href="#里氏替换原则" class="headerlink" title="里氏替换原则"></a>里氏替换原则</h3><p>一个子类可以替换掉父类并且正常工作。（简单来说就是不应该让子类覆盖父类的方法，听起来有些不对，是么？ 当然，应用这个模式需要你进一步的思考，当你覆盖了父类的方法，是不是可以完成现在的工作？）</p>
+<h3 id="接口隔离原则"><a href="#接口隔离原则" class="headerlink" title="接口隔离原则"></a>接口隔离原则</h3><p>也称作接口最小化原则，一个接口里的方法应该尽可能的少。不然就会出现接口里的某些方法是空着的。<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Mobile</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">()</span></span>;<span class="comment">//手机可以打电话</span></div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendMessage</span><span class="params">()</span></span>;<span class="comment">//手机可以发短信</span></div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">playBird</span><span class="params">()</span></span>;<span class="comment">//手机可以玩愤怒的小鸟？</span></div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这里的第三个方法就明显不合适，因为有些手机是没办法玩愤怒的小鸟的，这样会强迫某些类来实现这个方法，但是用户调用了又得不到合适的结果。我们可以这样做<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SmartPhone</span> <span class="keyword">extends</span> <span class="title">Mobile</span></span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">playBird</span><span class="params">()</span></span>;<span class="comment">//智能手机的接口就可以加入这个方法了</span></div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="依赖倒置原则"><a href="#依赖倒置原则" class="headerlink" title="依赖倒置原则"></a>依赖倒置原则</h3><p>高层模块不应该依赖于底层模块，两者都应该依赖于抽象。抽象不应该依赖于细节，细节应该依赖于抽象。</p>
+<p>解释一下依赖倒置，比如说我们现在想要吃烤肉，那么我们会写一个eat()，然后传递烤肉。这是自然语言中的面向实现，我们需要什么，我们就做什么，在这个例子里，我们依赖的是烤肉。但是如果你想吃别的东西呢？这样就需要你去修改eat()的具体代码了。<br>可以吃的东西多种多样，会对扩展造成很大的困难。</p>
+<p>刚才是依赖烤肉，那么如果依赖倒置了是什么样子呢？ 我们不依赖实现了（烤肉），而是依赖抽象（可以吃的东西），那么我们只要声明一个接口，然后让烤肉去继承他就行了。实现了由依赖实现到依赖抽象的依赖倒置。</p>
+<h3 id="迪米特原则"><a href="#迪米特原则" class="headerlink" title="迪米特原则"></a>迪米特原则</h3><p>也称最小知道原则（单一职责原则），一个类需要尽可能小的依赖其他类的细节，这样做是为了降低耦合度。高内聚代表的是一个类应该尽量封装他自己的细节，把所有逻辑在自己内部处理。这个原则也和我们所提倡的高内聚低耦合相呼应。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Reader</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="keyword">int</span> a,b;</div><div class="line">    </div><div class="line">    <span class="keyword">private</span> String path;</div><div class="line">    </div><div class="line">    <span class="keyword">private</span> BufferedReader br;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Reader</span><span class="params">(String path)</span></span>&#123;</div><div class="line">        <span class="keyword">this</span>.path = path;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBufferedReader</span><span class="params">()</span> <span class="keyword">throws</span> FileNotFoundException</span>&#123;</div><div class="line">        br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(<span class="keyword">new</span> File(path)));</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">readLine</span><span class="params">()</span> <span class="keyword">throws</span> NumberFormatException, IOException</span>&#123;</div><div class="line">        a = Integer.valueOf(br.readLine());</div><div class="line">        b = Integer.valueOf(br.readLine());</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getA</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> a;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getB</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> b;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个类这么写是非常不好的，首先我们看到了很多的public，这样就代表暴露了太多的细节给外部，如果我们要调用，那么会这么写：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">        Reader reader = <span class="keyword">new</span> Reader(<span class="string">"E:/test.txt"</span>);</div><div class="line">        reader.setBufferedReader();</div><div class="line">        reader.readLine();</div><div class="line">        <span class="keyword">int</span> a = reader.getA();</div><div class="line">        <span class="keyword">int</span> b = reader.getB();</div><div class="line">        <span class="comment">//以下用于计算等等</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看出暴露了太多的信息用于交互，我们可以这么修改：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Reader</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> a,b;</div><div class="line">    <span class="keyword">private</span> String path;</div><div class="line">    <span class="keyword">private</span> BufferedReader br;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Reader</span><span class="params">(String path)</span> <span class="keyword">throws</span> Exception</span>&#123;</div><div class="line">        <span class="keyword">super</span>();</div><div class="line">        <span class="keyword">this</span>.path = path;</div><div class="line">        setBufferedReader();</div><div class="line">        readLine();</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//注意，我们变为私有的方法</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">setBufferedReader</span><span class="params">()</span> <span class="keyword">throws</span> FileNotFoundException</span>&#123;</div><div class="line">        br = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(path));</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//注意，我们变为私有的方法</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">readLine</span><span class="params">()</span> <span class="keyword">throws</span> NumberFormatException, IOException</span>&#123;</div><div class="line">        a = Integer.valueOf(br.readLine());</div><div class="line">        b = Integer.valueOf(br.readLine());</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getA</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> a;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getB</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> b;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="开闭原则"><a href="#开闭原则" class="headerlink" title="开闭原则"></a>开闭原则</h3><p>对修改关闭，对扩展开放。</p>
+<p>这是我们的理想状态，但是实现起来非常困难，这个原则更像是上面原则的一个总结，需要我们在代码中慢慢的去体会和实现。</p>
+<h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h2><p>单例模式大家想必都不陌生，那么我们什么时候使用单例模式呢？</p>
+<p>简单来说，这些类在系统的的同一时刻只能有一种状态。然后就没什么可说的了，看看<a href="https://github.com/felisnigreps/DesignPattern" target="_blank" rel="external">代码</a>吧.</p>
+<h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><p>所谓代理就是在某些情况下，无法直接调用对象或者调用对象的功能不满足需求。一个对象代替另一个对象行使功能</p>
+<p>代理分为两种，静态代理和动态代理，静态代理是在编译期对字节码进行修改，然后达到我们的需求，而动态代理是在运行过程中进行更改。<br>我们再<a href="http://tiltcat.com/2016/10/27/SpringAOP/">Spring AOP</a>里已经谈过了这两种代理，可以参考下。</p>
+<p>静态代理就是继承一样的接口，然后添加业务逻辑，调用代理类。<br>动态代理就是继承InvocationHandler,然后调用invoke方法。</p>
+<h2 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h2><p>工厂模式即为类的创建模式，又叫静态工厂方法，通过工厂来创建各种各样不同类的实例。</p>
+<p>比如说用户登录有多种方式，这时候工厂类就可以通过类型来生成不同的对象来处理业务逻辑。从而也实现了责任的分割，便于修改和扩展。写点伪代码：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Login</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">login</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginByMobile</span> <span class="keyword">implements</span> <span class="title">Login</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">login</span><span class="params">()</span> </span>&#123;</div><div class="line">        .....</div><div class="line">        业务逻辑</div><div class="line">        ......</div><div class="line">        <span class="keyword">return</span> result;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginByEmail</span> <span class="keyword">implements</span> <span class="title">Login</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">login</span><span class="params">()</span> </span>&#123;</div><div class="line">        .....</div><div class="line">        业务逻辑</div><div class="line">        ......</div><div class="line">        <span class="keyword">return</span> result;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleFactory</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> Login <span class="title">getType</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (email) &#123;</div><div class="line">            业务逻辑</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> LoginByEmail();</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (mobile) &#123;</div><div class="line">            业务逻辑</div><div class="line">            <span class="keyword">return</span> <span class="keyword">new</span> LoginByEmail();</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            异常处理</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>如果不使用简单工厂代理，那么所有的业务逻辑就要写在一块，不但耦合度高，而且会出现重复代码。有兴趣的童鞋可以试一试。</p>
+<h2 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h2><p>和刚提到的简单工厂方法有关系，简单工厂方法是把判断的业务逻辑放到一个类中。但是如果这个逻辑过多，判断过于复杂，那么工厂方法就并不适用了。这个时候我们需要声明一个工厂接口，其他的工厂类要实现这个接口，来完成他们的功能，其实本人感觉就是把类换成接口，在职责分担的前提下进一步抽象，实现高内聚低耦合。</p>
+<h2 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h2><p>工厂模式上的一个延伸，当每个工厂至少维护两种产品，但是每个工厂又有很多共同的抽象的时候，需要使用此模式。</p>
+<p>此模式需要维护产品等级和产品族。简单来说，你想去打猎，需要购买枪和子弹，但是枪只能用固定的子弹。按照工厂模式，比如说有两个工厂，一个生产AK和AK子弹，一个生产13（沙鹰，CS我用的最好的枪，关键在于点射爆头）和13的子弹,那么如果用户买了AK和13的子弹，打猎遇到野猪，卒。</p>
+<p>这样肯定是不合适的，需要有人来和他说：少年，你这智商欠费啊。才能避免此类段子发生呢？但是工厂模式是不不会维护这种关系的，那么该怎么办呢？用户说，我要买AK打猎，就完事了，不用你选子弹，我们按照产品族给你拿子弹。问题解决了。</p>
+<p>一个抽象工厂接口，各个工厂类实现。调用的时候面向抽象，用户直接传入需要的对象(枪)，工厂类就会生成相关产品族。</p>
+<p>当一个系统有多个产品族，但是消费者每次只消费其中一个产品族，那么应该使用抽象工厂。缺点是如果要在产品族中添加新的产品，那么需要修改所有的工厂。</p>
+<h2 id="建造模式"><a href="#建造模式" class="headerlink" title="建造模式"></a>建造模式</h2><p>看到这模式我一下想起来Netty的AbstractBootstrap了，因为有太多的参数，而且情况较多，所以写各种各样的构造方法很不合适，不过那个是builder方法，而不是我们要说的建造模式（虽然有点像），那么建造模式是什么，好在哪，怎么用，就是我们下面要说明的。</p>
+<p>生活中有一些很复杂的对象，比如说火箭。我想要一个火箭对象，里面有几百万个零件，那么我想要火箭的对象时，我没必要了解所有的零件是什么，都有什么作用。需要有一个关系来帮我维持这种关系，那么维持这种关系的就叫做建造者，这个模式就是建造模式。<br>（火箭理解起来不好的话尝试变为汽车）</p>
+<p>建造者模式：把一个复杂对象的建造和表现进行分离，使得同样的构建过程可以创建不同的表示。（精辟！）又叫生成器模式。</p>
+<p>在客户端代码中，用户无需考虑具体的构建过程，只需提供需要构建的类型，那么建造者就会根据用户提供的参数来建造响应的对象，建造者可以通过同样的构建过程来创建不同的对象。</p>
+<p><img src="http://ogeojkg3t.bkt.clouddn.com/Builder%20pattern.jpg" alt=""></p>
+<p>Director：指挥者<br>Builder:抽象建造者<br>ConcreteBuilder: 具体建造者<br>Product:产品</p>
+<p>这里要注意可以有多个具体的建造者，而且每个具体的建造者都是分离的，这也是低耦合的表现，方便我们尽享替换和改装，而且其中的建造方法可以继续进行细分。</p>
+<p>如果系统中只有一个具体建造者，那么可以省略抽象建造者。</p>
+<blockquote>
+<ul>
+<li>与抽象工厂模式相比，抽象工厂生产一系列相关的产品，这些产品位于不不同的产品层级，从而形成了一个产品族。 而建造者模式返回一个完整的产品。</li>
+</ul>
+</blockquote>
+<h2 id="单例模式-1"><a href="#单例模式-1" class="headerlink" title="单例模式"></a>单例模式</h2><p>说了很多次的单例模式，很多种写法,两种可以用的，一个双重加锁。一个泛型。<br>屏幕左下方我的github上有，可以看看。</p>
+<p>当系统需要只有一个对象来处理问题的时候可以使用此模式，什么打印机啊之类的，或者线程池什么的。好处是处理简单，节省资源。缺点也有很多，比如说有点违反但一原则，他可能即单工厂，又处理业务逻辑。总之呢，具体情况，具体分析.</p>
+<h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><p>将接口转换成</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2016/10/27/设计模式/" class="archive-article-date">
+  	<time datetime="2016-10-26T16:01:01.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-27</time>
+</a>
+      
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2016/10/27/SpringAOP/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          我们说说Spring AOP
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/10/19/ConcurrentHashMap & HashMap/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ConcurrentHashMap &amp; HashMap</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="设计模式" data-title="" data-url="http://tiltcat.com/2016/10/27/设计模式/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 tiltcat
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js"></script>
+
+
+    
+<div class="tools-col">
+  <ul class="btn-wrap">
+    
+      <li class="chose" data-hook="tools-section-all"><span class="text">全部</span><i class="icon-book"></i></li>
+    
+    
+      <li data-hook="tools-section-tag"><span class="text">标签</span><i class="icon-price-tags"></i></li>
+    
+    
+    
+      <li data-hook="tools-section-me"><span class="text">我</span><i class="icon-smile"></i></li>
+    
+  </ul>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all chose">
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-tag">
+    			<div class="widget tagcloud" id="js-tagcloud">
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a>
+    			</div>
+    	</section>
+    
+
+    
+
+    
+    	<section class="tools-section tools-section-me">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>
