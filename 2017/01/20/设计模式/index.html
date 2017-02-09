@@ -15,7 +15,8 @@
 <meta property="og:site_name" content="Let's do this">
 <meta property="og:description" content="设计模式的六大原则在详细探讨设计模式之前，我们先说下基本的设计模式规则：">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Builder%20pattern.jpg">
-<meta property="og:updated_time" content="2017-02-08T10:09:12.000Z">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/%E6%A1%A5%E6%A2%81%E6%A8%A1%E5%BC%8F.png">
+<meta property="og:updated_time" content="2017-02-09T13:09:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="设计模式">
 <meta name="twitter:description" content="设计模式的六大原则在详细探讨设计模式之前，我们先说下基本的设计模式规则：">
@@ -194,7 +195,39 @@
 </blockquote>
 <h2 id="单例模式-1"><a href="#单例模式-1" class="headerlink" title="单例模式"></a>单例模式</h2><p>说了很多次的单例模式，很多种写法,两种可以用的，一个双重加锁。一个泛型。<br>屏幕左下方我的github上有，可以看看。</p>
 <p>当系统需要只有一个对象来处理问题的时候可以使用此模式，什么打印机啊之类的，或者线程池什么的。好处是处理简单，节省资源。缺点也有很多，比如说有点违反但一原则，他可能即单工厂，又处理业务逻辑。总之呢，具体情况，具体分析.</p>
-<h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><p>将接口转换成</p>
+<h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><p>比如我们的电脑电源是三相插头，但是插线板是两个口，那么三转二插头就是适配器。</p>
+<p>适配器模式是把一个接口转换成用户可以使用的接口，使得不兼容的类可以一起工作。适配器有两种，类的适配器模式和对象的适配器模式。</p>
+<p>我们有三个角色，源，目标，适配器。</p>
+<p>假设我们目标有a(),b(),源有a(),那么适配器就要实现b()来进行适配。</p>
+<p>因为是适配器继承了源，所以这个是类适配器模式。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Target</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">a</span><span class="params">()</span></span>;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">b</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Adaptee</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">a</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//类适配器</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Adapter</span> <span class="keyword">extends</span> <span class="title">Adaptee</span> <span class="keyword">implements</span> <span class="title">Target</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">b</span><span class="params">()</span> </span>&#123;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//对象适配器</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Adapter</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Adaptee adaptee;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Adapter</span><span class="params">(Adaptee adaptee)</span></span>&#123;</div><div class="line">        <span class="keyword">this</span>.adaptee = adaptee;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">a</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">this</span>.adaptee.a();</div><div class="line">    &#125;</div><div class="line"></div><div class="line"><span class="comment">//直接补充方法</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">b</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="comment">//写相关的代码</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>因为需要继承，但是Java是单继承，所以有些情况很尴尬。</p>
+<h3 id="认适配器模式-Default-Adapter-Pattern-或缺省适配器模式"><a href="#认适配器模式-Default-Adapter-Pattern-或缺省适配器模式" class="headerlink" title="认适配器模式(Default Adapter Pattern)或缺省适配器模式"></a>认适配器模式(Default Adapter Pattern)或缺省适配器模式</h3><blockquote>
+<ul>
+<li><p>当不需要全部实现接口提供的方法时，可先设计一个抽象类实现接口，并为该接口中每个方法提供一个默认实现（空方法），那么该抽象类的子类可有选择地覆盖父类的某些方法来实现需求，它适用于一个接口不想使用其所有的方法的情况。因此也称为单接口适配器模式。</p>
+</li>
+<li><p>结构型模式描述如何将类或者对象结合在一起形成更大的结构。<br>适配器模式用于将一个接口转换成客户希望的另一个接口，适配器模式使接口不兼容的那些类可以一起工作，其别名为包装器。适配器模式既可以作为类结构型模式，也可以作为对象结构型模式。</p>
+</li>
+<li>适配器模式包含四个角色：目标抽象类定义客户要用的特定领域的接口；适配器类可以调用另一个接口，作为一个转换器，对适配者和抽象目标类进行适配，它是适配器模式的核心；适配者类是被适配的角色，它定义了一个已经存在的接口，这个接口需要适配；在客户类中针对目标抽象类进行编程，调用在目标抽象类中定义的业务方法。</li>
+<li>在类适配器模式中，适配器类实现了目标抽象类接口并继承了适配者类，并在目标抽象类的实现方法中调用所继承的适配者类的方法；在对象适配器模式中，适配器类继承了目标抽象类并定义了一个适配者类的对象实例，在所继承的目标抽象类方法中调用适配者类的相应业务方法。</li>
+<li>适配器模式的主要优点是将目标类和适配者类解耦，增加了类的透明性和复用性，同时系统的灵活性和扩展性都非常好，更换适配器或者增加新的适配器都非常方便，符合“开闭原则”；类适配器模式的缺点是适配器类在很多编程语言中不能同时适配多个适配者类，对象适配器模式的缺点是很难置换适配者类的方法。<br>适配器模式适用情况包括：系统需要使用现有的类，而这些类的接口不符合系统的需要；想要建立一个可以重复使用的类，用于与一些彼此之间没有太大关联的一些类一起工作。</li>
+</ul>
+</blockquote>
+<h2 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h2><p>是对象的结构模式，使得抽象化和实体化可以脱耦，使得两者可以独立的变化。</p>
+<p>比如你一个负责画图形的类，每个图形又有各种颜色。比如圆形/正方形，红色/黑色。有一种设计师每一个图形都对应两个颜色，但这显然不够好，这时候就可以使用桥接模式，也称为柄体模式或者接口模式。</p>
+<p>引用Java与模式中的话：</p>
+<p>脱耦合市值将抽象化和实现化之间的耦合解脱开，或者说是将强关联变为弱关联。<br>所谓强关联，是在编译期确定的，无法在运行时期改变的关联。所谓弱关联，就是在编译期可以动态确定并改变的关联。</p>
+<p>将两个角色的继承关系变为聚合关系，就是将强关联改变为弱关联。所以桥接模式的作用就是在一个软件系统中将继承关系改变为组合/聚合关系。</p>
+<p><img src="http://ogeojkg3t.bkt.clouddn.com/%E6%A1%A5%E6%A2%81%E6%A8%A1%E5%BC%8F.png" alt=""></p>
+<p>桥梁模式涉及的角色有：</p>
+<blockquote>
+<ul>
+<li>抽象化角色：抽象化的定义，并拥有实现化角色的一个实例。</li>
+<li>修正抽象化角色：抽象化角色的继承，改变和修正父类对抽象化的定义。</li>
+<li>实现化角色：这个角色给出实现化角色的接口，但不给出具体的实现</li>
+<li>具体实现化角色：给出实现化角色的具体实现。</li>
+</ul>
+</blockquote>
 
       
     </div>
