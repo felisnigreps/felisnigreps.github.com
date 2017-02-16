@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://tiltcat.com">
+  <title>Let&#39;s do this</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Spring IoC
+title: Spring IOCdate: 2017-2-16 10:09:12tags: 
+
+Spring
+IoC
+
+
+最近才发现一直没有IoC的笔记，那么现在在这简单写一下，就当作复习了。相关的代码在Github上应该会有，没有的就是还没来得及补充…
+IoC是什么IoC相信大家都比较熟悉了，Inverse of control,控制反转。那么什么是控制反转呢？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Let's do this">
+<meta property="og:url" content="http://tiltcat.com/2016/10/27/SpringIOC/index.html">
+<meta property="og:site_name" content="Let's do this">
+<meta property="og:description" content="Spring IoC
+title: Spring IOCdate: 2017-2-16 10:09:12tags: 
+
+Spring
+IoC
+
+
+最近才发现一直没有IoC的笔记，那么现在在这简单写一下，就当作复习了。相关的代码在Github上应该会有，没有的就是还没来得及补充…
+IoC是什么IoC相信大家都比较熟悉了，Inverse of control,控制反转。那么什么是控制反转呢？">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/BeanFactoryTree.PNG">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/IoC%E7%AE%80%E5%8D%95%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.jpg">
+<meta property="og:updated_time" content="2017-02-16T12:21:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Let's do this">
+<meta name="twitter:description" content="Spring IoC
+title: Spring IOCdate: 2017-2-16 10:09:12tags: 
+
+Spring
+IoC
+
+
+最近才发现一直没有IoC的笔记，那么现在在这简单写一下，就当作复习了。相关的代码在Github上应该会有，没有的就是还没来得及补充…
+IoC是什么IoC相信大家都比较熟悉了，Inverse of control,控制反转。那么什么是控制反转呢？">
+<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/BeanFactoryTree.PNG">
+  
+  
+    <link rel="icon" href="/images/favicon.jpg">
+  
+  <link rel="stylesheet" href="/main.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/images/avatar.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">tiltcat</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">wub lab dup dup</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a class="js-smart-menu" data-idx="0" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="1" href="javascript:void(0)">标签</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="2" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/felisnigreps" title="github">github</a>
+		        
+					<a class="weibo" target="_blank" href="http://weibo.com/cool5231" title="weibo">weibo</a>
+		        
+					<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/tilt-play" title="zhihu">zhihu</a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-list"></i></div>
+  		<h1 class="header-author js-mobile-header hide">tiltcat</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img src="/images/avatar.jpg" class="js-avatar">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">tiltcat</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">wub lab dup dup</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/felisnigreps" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/cool5231" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/tilt-play" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap">
+        <article id="post-SpringIOC" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Spring-IoC"><a href="#Spring-IoC" class="headerlink" title="Spring IoC"></a>Spring IoC</h1><hr>
+<p>title: Spring IOC<br>date: 2017-2-16 10:09:12<br>tags: </p>
+<ul>
+<li>Spring</li>
+<li>IoC</li>
+</ul>
+<hr>
+<p>最近才发现一直没有IoC的笔记，那么现在在这简单写一下，就当作复习了。相关的代码在Github上应该会有，没有的就是还没来得及补充…</p>
+<h2 id="IoC是什么"><a href="#IoC是什么" class="headerlink" title="IoC是什么"></a>IoC是什么</h2><p>IoC相信大家都比较熟悉了，Inverse of control,控制反转。那么什么是控制反转呢？<br><a id="more"></a><br>一般来说我们需要一个对象的时候我们会new一个，但是在Spring中不需要你自己去new，你只要告诉Spring,我需要一个对象，那么Spring就会创建一个对象然后交给你。</p>
+<h2 id="IoC和DI"><a href="#IoC和DI" class="headerlink" title="IoC和DI"></a>IoC和DI</h2><p>Dependency Injection依赖注入。是IoC的一种体现形式。</p>
+<p>所谓依赖注入，那么什么是依赖呢？</p>
+<p>一般情况下来讲类之间的关系有以下几种：</p>
+<blockquote>
+<ul>
+<li>泛化：类与类，接口与接口之间的继承关系。</li>
+<li>实现：类实现接口.</li>
+<li>依赖：当类与类之间有使用关系时就属于依赖关系，不同于关联关系，依赖不具有“拥有关系”，而是一种“相识关系”，只在某个特定地方（比如某个方法体内）才有关系.</li>
+<li>关联：表示类与类或类与接口之间的依赖关系，表现为“拥有关系”；具体到代码可以用实例变量来表示.</li>
+<li>聚合：属于是关联的特殊情况，体现部分-整体关系，是一种弱拥有关系；整体和部分可以有不一样的生命周期；是一种弱关联.</li>
+<li>组合：属于是关联的特殊情况，也体现了体现部分-整体关系，是一种强“拥有关系”；整体与部分有相同的生命周期，是一种强关联.</li>
+</ul>
+</blockquote>
+<p>IoC容器中的依赖有两层含义</p>
+<blockquote>
+<ul>
+<li><p>Bean依赖容器:这里的依赖容器闭表现为容器创建Bean并负责管理Bean的生命周期，这就是体现控制反转。</p>
+</li>
+<li><p>容器注入Bean的依赖资源：Bean的依赖资源可能有很多，常量，外部文件等。但是在Java中统一称为对象。容器负责组装Bean的依赖资源，这里的依赖可以理解为上面我们提到的关联，聚合等关系。</p>
+</li>
+</ul>
+</blockquote>
+<p>我们为什么要用依赖注入呢？</p>
+<blockquote>
+<ul>
+<li>灵活的替换Bean的依赖。因为依赖设置在配置文件中，所以需要修改依赖时不需要修改代码，修改配置文件就好。</li>
+<li>更好的实现面向接口编程。在Bean中只需要指定依赖对象的接口，接口定义依赖对象完成的功能，通过容器注入依赖实现。</li>
+</ul>
+</blockquote>
+<p>Spring IoC容器注入资源主要有以下几种实现方式，构造器注入，setter()方法注入。 我们下面就来分别看看实现吧。</p>
+<h2 id="构造器注入"><a href="#构造器注入" class="headerlink" title="构造器注入"></a>构造器注入</h2><h3 id="根据参数索引注入"><a href="#根据参数索引注入" class="headerlink" title="根据参数索引注入"></a>根据参数索引注入</h3><p>看下代码，估计没什么问题。<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloImpl</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> String message;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> index;</div><div class="line">    <span class="keyword">private</span> String cache;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HelloImpl</span><span class="params">(String message, <span class="keyword">int</span> index, String cache)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.message = message;</div><div class="line">        <span class="keyword">this</span>.index = index;</div><div class="line">        <span class="keyword">this</span>.cache = cache;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHello</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(index + <span class="string">":"</span> + message + <span class="string">":"</span> + cache);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"hello"</span> <span class="attr">class</span>=<span class="string">"com.tiltcat.HelloImpl"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span> <span class="attr">value</span>=<span class="string">"hello"</span>&gt;</span><span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"1"</span> <span class="attr">value</span>=<span class="string">"3"</span>&gt;</span><span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"2"</span> <span class="attr">value</span>=<span class="string">"jason"</span>&gt;</span><span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>这样就完成了通过索引的注入，应该是一目了然的。</p>
+<h3 id="根据参数类型注入"><a href="#根据参数类型注入" class="headerlink" title="根据参数类型注入"></a>根据参数类型注入</h3><p>会匹配第一个类型相同的参数.类型需要些全限定名。<br><figure class="highlight xml"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"hello"</span> <span class="attr">class</span>=<span class="string">"com.tiltcat.HelloImpl"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"1"</span> <span class="attr">value</span>=<span class="string">"3"</span>&gt;</span><span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">type</span>=<span class="string">"java.lang.String"</span> <span class="attr">value</span>=<span class="string">"jason"</span>&gt;</span><span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">type</span>=<span class="string">"java.lang.String"</span> <span class="attr">value</span>=<span class="string">"hello"</span>&gt;</span><span class="tag">&lt;/<span class="name">constructor-arg</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<h3 id="使用参数名进行注入"><a href="#使用参数名进行注入" class="headerlink" title="使用参数名进行注入"></a>使用参数名进行注入</h3><figure class="highlight"><table><tr><td class="code"><pre><div class="line">&lt;bean name="hello" class="com.tiltcat.HelloImpl"&gt;</div><div class="line">    &lt;constructor-arg name="index" value="3"&gt;&lt;/constructor-arg&gt;</div><div class="line">    &lt;constructor-arg name="message" value="jason"&gt;&lt;/constructor-arg&gt;</div><div class="line">    &lt;constructor-arg name="cache" value="hello"&gt;&lt;/constructor-arg&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<p>也没啥可说的。</p>
+<h2 id="setter-注入"><a href="#setter-注入" class="headerlink" title="setter()注入"></a>setter()注入</h2><p>首先要有setter方法，然后按照下面，一目了然.</p>
+<p>注意一定要有无参的构造器。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">"hello"</span> <span class="attr">class</span>=<span class="string">"com.tiltcat.HelloImpl"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"message"</span> <span class="attr">value</span>=<span class="string">"lalal"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"index"</span> &gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>1<span class="tag">&lt;/<span class="name">value</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"cache"</span> <span class="attr">value</span>=<span class="string">"jason"</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!--如果需要注入空值的话可以这样--&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"message"</span> &gt;</span><span class="tag">&lt;<span class="name">null</span>&gt;</span><span class="tag">&lt;/<span class="name">null</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="注入集合，字典和数组"><a href="#注入集合，字典和数组" class="headerlink" title="注入集合，字典和数组"></a>注入集合，字典和数组</h3><p>Spring同样可以注入上述数据类型。数组：</p>
+<figure class="highlight"><table><tr><td class="code"><pre><div class="line">...</div><div class="line">        &lt;property name="list"&gt;</div><div class="line">            &lt;list value-type="java.lang.String"&gt;</div><div class="line">                &lt;value&gt;live&lt;/value&gt;</div><div class="line">                &lt;value&gt;give&lt;/value&gt;</div><div class="line">                &lt;value&gt;life&lt;/value&gt;</div><div class="line">                &lt;value&gt;love&lt;/value&gt;</div><div class="line">                &lt;value&gt;time&lt;/value&gt;</div><div class="line">            &lt;/list&gt;</div><div class="line">        &lt;/property&gt;</div><div class="line">    &lt;/bean&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="code"><pre><div class="line">...</div><div class="line">        &lt;property name="set"&gt;</div><div class="line">            &lt;set value-type="java.lang.String"&gt;</div><div class="line">                &lt;value&gt;live&lt;/value&gt;</div><div class="line">                &lt;value&gt;give&lt;/value&gt;</div><div class="line">                &lt;value&gt;life&lt;/value&gt;</div><div class="line">                &lt;value&gt;love&lt;/value&gt;</div><div class="line">                &lt;value&gt;time&lt;/value&gt;</div><div class="line">            &lt;/set&gt;</div><div class="line">        &lt;/property&gt;</div><div class="line">    &lt;/bean&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="code"><pre><div class="line">&lt;property name="array"&gt;</div><div class="line">    &lt;array value-type="java.lang.String"&gt;</div><div class="line">        &lt;value&gt;live&lt;/value&gt;</div><div class="line">        &lt;value&gt;give&lt;/value&gt;</div><div class="line">        &lt;value&gt;life&lt;/value&gt;</div><div class="line">        &lt;value&gt;love&lt;/value&gt;</div><div class="line">        &lt;value&gt;time&lt;/value&gt;</div><div class="line">    &lt;/array&gt;</div><div class="line">&lt;/property&gt;</div></pre></td></tr></table></figure>
+<p>array也是一样的,接下来是map</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printList</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">for</span>(Map.Entry&lt;String,String&gt; entry: map.entrySet())&#123;</div><div class="line">        System.out.println(<span class="string">"key = "</span> + entry.getKey() + <span class="string">", value = "</span> + entry.getValue());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"map"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">map</span> <span class="attr">key-type</span>=<span class="string">"java.lang.String"</span> <span class="attr">value-type</span>=<span class="string">"java.lang.String"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"1"</span> <span class="attr">value</span>=<span class="string">"life"</span>&gt;</span><span class="tag">&lt;/<span class="name">entry</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">entry</span> <span class="attr">key</span>=<span class="string">"lala"</span> <span class="attr">value</span>=<span class="string">"rick"</span>&gt;</span><span class="tag">&lt;/<span class="name">entry</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">map</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="引用其他Bean"><a href="#引用其他Bean" class="headerlink" title="引用其他Bean"></a>引用其他Bean</h3><p>引用其他Bean只需要再标签中加入ref就可以实现。</p>
+<h3 id="一些小知识"><a href="#一些小知识" class="headerlink" title="一些小知识"></a>一些小知识</h3><blockquote>
+<ul>
+<li><p>延迟初始化Bean:只有在真正使用的时候才去创建Bean. Spring一般情况下会提前生成singleton作用域的Bean.</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"helloApi"</span> <span class="attr">class</span>=<span class="string">"cn.javass.spring.chapter2.helloworld.HelloImpl"</span>  <span class="attr">lazy-init</span>=<span class="string">"true"</span>/&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>depends-on:“decorator”指定了“depends-on”属性为“helloApi”，所以在“decorator”Bean初始化之前要先初始化“helloApi”，而在销毁“helloApi”之前先要销毁“decorator”，大家注意一下销毁顺序，与文档上的不符。</p>
+<pre><code>“depends-on”属性可以指定多个Bean，若指定多个Bean可以用“;”、“,”、空格分割。
+那“depends-on”有什么好处呢？主要是给出明确的初始化及销毁顺序，比如要初始化“decorator”时要确保“helloApi”Bean的资源准备好了，否则使用“decorator”时会看不到准备的资源；而在销毁时要先在“decorator”Bean的把对“helloApi”资源的引用释放掉才能销毁“helloApi”，否则可能销毁 “helloApi”时而“decorator”还保持着资源访问，造成资源不能释放或释放错误。
+</code></pre><figure class="highlight xml"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"helloApi"</span> <span class="attr">class</span>=<span class="string">"cn.javass.spring.chapter2.helloworld.HelloImpl"</span>/&gt;</span>  </div><div class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"decorator"</span>  </span></div><div class="line">    <span class="attr">class</span>=<span class="string">"cn.javass.spring.chapter3.bean.HelloApiDecorator"</span>  </div><div class="line">    <span class="attr">depends-on</span>=<span class="string">"helloApi"</span>&gt;  </div><div class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"helloApi"</span>&gt;</span><span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"helloApi"</span>/&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </div><div class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<p>更详细的理解在<a href="https://www.martinfowler.com/articles/injection.html" target="_blank" rel="external">Martin的这边文章</a>，很惭愧，还没有拜读。</p>
+<h2 id="IoC容器"><a href="#IoC容器" class="headerlink" title="IoC容器"></a>IoC容器</h2><p>IoC容器就是具有依赖注入的容器，他负责建立，配置应用程序中的对象，并建立与这些对象中的依赖。在Spring中BeanFactory就是IoC容器的代名词。</p>
+<p>那么IoC容器是如何知道是哪些对象，而且怎么配置呢？这就需要配置文件，我们通常情况下常用XML文件进行配置，除此之外还有注解，源属性等。他们是这个样子：<br><figure class="highlight xml"><table><tr><td class="code"><pre><div class="line">...</div><div class="line">   <span class="comment">&lt;!--根据ID实例化--&gt;</span></div><div class="line">    <span class="comment">&lt;!--&lt;bean id="rick" class="com.cat.RickHi"/&gt;--&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"morty"</span> <span class="attr">class</span>=<span class="string">"com.swim.Morty"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"writeJava"</span> <span class="attr">class</span>=<span class="string">"com.aop.schema.WriteJava"</span>/&gt;</span></div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>然后实例化的时候大约这么调用下：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line">ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"spring-config.xml"</span>);</div><div class="line"><span class="comment">//SayHi sayHi = context.getBean("game", SayHiImplW.class);</span></div><div class="line"><span class="comment">//sayHi.WhiteFolksHi();</span></div><div class="line">SayConstructor con = context.getBean(<span class="string">"cons"</span>,SayConstructor.class);</div><div class="line">con.WhiteFolksHi();</div></pre></td></tr></table></figure></p>
+<p>这边的ApplicationContext是BeanFactory的一个实现，ClassPathXmlApplicationContext是ApplicationContext的一个实现。</p>
+<p><img src="http://ogeojkg3t.bkt.clouddn.com/BeanFactoryTree.PNG" alt=""></p>
+<p>流程大约是这样的：<br><img src="http://ogeojkg3t.bkt.clouddn.com/IoC%E7%AE%80%E5%8D%95%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.jpg" alt=""></p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2016/10/27/SpringIOC/" class="archive-article-date">
+  	<time datetime="2016-10-26T16:01:01.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-27</time>
+</a>
+      
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2016/10/27/SpringAOP/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          我们说说Spring AOP
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/10/19/ConcurrentHashMap & HashMap/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ConcurrentHashMap &amp; HashMap</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="SpringIOC" data-title="" data-url="http://tiltcat.com/2016/10/27/SpringIOC/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 tiltcat
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js"></script>
+
+
+    
+<div class="tools-col">
+  <ul class="btn-wrap">
+    
+      <li class="chose" data-hook="tools-section-all"><span class="text">全部</span><i class="icon-book"></i></li>
+    
+    
+      <li data-hook="tools-section-tag"><span class="text">标签</span><i class="icon-price-tags"></i></li>
+    
+    
+    
+      <li data-hook="tools-section-me"><span class="text">我</span><i class="icon-smile"></i></li>
+    
+  </ul>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all chose">
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-tag">
+    			<div class="widget tagcloud" id="js-tagcloud">
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a>
+    			</div>
+    	</section>
+    
+
+    
+
+    
+    	<section class="tools-section tools-section-me">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>
