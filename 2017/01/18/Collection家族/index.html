@@ -8,20 +8,25 @@
   <link rel="dns-prefetch" href="http://tiltcat.com">
   <title>Collection家族 | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Collection这是Java基础中不可缺少的部分，以前看过很多次，但总是记不牢，这次在这边简单总结下。方便复习。">
+  <meta name="description" content="这是Java基础中不可缺少的部分，以前看过很多次，但总是记不牢，这次在这边简单总结下。方便复习。
+很多图片和内容都是抄自于网上的博客，侵删。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Collection家族">
 <meta property="og:url" content="http://tiltcat.com/2017/01/18/Collection家族/index.html">
 <meta property="og:site_name" content="Let's do this">
-<meta property="og:description" content="Collection这是Java基础中不可缺少的部分，以前看过很多次，但总是记不牢，这次在这边简单总结下。方便复习。">
-<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/CollectionVsCollections.jpeg">
-<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/java-collection-hierarchy.jpeg">
-<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Chill.PNG">
-<meta property="og:updated_time" content="2017-02-16T12:23:09.000Z">
+<meta property="og:description" content="这是Java基础中不可缺少的部分，以前看过很多次，但总是记不牢，这次在这边简单总结下。方便复习。
+很多图片和内容都是抄自于网上的博客，侵删。">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/CollectionsMind.png">
+<meta property="og:image" content="http://img.blog.csdn.net/20150501233345854?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20150501235138962?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20150502000405642?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/collection.png">
+<meta property="og:updated_time" content="2017-02-16T14:22:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Collection家族">
-<meta name="twitter:description" content="Collection这是Java基础中不可缺少的部分，以前看过很多次，但总是记不牢，这次在这边简单总结下。方便复习。">
-<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/CollectionVsCollections.jpeg">
+<meta name="twitter:description" content="这是Java基础中不可缺少的部分，以前看过很多次，但总是记不牢，这次在这边简单总结下。方便复习。
+很多图片和内容都是抄自于网上的博客，侵删。">
+<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/CollectionsMind.png">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -152,11 +157,10 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h2><p>这是Java基础中不可缺少的部分，以前看过很多次，但总是记不牢，这次在这边简单总结下。方便复习。</p>
-<a id="more"></a>
-<h3 id="Collection-amp-Collections"><a href="#Collection-amp-Collections" class="headerlink" title="Collection &amp; Collections"></a>Collection &amp; Collections</h3><p><img src="http://ogeojkg3t.bkt.clouddn.com/CollectionVsCollections.jpeg" alt="Collection &amp; Collections"></p>
-<p>Collection是一个接口，Collections是一个工具类，那我们再看下Collection里有什么：</p>
-<p><img src="http://ogeojkg3t.bkt.clouddn.com/java-collection-hierarchy.jpeg" alt=""></p>
+        <p>这是Java基础中不可缺少的部分，以前看过很多次，但总是记不牢，这次在这边简单总结下。方便复习。</p>
+<p>很多图片和内容都是抄自于网上的博客，侵删。<br><a id="more"></a></p>
+<h2 id="集合体系"><a href="#集合体系" class="headerlink" title="集合体系"></a>集合体系</h2><p><img src="http://ogeojkg3t.bkt.clouddn.com/CollectionsMind.png" alt=""></p>
+<h2 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h2><p><img src="http://img.blog.csdn.net/20150501233345854?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""></p>
 <p>Set:一种不包含重复元素Collection,他维持自己内部的顺序，所以随机访问对他没有意义（无序）。可以存在null值但是只能存在一个。</p>
 <blockquote>
 <ul>
@@ -175,8 +179,11 @@
 <li>LinkedList：它是一个双向链表，可以更好的进行插入和删除，除了ArrayList提供的方法之外，他还有get/remove等方法获取头部的元素。它查找的方式和ArrayList有所不同，他不支持随机查找，每次查找都需要从头/尾进行遍历来查找元素。</li>
 </ul>
 </blockquote>
-<p>Queue:</p>
-<p>下面所有方框中的东西都需要你去了解，部分你需要熟练掌握。<br><img src="http://ogeojkg3t.bkt.clouddn.com/Chill.PNG" alt=""></p>
+<h2 id="Maps"><a href="#Maps" class="headerlink" title="Maps"></a>Maps</h2><p><img src="http://img.blog.csdn.net/20150501235138962?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""></p>
+<p>HashMap支持null, HashTable不支持。 HashTable已经基本被HashMap取代。</p>
+<h2 id="工具类"><a href="#工具类" class="headerlink" title="工具类"></a>工具类</h2><p><img src="http://img.blog.csdn.net/20150502000405642?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""></p>
+<h2 id="一张图"><a href="#一张图" class="headerlink" title="一张图"></a>一张图</h2><p><img src="http://ogeojkg3t.bkt.clouddn.com/collection.png" alt=""></p>
+<p>其实看多了，梳理一下，其实还是很好理解的。</p>
 
       
     </div>
