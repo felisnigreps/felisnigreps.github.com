@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://tiltcat.com">
+  <title>MySQL | Let&#39;s do this</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="这个文章主要复习一下以前学习的mysql相关知识，在onenote上还有一个笔记，这边也会转移过来。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL">
+<meta property="og:url" content="http://tiltcat.com/2017/02/16/MySQL/index.html">
+<meta property="og:site_name" content="Let's do this">
+<meta property="og:description" content="这个文章主要复习一下以前学习的mysql相关知识，在onenote上还有一个笔记，这边也会转移过来。">
+<meta property="og:updated_time" content="2017-02-17T13:52:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL">
+<meta name="twitter:description" content="这个文章主要复习一下以前学习的mysql相关知识，在onenote上还有一个笔记，这边也会转移过来。">
+  
+  
+    <link rel="icon" href="/images/favicon.jpg">
+  
+  <link rel="stylesheet" href="/main.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/images/avatar.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">tiltcat</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">wub lab dup dup</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a class="js-smart-menu" data-idx="0" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="1" href="javascript:void(0)">标签</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="2" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/felisnigreps" title="github">github</a>
+		        
+					<a class="weibo" target="_blank" href="http://weibo.com/cool5231" title="weibo">weibo</a>
+		        
+					<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/tilt-play" title="zhihu">zhihu</a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-list"></i></div>
+  		<h1 class="header-author js-mobile-header hide">tiltcat</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img src="/images/avatar.jpg" class="js-avatar">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">tiltcat</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">wub lab dup dup</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/felisnigreps" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/cool5231" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/tilt-play" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap">
+        <article id="post-MySQL" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MySQL
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这个文章主要复习一下以前学习的mysql相关知识，在onenote上还有一个笔记，这边也会转移过来。</p>
+<a id="more"></a>
+<h2 id="存储引擎概述"><a href="#存储引擎概述" class="headerlink" title="存储引擎概述"></a>存储引擎概述</h2><p>本来应该写全了有多少存储引擎和他们的区别，不过记不住，就写点常用的，有两个：</p>
+<ol>
+<li>MyISAM:是mysql的默认引擎，当你创建表的时候会默认选择它。</li>
+<li>InnoDB:提供了提交，回滚和崩溃恢复的能力，事物安全，但是比起来Myisam,它占用的空间会大一些（管理索引），处理效率也相对差一些。</li>
+</ol>
+<p>那我们该怎么选择存储引擎呢？</p>
+<blockquote>
+<ul>
+<li>myisam:默认的mysql引擎，是在web，数据仓储中最常用的引擎。</li>
+<li>innodb:用于事物处理的应用程序，支持包括acid（原子/一致/独立/持久）的众多特性。</li>
+<li>memory:将所有数据保存在RAM中，提供极快的访问速度。</li>
+</ul>
+</blockquote>
+<h2 id="选择合适的数据类型"><a href="#选择合适的数据类型" class="headerlink" title="选择合适的数据类型"></a>选择合适的数据类型</h2><p>数据类型是在合适的存储引擎基础上决定的，</p>
+<p>myisam:最好使用固定长度的数据列代替可变长度的数据列。</p>
+<p>innodb:建议使用varchar类型，对于InnoDB数据表，内部的行存储格式没有区分固定长度和可变长度列（所有数据行都使用指向数据列值的头指针），因此在本质上，使用固定长度的CHAR列不一定比使用可变长度VARCHAR列简单。因而，主要的性能因素是数据行使用的存储总量。由于CHAR平均占用的空间多于VARCHAR，因 此使用VARCHAR来最小化需要处理的数据行的存储总量和磁盘I/O是比较好的。</p>
+<p>memory:MEMORY数据表目前都使用固定长度的数据行存储，因此无论使用CHAR或VARCHAR列都没有关系。两者都是作为CHAR类型处理的。</p>
+<h2 id="固定长度数据列和可变长度数据列"><a href="#固定长度数据列和可变长度数据列" class="headerlink" title="固定长度数据列和可变长度数据列"></a>固定长度数据列和可变长度数据列</h2><h3 id="char和varchar"><a href="#char和varchar" class="headerlink" title="char和varchar"></a>char和varchar</h3><p>他们的数据格式类似，但是保存和检索方式不同，最大长度和尾部空格是否保留也不同。在存储过程中不进行大小写转换。</p>
+<p>在进行检索时char列尾部会删除空格。</p>
+<h3 id="text和blob"><a href="#text和blob" class="headerlink" title="text和blob"></a>text和blob</h3><p>删除此类数据会留下比较大的空洞，建议定期使用optmize table来整理碎片。</p>
+<p>在不必要的时候避免检索大型的text和blob值，比如说select * from table就不是很好的选择，这样会在网络上</p>
+<p>把blob和text列分离到单独的表中。</p>
+<h3 id="浮点数和定点数"><a href="#浮点数和定点数" class="headerlink" title="浮点数和定点数"></a>浮点数和定点数</h3><p>为了能够引起大家的重视，在介绍浮点数与定点数以前先让大家看一个例子：<br><figure class="highlight"><table><tr><td class="code"><pre><div class="line">mysql&gt; CREATE TABLE test (c1 float(10,2),c2 decimal(10,2));</div><div class="line">Query OK, 0 rows affected (0.29 sec)</div><div class="line">mysql&gt; insert into test values(131072.32,131072.32);</div><div class="line">Query OK, 1 row affected (0.07 sec)</div><div class="line">mysql&gt; select * from test;</div></pre></td></tr></table></figure></p>
+<table>
+<thead>
+<tr>
+<th>c1</th>
+<th>c2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>131072.31</td>
+<td>131072.32</td>
+</tr>
+</tbody>
+</table>
+<p>这就是由浮点数的不精确造成的。</p>
+<p>在 mysql 中 float、double（或 real）是浮点数，decimal（或 numberic）是定点数。<br>浮点数相对于定点数的优点是在长度一定的情况下，浮点数能够表示更大的数据范围；<br>它的缺点是会引起精度问题。<br>在今后关于浮点数和定点数的应用中，大家要记住以下几点：<br>1、浮点数存在误差问题；<br>2、对货币等对精度敏感的数据，应该用定点数表示或存储；<br>3、编程中，如果用到浮点数，要特别注意误差问题，并尽量避免做浮点数比较；<br>4、要注意浮点数中一些特殊值的处理。</p>
+<h2 id="字符集"><a href="#字符集" class="headerlink" title="字符集"></a>字符集</h2><p>字符集是一套符号和编码的规则，oracle和mysql中都存在一套字符集的规则，如果前期没有选择正确，后期的更换是代价比较高的操作。</p>
+<p>mysql服务器可以支持多种字符集（可以用show character set命令查看所有mysql支持的字符集），在同一台服务器、同一个数据库、甚至同一个表的不同字段都可以指定使用不同的字符集，相比oracle等其他数据库管理系统，在同一个数据库只能使用相同的字符集，mysql明显存在更大的灵活性。</p>
+<p>mysql的字符集包括字符集（CHARACTER）和校对规则（COLLATION）两个概念。字符集是用来定义mysql存储字符串的方式，校对规则则是定义了比较字符串的方式。字符集和校对规则是一对多的关系,MySQL支持30多种字符集的70多种校对规则。</p>
+<h3 id="怎样选择字符集"><a href="#怎样选择字符集" class="headerlink" title="怎样选择字符集"></a>怎样选择字符集</h3><p>我们建议在能够完全满足应用的前提下，尽量使用小的字符集。因为更小的字符集意</p>
+<h2 id="索引的设计和使用"><a href="#索引的设计和使用" class="headerlink" title="索引的设计和使用"></a>索引的设计和使用</h2><p>所有mysql的列都可以进行索引，对相关列进行索引是提高select查询的最佳方式。根据存储引擎定义每个表的最大索引数和最大索引长度。所有存储引擎支持每个表至少16个索引，总索引长度至少为 256 字节。大多数存储引擎有更高的限制。</p>
+<h3 id="设计索引的原则"><a href="#设计索引的原则" class="headerlink" title="设计索引的原则"></a>设计索引的原则</h3><p>1.搜索的索引列，不一定是所要选择的列。换句话说，最适合索引的列是出现在 WHERE 子句中的列，或连接子句中指定的列，而不是出现在 SELECT关键字后的选择列表中的列。</p>
+<p>2.使用惟一索引。考虑某列中值的分布。对于惟一值的列，索引的效果最好，而具有多个重复值的列，其索引效果最差。例如，存放年龄的列具有不同值，很容易区分各行。而用来记录性别的列，只含有“M”和“F”，则对此列进行索引没有多大用处（不管搜索哪个值，都会得出大约一半的行）</p>
+<p>3.使用短索引。如果对串列进行索引，应该指定一个前缀长度，只要有可能就应该这样做 。例如，如果有一个 CHAR(200) 列，如果在前 10 个或 20个字符内，多数值是惟一的，那么就不要对整个列进行索引。对前 10 个或 20 个字符进行索引能够节省大量索引空间，也可能会使查询更快。较小的索引涉及的磁盘 I/O 较少，较短的值比较起来更快。更为重要的是，对于较短的键值，索引高速缓存中的块能容纳更多的键值，因此，MySQL也可以在内存中容纳更多的值。这增加了找到行而不用读取索引中较多块的可能性。（当然，应该利用一些常识。如仅用列值的第一个字符进行索引是不可能有多大好处的，因为这个索引中不会有许多不 同的值。）</p>
+<p>4.不要过度索引。不要以为索引“越多越好”，什么东西都用索引是错的。每个额外的索引都要占用额外的磁盘空间，并降低写操作的性能，这一点我们前面已经介绍过。在修改表的内容时，索引必须进行更新，有时可能需要重构，因此，索引越多，所花的时间越长。如果有一个索引很少利用或从不使用，那么会不必要地减缓表的修改速度。此外，MySQL在生成一个执行计划时，要考虑各个索引，这也要费时间。创建多余的索引给查询优化带来了更多的工作。索引太多，也可能会使MySQL选择不到所要使用的最好索引。只保持所需的索引有利于查询优化。如果想给已索引的表增加索引，应该考虑所要增加的索引是否是现有多列索引的最左索引。如果是，则就不要费力去增加这个索引了，因为已经有了。</p>
+<h3 id="如何使用索引"><a href="#如何使用索引" class="headerlink" title="如何使用索引"></a>如何使用索引</h3><p>索引用于快速找出在某个列中有一特定值的行。不使用索引，MySQL 必须从第 1 条记录开始然后读完整个表直到找出相关的行。表越大，花费的时间越多。如果表中查询的列有一个索引，MySQL能快速到达一个位置去搜寻到数据文件的中间，没有必要看所有数据。如果一个表有1000行，这比顺序读取至少快100倍。注意如果你需要访问大部分行，顺序读取要快得多，因为此时我们避免磁盘搜索。大多数 MySQL 索引(PRIMARY KEY、UNIQUE、INDEX和FULLTEXT)在B树中存储。只是空间列类型的索引使用 R-树，并且 MEMORY 表还支持 hash 索引。</p>
+<h2 id="锁机制和事务控制"><a href="#锁机制和事务控制" class="headerlink" title="锁机制和事务控制"></a>锁机制和事务控制</h2><p>锁表：</p>
+<p>lock tables [table1] read,[table2] write,[table3] read;</p>
+<p>解锁：</p>
+<p>unlock tables</p>
+<h3 id="事务控制"><a href="#事务控制" class="headerlink" title="事务控制"></a>事务控制</h3><p>MySQL通过SET AUTOCOMMIT, START TRANSACTION,COMMIT和ROLLBACK等语句支持本地<br>事务。<br>语法：<br><figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"><span class="keyword">START</span> <span class="keyword">TRANSACTION</span> | <span class="keyword">BEGIN</span> [<span class="keyword">WORK</span>]</div><div class="line"><span class="keyword">COMMIT</span> [<span class="keyword">WORK</span>] [<span class="keyword">AND</span> [<span class="keyword">NO</span>] <span class="keyword">CHAIN</span>] [[<span class="keyword">NO</span>] <span class="keyword">RELEASE</span>]</div><div class="line"><span class="keyword">ROLLBACK</span> [<span class="keyword">WORK</span>] [<span class="keyword">AND</span> [<span class="keyword">NO</span>] <span class="keyword">CHAIN</span>] [[<span class="keyword">NO</span>] <span class="keyword">RELEASE</span>]</div><div class="line"><span class="keyword">SET</span> AUTOCOMMIT = &#123;<span class="number">0</span> | <span class="number">1</span>&#125;</div></pre></td></tr></table></figure></p>
+<p>默认情况下，mysql是autocommit的，如果需要通过明确的commit和rollback来提交和回滚事务，那么需要通过明确的事务控制命令来开始事务，这是和oracle的事务管理明显不同的地方，如果应用是从oracle数据库迁移到mysql数据库，则需要确保应用中是否对事务进行了明确的管理。START TRANSACTION或BEGIN语句可以开始一项新的事务。</p>
+<p>如果我们只是对某些语句需要进行事务控制，则使用START TRANSACTION开始一个事务比较方便，这样事务结束之后可以自动回到自动提交的方式，如果我们希望我们所有的事务都不是自动提交的，那么通过修改AUTOCOMMIT来控制事务比较方便，这样不用在每个事务开始的时候再执行START TRANSACTION。</p>
+<h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h3><p>可以使用prepareStatement来预防，Mybatis的预编译也可以防止，使用的也是prepareStatement</p>
+<h3 id="sql-mode"><a href="#sql-mode" class="headerlink" title="sql mode"></a>sql mode</h3><p>通常在linux下安装完mysql后，默认的sql-mode值是空，在这种情形下mysql执行的是一种不严格的检查，例如日期字段可以插入’0000-00-00 00:00:00’这样的值，还有如果要插入的字段长度超过列定义的长度，那么mysql不会终止操作，而是会自动截断后面的字符继续插入操作，如下例：<br><figure class="highlight"><table><tr><td class="code"><pre><div class="line">mysql&gt; create table t5 (c1 char(3));</div><div class="line">mysql&gt; insert into t5 values('abcd');</div><div class="line">mysql&gt; select * from t5;</div></pre></td></tr></table></figure></p>
+<table>
+<thead>
+<tr>
+<th>c1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abc</td>
+</tr>
+</tbody>
+</table>
+<p>1 row in set (0.00 sec)</p>
+<p>我们发现插入的字符被自动截断了，但是如果我们本意希望如果长度超过限制就报错，那么我们可以设置sql_mode为STRICT_TRANS_TABLES，如下：<br>    mysql&gt; set session sql_mode=’STRICT_TRANS_TABLES’<br>这样我们再执行同样的操作，mysql就会告诉我们插入的值太长，操作被终止，如下：<br><figure class="highlight"><table><tr><td class="code"><pre><div class="line">mysql&gt; insert into t5 values('abcd');</div><div class="line">ERROR 1406 (22001): Data too long for column 'c1' at row 1</div></pre></td></tr></table></figure></p>
+<h2 id="Mysql-优化"><a href="#Mysql-优化" class="headerlink" title="Mysql 优化"></a>Mysql 优化</h2><h3 id="统计各类语句的执行信息"><a href="#统计各类语句的执行信息" class="headerlink" title="统计各类语句的执行信息"></a>统计各类语句的执行信息</h3><p>SHOW STATUS可以提供服务器状态信息，也可以使用 mysqladmin extended-status<br>命令获得。SHOW STATUS 可以根据需要显示 session 级别的统计结果和 global<br>级别的统计结果。<br>以下几个参数对 Myisam 和 Innodb 存储引擎都计数：</p>
+<ol>
+<li>Com_select 执行 select 操作的次数，一次查询只累加 1；</li>
+<li>Com_insert 执行 insert 操作的次数，对于批量插入的 insert操作，只累加一次；</li>
+<li>Com_update 执行 update 操作的次数；</li>
+<li>Com_delete 执行 delete 操作的次数；</li>
+</ol>
+<p>以下几个参数是针对 Innodb 存储引擎计数的，累加的算法也略有不同：</p>
+<ol>
+<li>Innodb_rows_read select 查询返回的行数；</li>
+<li>Innodb_rows_inserted 执行 Insert 操作插入的行数；</li>
+<li>Innodb_rows_updated 执行 update 操作更新的行数；</li>
+<li>Innodb_rows_deleted 执行 delete 操作删除的行数；</li>
+</ol>
+<p>通过以上几个参数，可以很容易的了解当前数据库的应用是以插入更新为主还是<br>以查询操作为主，以及各种类型的SQL大致的执行比例是多少。对于更新操作的计数 ，是对执行次数的计数，不论提交还是回滚都会累加。对于事务型的应用，通过 Com_commit 和 Com_rollback可以了解事务提交和回滚的情况，对于回滚操作非常频繁的数据库，可能意味着应用编写存在问题。此外，以下几个参数便于我们了解数据库的基本情况：</p>
+<h3 id="定位执行效率较低的sql语句"><a href="#定位执行效率较低的sql语句" class="headerlink" title="定位执行效率较低的sql语句"></a>定位执行效率较低的sql语句</h3><ol>
+<li><p>可以通过慢查询日志定位那些执行效率较低的sql语句，用–log-slowqueries[=file_name]选项启动时，mysqld写一个包含所有执行时间超过long_query_time 秒的 SQL 语句的日志文件。可以链接到管理维护中的相关章节。</p>
+</li>
+<li><p>慢查询日志在查询结束以后才纪录，所以在应用反映执行效率出现问题的时候查询慢查询日志并不能定位问题，可以使用 show processlist 命令查看当前 MySQL 在进行的线程，包括线程的状态，是否锁表等等，可以实时的查看SQL执行情况，同时对一些锁表操作进行优化。</p>
+</li>
+</ol>
+<h3 id="通过EXPLAIN分析低效-SQL-的执行计划"><a href="#通过EXPLAIN分析低效-SQL-的执行计划" class="headerlink" title="通过EXPLAIN分析低效 SQL 的执行计划"></a>通过EXPLAIN分析低效 SQL 的执行计划</h3><p>通过以上步骤查询到效率低的 SQL 后，我们可以通过 explain 或者 desc 获取MySQL 如何执行 SELECT语句的信息，包括select语句执行过程表如何连接和连接的次序。explain 可以知道什么时候必须为表加入索引以得到一个使用索引来寻找记录的更快的 SELECT。<br><figure class="highlight"><table><tr><td class="code"><pre><div class="line">mysql&gt; explain select sum(moneys) from sales a,companys b where a.company_id =</div><div class="line">b.id and a.year = 2006;</div></pre></td></tr></table></figure></p>
+<table>
+<thead>
+<tr>
+<th>select_type</th>
+<th>table</th>
+<th>type</th>
+<th>possible_keys</th>
+<th>key</th>
+<th>key_len</th>
+<th>rows</th>
+<th>Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIMPLE</td>
+<td>b</td>
+<td>index</td>
+<td>PRIMARY</td>
+<td>PRIMARY</td>
+<td>4</td>
+<td>1</td>
+<td>Using index</td>
+</tr>
+<tr>
+<td></td>
+</tr>
+<tr>
+<td>SIMPLE</td>
+<td>a</td>
+<td>ALL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>NULL</td>
+<td>12</td>
+<td>Using where</td>
+</tr>
+</tbody>
+</table>
+<p>2 rows in set (0.02 sec)</p>
+<p>select_type： select 类型<br>table： 输出结果集的表<br>type： 表示表的连接类型当表中仅有一行是type的值为system是最佳的连接类型；<br>当select操作中使用索引进行表连接时type的值为ref；当select的表连接没有使用索引时，经常会看到type的值为ALL，表示对该表进行了全表扫描，这时需要考虑通过创建索引来提高表连接的效率。<br>possible_keys： 表示查询时,可以使用的索引列.<br>key： 表示使用的索引<br>key_len： 索引长度<br>rows： 扫描范围<br>Extra： 执行情况的说明和描述</p>
+<h3 id="确定问题"><a href="#确定问题" class="headerlink" title="确定问题"></a>确定问题</h3><p>经过以上步骤，基本可以确认问题出现的原因，可以根据情况采取相应的措施，进行优化提高执行的效率。例如上面的例子，我们确认是对a表的全表扫描导致效率的不理想，我们对a表的year字段创建了索引，查询需要扫描的行数明显较少。<br><figure class="highlight"><table><tr><td class="code"><pre><div class="line">mysql&gt; explain select sum(moneys) from sales a,companys b where a.company_id =</div><div class="line">b.id and a.year = 2006;</div></pre></td></tr></table></figure></p>
+<table>
+<thead>
+<tr>
+<th>select_type</th>
+<th>table</th>
+<th>type</th>
+<th>possible_keys</th>
+<th>key</th>
+<th>key_len</th>
+<th>rows</th>
+<th>Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIMPLE</td>
+<td>b</td>
+<td>index</td>
+<td>PRIMARY</td>
+<td>PRIMARY</td>
+<td>4</td>
+<td>1</td>
+<td>Using index</td>
+</tr>
+<tr>
+<td>SIMPLE</td>
+<td>a</td>
+<td>ref</td>
+<td>year</td>
+<td>year</td>
+<td>4</td>
+<td>3</td>
+<td>Using where</td>
+</tr>
+</tbody>
+</table>
+<p>2 rows in set (0.02 sec)</p>
+<h2 id="索引问题"><a href="#索引问题" class="headerlink" title="索引问题"></a>索引问题</h2><p>myisam 表的数据文件和索引文件是自动分开的；innodb的数据和索引是存储在同一个表空间里面，但可以有多个文件组成。<br>创建索引语法如下：<br>myisam 表的数据文件和索引文件是自动分开的；innodb 的数据和索引是存储在<br>同一个表空间里面，但可以有多个文件组成。<br>创建索引语法如下：<br><figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> [<span class="keyword">UNIQUE</span>|FULLTEXT|SPATIAL] <span class="keyword">INDEX</span> index_name</div><div class="line">[<span class="keyword">USING</span> index_type]</div><div class="line"><span class="keyword">ON</span> tbl_name (index_col_name,...)</div><div class="line">index_col_name:</div><div class="line">col_name [(<span class="keyword">length</span>)] [<span class="keyword">ASC</span> | <span class="keyword">DESC</span>]</div></pre></td></tr></table></figure></p>
+<p>索引的存储类型目前只有两种（btree 和 hash），具体和表的模式相关：<br>myisam:btree<br>innodb:btree<br>memory:heap hash，btree</p>
+<p>mysql 目前不支持函数索引，只能对列的前一部分（length）进行索引，例：<br><figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"><span class="keyword">create</span> <span class="keyword">index</span> ind_test <span class="keyword">on</span> table1(<span class="keyword">name</span>(<span class="number">5</span>))</div></pre></td></tr></table></figure></p>
+<p>对于 char 和 varchar 列，使用前缀索引将大大节省空间</p>
+<h3 id="mysql如何使用索引"><a href="#mysql如何使用索引" class="headerlink" title="mysql如何使用索引"></a>mysql如何使用索引</h3><p>索引用于快速找出在某个列中有一特定值的行。对相关列使用索引是提高SELECT操作性能的最佳途径。查询要使用索引最主要的条件是查询条件中需要使用索引关键字，如果是多列索引，那么只有查询条件使用了多列关键字最左边的前缀时，才可以使用索引，否则将不能使用索引。<br>下列情况下，Mysql 不会使用已有的索引：</p>
+<ol>
+<li>如果 mysql 估计使用索引比全表扫描更慢，则不使用索引。例如：如果 key_part1均匀分布在1和 100 之间，下列查询中使用索引就不是很好：<br>SELECT * FROM table_name where key_part1 &gt; 1 and key_part1 &lt; 90</li>
+<li>如果使用 heap 表并且where条件中不用＝索引列，其他&gt;、&lt;、&gt;=、&lt;=均不使用索引；</li>
+<li>如果不是索引列的第一部分；</li>
+<li>如果 like 是以％开始；</li>
+<li>对 where 后边条件为字符串的一定要加引号，字符串如果为数字mysql会自动转为字符串，但是不使用索引。</li>
+</ol>
+<h3 id="查看索引的使用情况"><a href="#查看索引的使用情况" class="headerlink" title="查看索引的使用情况"></a>查看索引的使用情况</h3><p>如果索引正在工作，Handler_read_key的值将很高，这个值代表了一个行被索引值读的次数，很低的值表明增加索引得到的性能改善不高，因为索引并不经常使用 。<br>Handler_read_rnd_next的值高则意味着查询运行低效，并且应该建立索引补救。这个值的含义是在数据文件中读下一行的请求数。如果你正进行大量的表扫描，该值较高。通常说明表索引不正确或写入的查询没有利用索引。</p>
+<p>语法：<br><figure class="highlight"><table><tr><td class="code"><pre><div class="line">mysql&gt; show status like 'Handler_read%';</div></pre></td></tr></table></figure></p>
+<h2 id="两个简单实用的优化办法"><a href="#两个简单实用的优化办法" class="headerlink" title="两个简单实用的优化办法"></a>两个简单实用的优化办法</h2><h3 id="定期分析表"><a href="#定期分析表" class="headerlink" title="定期分析表"></a>定期分析表</h3><h4 id="ANALYZE-TABLE"><a href="#ANALYZE-TABLE" class="headerlink" title="ANALYZE TABLE"></a>ANALYZE TABLE</h4><p>语法：<br><figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"><span class="keyword">ANALYZE</span> [<span class="keyword">LOCAL</span> | <span class="keyword">NO_WRITE_TO_BINLOG</span>] <span class="keyword">TABLE</span> tbl_name [, tbl_name] ...</div></pre></td></tr></table></figure></p>
+<p>本语句用于分析和存储表的关键字分布。在分析期间，使用一个读取锁定对表进行锁<br>定。这对于 MyISAM, BDB和InnoDB表有作用。对于MyISAM表，本语句与使用 myisamchk<br>-a 相当。</p>
+<h4 id="CHECK-TABLE"><a href="#CHECK-TABLE" class="headerlink" title="CHECK TABLE"></a>CHECK TABLE</h4><p>语法：<br><figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"><span class="keyword">CHECK</span> <span class="keyword">TABLE</span> tbl_name [, tbl_name] ... [<span class="keyword">option</span>] ...</div><div class="line"><span class="keyword">option</span> = &#123;<span class="keyword">QUICK</span> | <span class="keyword">FAST</span> | <span class="keyword">MEDIUM</span> | <span class="keyword">EXTENDED</span> | <span class="keyword">CHANGED</span>&#125;</div></pre></td></tr></table></figure></p>
+<p>检查一个或多个表是否有错误。CHECK TABLE 对 MyISAM 和 InnoDB 表有作用。对于<br>MyISAM 表，关键字统计数据被更新。<br>CHECK TABLE 也可以检查视图是否有错误，比如在视图定义中被引用的表已不存在。</p>
+<h4 id="CHECKSUM-TABLE"><a href="#CHECKSUM-TABLE" class="headerlink" title="CHECKSUM TABLE"></a>CHECKSUM TABLE</h4><p>语法：<br>CHECKSUM TABLE tbl_name [, tbl_name] … [ QUICK | EXTENDED ]<br>报告一个表校验和。</p>
+<h3 id="使用optimize-table"><a href="#使用optimize-table" class="headerlink" title="使用optimize table"></a>使用optimize table</h3><p>语法：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line">OPTIMIZE [LOCAL | NO_WRITE_TO_BINLOG] TABLE tbl_name [, tbl_name] ...</div></pre></td></tr></table></figure></p>
+<p>如果已经删除了表的一大部分，或者如果您已经对含有可变长度行的表（含有VARCHAR, BLOB 或 TEXT 列的表）进行了很多更改，则应使用 OPTIMIZE TABLE。被删除的记录被保持在链接清单中，后续的 INSERT操作会重新使用旧的记录位置。您可以使用OPTIMIZETABLE来重新利用未使用的空间，并整理数据文件的碎片。OPTIMIZE TABLE 只对 MyISAM, BDB 和 InnoDB 表起作用。</p>
+<h2 id="常用sql优化"><a href="#常用sql优化" class="headerlink" title="常用sql优化"></a>常用sql优化</h2><h3 id="大批量导入数据"><a href="#大批量导入数据" class="headerlink" title="大批量导入数据"></a>大批量导入数据</h3><p>1.对于 Myisam 类型的表，可以通过以下方式快速的导入大量的数据。<br>ALTER TABLE tblname DISABLE KEYS;<br>loading the data<br>ALTER TABLE tblname ENABLE KEYS;<br>这两个命令用来打开或者关闭 Myisam表非唯一索引的更新。在导入大量的数据到一<br>个非空的 Myisam 表时，通过设置这两个命令，可以提高导入的效率。对于导入大量数据到一个。</p>
+<p>2.对于InnoDB类型的表，这种方式是无效的，我们有以下几种方式来提高导入效率：</p>
+<blockquote>
+<ul>
+<li>InnoDB是根据主键来进行保存的，如果没有主键会在内部自动生成一个主键。所以建立主键会提高导入顺序。</li>
+<li>在导入数据前执行 SET UNIQUE_CHECKS=0，关闭唯一性校验，在导入结束后执行 SET UNIQUE_CHECKS=1，恢复唯一性校验，可以提高导入的效率。</li>
+<li>如果应用使用自动提交的方式，建议在导入前执行 SET AUTOCOMMIT=0，关闭自动提交，导入结束后再执行 SET AUTOCOMMIT=1，打开自动提交，也可以提高导入的效率。</li>
+</ul>
+</blockquote>
+<h3 id="优化insert语句"><a href="#优化insert语句" class="headerlink" title="优化insert语句"></a>优化insert语句</h3><p>1.如果你同时从同一客户插入很多行，使用多个值表的 INSERT语句。这比使用分开INSERT 语句快(在一些情况中几倍)。Insert into test values(1,2),(1,3),(1,4)…</p>
+<ol>
+<li>如果你从不同客户插入很多行，能通过使用 INSERT DELAYED语句得到更高的速度。Delayed 的含义是让 insert语句马上执行，其实数据都被放在内存的队列中，并没有真正写入磁盘；这比每条语句分别插入要快的多；LOW_PRIORITY刚好相反，在所有其他用户对表的读写完后才进行插入；</li>
+<li>将索引文件和数据文件分在不同的磁盘上存放（利用建表中的选项）；</li>
+<li>如果进行批量插入，可以增加 bulk_insert_buffer_size 变量值的方法来提高速<br>度，但是，这只能对 myisam 表使用；</li>
+<li>当从一个文本文件装载一个表时，使用 LOAD DATA INFILE。这通常比使用很多<br>INSERT 语句快 20 倍；</li>
+<li>根据应用情况使用 replace 语句代替 insert；</li>
+<li>根据应用情况使用 ignore 关键字忽略重复记录。</li>
+</ol>
+<h3 id="优化Group-by-语句"><a href="#优化Group-by-语句" class="headerlink" title="优化Group by 语句"></a>优化Group by 语句</h3><p>默认情况下，MySQL 排序所有 GROUP BY col1，col2，….查询的方法如同在查询中指定 ORDER BY col1，col2，…如果显式包括一个包含相同的列的ORDER BY子句，MySQL可以毫不减速地对它进行优化，尽管仍然进行排序。如果查询包括 GROUP BY但你想要避免排序结果的消耗，你可以指定 ORDER BY NULL禁止排序。<br>例如：<br><figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> foo</div><div class="line"><span class="keyword">SELECT</span> a, <span class="keyword">COUNT</span>(*) <span class="keyword">FROM</span> bar <span class="keyword">GROUP</span> <span class="keyword">BY</span> a <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="literal">NULL</span>;</div></pre></td></tr></table></figure></p>
+<h3 id="优化join语句"><a href="#优化join语句" class="headerlink" title="优化join语句"></a>优化join语句</h3><p>Mysql4.1 开始支持 SQL的子查询。这个技术可以使用SELECT语句来创建一个单列的查询结果，然后把这个结果作为过滤条件用在另一个查询中。使用子查询可以一次性的完成很多逻辑上需要多个步骤才能完成的SQL操作，同时也可以避免事务或者表锁死，并且写起来也很容易。但是，有些情况下，子查询可以被更有效率的连接(JOIN)..替代。<br>假设我们要将所有没有订单记录的用户取出来，可以用下面这个查询完成：<br><figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> customerinfo <span class="keyword">WHERE</span> CustomerID <span class="keyword">NOT</span> <span class="keyword">in</span> (<span class="keyword">SELECT</span> CustomerID</div><div class="line"><span class="keyword">FROM</span> salesinfo )</div></pre></td></tr></table></figure></p>
+<p>如果使用连接(JOIN).. 来完成这个查询工作，速度将会快很多。尤其是当 salesinfo表中对 CustomerID 建有索引的话，性能将会更好，查询如下：<br><figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> customerinfo</div><div class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> salesinfoON customerinfo.CustomerID=salesinfo.CustomerID</div><div class="line"><span class="keyword">WHERE</span> salesinfo.CustomerID <span class="keyword">IS</span> <span class="literal">NULL</span></div></pre></td></tr></table></figure></p>
+<p>连接(JOIN).. 之所以更有效率一些，是因为 MySQL 不需要在内存中创建临时表来完成这个逻辑上的需要两个步骤的查询工作。</p>
+<h3 id="查询优先还是更新优先"><a href="#查询优先还是更新优先" class="headerlink" title="查询优先还是更新优先"></a>查询优先还是更新优先</h3><p>MySQL 还允许改变语句调度的优先级，它可以使来自多个客户端的查询更好地协作，这样单个客户端就不会由于锁定而等待很长时间。改变优先级还可以确保特定类型的查询被处理得更快。我们首先应该确定应用的类型，判断应用是以查询为主还是以更新为主的，是确保查询效率还是确保更新的效率，决定是查询优先还是更新优先。<br>下面我们提到的改变调度策略的方法主要是针对Myisam存储引擎的，对于Innodb存储引擎，语句的执行是由获得行锁的顺序决定的。<br>MySQL 的默认的调度策略可用总结如下：</p>
+<ol>
+<li>写入操作优先于读取操作。</li>
+<li>对某张数据表的写入操作某一时刻只能发生一次，写入请求按照它们到达的次序来处理。</li>
+<li>对某张数据表的多个读取操作可以同时地进行。MySQL提供了几个语句调节符，允许你修改它的调度策略：<br>a. LOW_PRIORITY关键字应用于DELETE、INSERT、LOAD DATA、REPLACE和UPDATE。<br>b. HIGH_PRIORITY关键字应用于SELECT和INSERT语句。<br>c. DELAYED关键字应用于INSERT和REPLACE语句。<br>如果写入操作是一个 LOW_PRIORITY（低优先级）请求，那么系统就不会认为它的优先级高于读取操作。在这种情况下，如果写入者在等待的时候，第二个读取者到达了，那么就允许第二个读取者插到写入者之前。只有在没有其它的读取者的时候，才允许写入者开始操作。这种调度修改可能存在LOW_PRIORITY写入操作永远被阻塞的情况。</li>
+</ol>
+<p>SELECT 查询的 HIGH_PRIORITY（高优先级）关键字也类似。它允许 SELECT 插入正<br>在等待的写入操作之前，即使在正常情况下写入操作的优先级更高。另外一种影响是，高优先级的 SELECT在正常的SELECT语句之前执行，因为这些语句会被写入操作阻塞。如果你希望所有支持LOW_PRIORITY选项的语句都默认地按照低优先级来处理，那么请使用–low-priority-updates选项来启动服务器。通过使用INSERT HIGH_PRIORITY 来把INSERT 语句提高到正常的写入优先级，可以消除该选项对单个 INSERT语句的影响。</p>
+<h3 id="其他优化措施"><a href="#其他优化措施" class="headerlink" title="其他优化措施"></a>其他优化措施</h3><p>1.使用持久的连接数据库以避免连接开销。</p>
+<ol>
+<li>经常检查所有查询确实使用了必要的索引。</li>
+<li>避免在频繁更新的表上执行复杂的SELECT查询，以避免与锁定表有关的由于读、写冲突发生的问题。</li>
+<li>对于没有删除的行操作的MyISAM表，插入操作和查询操作可以并行进行，因为没有删除操作的表查询期间不会阻塞插入操作．对于确实需要执行删除操作的表，尽量在空闲时间进行批量删除操作，避免阻塞其他操作。</li>
+<li>充分利用列有默认值的事实。只有当插入的值不同于默认值时，才明确地插入值。这减少MySQL 需要做的语法分析从而提高插入速度。</li>
+<li>对经常访问的可以重构的数据使用内存表，可以显著提高访问的效率。</li>
+<li>通过复制可以提高某些操作的性能。可以在复制服务器中分布客户的检索以均分负载。为了防止备份期间对应用的影响，可以在复制服务器上执行备份操作。</li>
+<li>表的字段尽量不使用自增长变量，在高并发情况下该字段的自增可能对效率有比较大的影响，推荐通过应用来实现字段的自增长。</li>
+</ol>
+<h2 id="优化数据库对象"><a href="#优化数据库对象" class="headerlink" title="优化数据库对象"></a>优化数据库对象</h2><h3 id="优化表的数据类型"><a href="#优化表的数据类型" class="headerlink" title="优化表的数据类型"></a>优化表的数据类型</h3><p>表需要使用何种数据类型，是需要根据应用来判断的。虽然应用设计的时候需要考虑字段的长度留有一定的冗余，但是不推荐让很多字段都留有大量的冗余，这样即浪费存储也浪费内存。我们可以使用 PROCEDURE ANALYSE()对当前已有应用的表类型的判断，该函数可以对数据表中的列的数据类型提出优化建议，可以根据应用的实际情况酌情考虑是否实施优化。<br>语法：<br><figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tbl_name <span class="keyword">PROCEDURE</span> ANALYSE();</div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tbl_name <span class="keyword">PROCEDURE</span> ANALYSE(<span class="number">16</span>,<span class="number">256</span>);</div></pre></td></tr></table></figure></p>
+<p>输出的每一列信息都会对数据表中的列的数据类型提出优化建议。第二个例子告诉PROCEDURE ANALYSE()不要为那些包含的值多于16个或者256字节的ENUM类型提出建议。如果没有这样的限制，输出信息可能很长；ENUM定义通常很难阅读。在对字段类型进行优化时，可以根据统计信息并结合应用的实际情况对其进行优化。</p>
+<h3 id="通过拆分-提高表的使用效率"><a href="#通过拆分-提高表的使用效率" class="headerlink" title="通过拆分 提高表的使用效率"></a>通过拆分 提高表的使用效率</h3><p>这里我们所说的拆分，主要是针对 Myisam 类型的表，拆分的方法可以分成两种情况：</p>
+<ol>
+<li>纵向拆分：<br>纵向拆分是只按照应用访问的频度，将表中经常访问的字段和不经常访问的字段拆分成两个<br>表，经常访问的字段尽量是定长的，这样可以有效的提高表的查询和更新的效率。</li>
+<li>横向拆分：<br>横向拆分是指按照应用的情况，有目的的将数据横向拆分成几个表或者通过分区分到多个分<br>区中，这样可以有效的避免 Myisam 表的读取和更新导致的锁问题。</li>
+</ol>
+<h3 id="选择更合适的表类型"><a href="#选择更合适的表类型" class="headerlink" title="选择更合适的表类型"></a>选择更合适的表类型</h3><p>1、如果应用出现比较严重的锁冲突，请考虑是否更改存储引擎到 innodb，行锁机制<br>可以有效的减少锁冲突的出现。<br>2、如果应用查询操作很多，且对事务完整性要求不严格，则可以考虑使用 Myisam存储引擎。</p>
+<h3 id="insert…select带来的问题"><a href="#insert…select带来的问题" class="headerlink" title="insert…select带来的问题"></a>insert…select带来的问题</h3><p>当使用 insert…select…进行记录的插入时，如果 select 的表是 innodb 类<br>型的，不论 insert 的表是什么类型的表，都会对 select 的表的纪录进行锁定。</p>
+<p>对于那些从 oracle 迁移过来的应用，需要特别的注意，因为 oracle 并不存在类<br>似的问题，所以在 oracle 的应用中 insert…select…操作非常的常见。例如：有<br>时候会对比较多的纪录进行统计分析，然后将统计的中间结果插入到另外一个表，这<br>样的操作因为进行的非常少，所以可能并没有设置相应的索引。如果迁移到 mysql<br>数据库后不进行相应的调整，那么在进行这个操作期间，对需要 select 的表实际上<br>是进行的全表扫描导致的所有记录的锁定，将会对应用的其他操作造成非常严重的影<br>响。<br>究其主要原因，是因为 mysql 在实现复制的机制时和 oracle 是不同的，如果不<br>进行 select 表的锁定，则可能造成从数据库在恢复期间插入结果集的不同，造成主<br>从数据的不一致。如果不采用主从复制，关闭 binlog 并不能避免对 select 纪录的锁<br>定，某些文档中提到可以通过设置 innodb_locks_unsafe_for_binlog 来避免这个现<br>象，当这个参数设置为 true 的时候，将不会对 select 的结果集加锁，但是这样的设<br>置将可能带来非常严重的隐患。如果使用这个 binlog 进行从数据库的恢复，或者进<br>行主数据库的灾难恢复，都将可能和主数据库的执行效果不同。</p>
+<p>因此，我们并不推荐通过设置这个参数来避免 insert…select…导致的锁，<br>如果需要进行可能会扫描大量数据的 insert…select 操作，我们推荐使用<br>select…into outfile 和 load data infile 的组合来实现，这样是不会对纪录进<br>行锁定的。</p>
+<h3 id="如何减少锁冲突"><a href="#如何减少锁冲突" class="headerlink" title="如何减少锁冲突"></a>如何减少锁冲突</h3><p>对 Myisam 类型的表：<br>1) Myisam 类型的表可以考虑通过改成 Innodb 类型的表来减少锁冲突。<br>2) 根据应用的情况，尝试横向拆分成多个表或者改成 Myisam 分区对减少锁冲突也会<br>有一定的帮助。</p>
+<ol>
+<li>对 Innodb 类型的表：<br>1) 首先要确认，在对表获取行锁的时候，要尽量的使用索引检索纪录，如果没有使用<br>索引访问，那么即便你只是要更新其中的一行纪录，也是全表锁定的。要确保 sql<br>是使用索引来访问纪录的，必要的时候，请使用 explain 检查 sql 的执行计划，判<br>断是否按照预期使用了索引。<br>2) 由于 mysql 的行锁是针对索引加的锁，不是针对纪录加的锁，所以虽然是访问不同<br>行的纪录，但是如果是相同的索引键，是会被加锁的。应用设计的时候也要注意，这里和 Oracle 有比较大的不同。<br>3) 当表有多个索引的时候，不同的事务可以使用不同的索引锁定不同的行，当表有主<br>键或者唯一索引的时候，不是必须使用主键或者唯一索引锁定纪录，其他普通索引<br>同样可以用来检索纪录，并只锁定符合条件的行。<br>4) 用 SHOW INNODB STATUS 来确定最后一个死锁的原因。查询的结果中，包括死锁的<br>事务的详细信息，包括执行的 SQL 语句的内容，每个线程已经获得了什么锁，在等<br>待什么锁，以及最后是哪个线程被回滚。详细的分析死锁产生的原因，可以通过改<br>进程序有效的避免死锁的产生。<br>5) 如果应用并不介意死锁的出现，那么可以在应用中对发现的死锁进行处理。<br>6) 确定更合理的事务大小，小事务更少地倾向于冲突。<br>7) 如果你正使用锁定读，（SELECT … FOR UPDATE 或 … LOCK IN SHARE MODE），<br>试着用更低的隔离级别，比如 READ COMMITTED。<br>8) 以固定的顺序访问你的表和行。则事务形成良好定义的查询并且没有死锁。</li>
+</ol>
+<p>合适的引擎<br>合适的数据类型<br>表的锁定优先级管理 优化 设置<br>索引的建立 优化 使用 查询<br>读写分离<br>是否开启事务的操作InnoDB<br>loading data/order by null/join/delete语句等优化<br>查询 定位 解决有问题的SQL语句<br>查询语句使用频率<br>insert一次插入多个值会更快<br>不要通过数据库自己实现自增长，高并发下会出现问题，最好通应用过实现自增长<br>优化mysql server</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2017/02/16/MySQL/" class="archive-article-date">
+  	<time datetime="2017-02-16T14:31:39.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-02-16</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2017/01/20/设计模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">设计模式</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="MySQL" data-title="MySQL" data-url="http://tiltcat.com/2017/02/16/MySQL/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 tiltcat
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js"></script>
+
+
+    
+<div class="tools-col">
+  <ul class="btn-wrap">
+    
+      <li class="chose" data-hook="tools-section-all"><span class="text">全部</span><i class="icon-book"></i></li>
+    
+    
+      <li data-hook="tools-section-tag"><span class="text">标签</span><i class="icon-price-tags"></i></li>
+    
+    
+    
+      <li data-hook="tools-section-me"><span class="text">我</span><i class="icon-smile"></i></li>
+    
+  </ul>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all chose">
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-tag">
+    			<div class="widget tagcloud" id="js-tagcloud">
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a>
+    			</div>
+    	</section>
+    
+
+    
+
+    
+    	<section class="tools-section tools-section-me">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>
