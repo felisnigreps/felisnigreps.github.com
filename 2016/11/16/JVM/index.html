@@ -20,7 +20,7 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
 JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.jpg">
-<meta property="og:updated_time" content="2017-02-20T12:28:16.000Z">
+<meta property="og:updated_time" content="2017-02-20T12:36:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我们说说JVM">
 <meta name="twitter:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
@@ -162,7 +162,6 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
 </blockquote>
 <p>JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。<br><a id="more"></a></p>
 <h2 id="JVM内存区域模型"><a href="#JVM内存区域模型" class="headerlink" title="JVM内存区域模型"></a>JVM内存区域模型</h2><p><img src="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg" alt=""></p>
-<!--more-->
 <blockquote>
 <ul>
 <li><p>方法区：存放类的信息，静态变量，常量，是各个线程共享的区域。可以通过-XX:PermSize=<em> 和-XX:MaxPermSize=</em> 来设置方法区的大小。默认最大64M,最小16M.<br>方法区中还有一部分叫做<code>运行时常量池</code>，常量池里主要存储两类信息，字面量和符号引用量。字面量是Java语言层面上的常量，比如String和被final修饰的局部变量。符号引用量是操作原理测光面的东西，包括以下三点:类和接口的全限定名，方法名称和描述符，字段民称和描述符。</p>
@@ -487,7 +486,7 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a>
     			</div>
     	</section>
     
