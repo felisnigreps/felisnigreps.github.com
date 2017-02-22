@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://tiltcat.com/2017/02/16/MySQL/index.html">
 <meta property="og:site_name" content="Let's do this">
 <meta property="og:description" content="这个文章主要复习一下以前学习的mysql相关知识，在onenote上还有一个笔记，这边也会转移过来。">
-<meta property="og:updated_time" content="2017-02-17T13:52:18.000Z">
+<meta property="og:updated_time" content="2017-02-20T14:25:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL">
 <meta name="twitter:description" content="这个文章主要复习一下以前学习的mysql相关知识，在onenote上还有一个笔记，这边也会转移过来。">
@@ -373,8 +373,8 @@
 <li>对某张数据表的多个读取操作可以同时地进行。MySQL提供了几个语句调节符，允许你修改它的调度策略：<br>a. LOW_PRIORITY关键字应用于DELETE、INSERT、LOAD DATA、REPLACE和UPDATE。<br>b. HIGH_PRIORITY关键字应用于SELECT和INSERT语句。<br>c. DELAYED关键字应用于INSERT和REPLACE语句。<br>如果写入操作是一个 LOW_PRIORITY（低优先级）请求，那么系统就不会认为它的优先级高于读取操作。在这种情况下，如果写入者在等待的时候，第二个读取者到达了，那么就允许第二个读取者插到写入者之前。只有在没有其它的读取者的时候，才允许写入者开始操作。这种调度修改可能存在LOW_PRIORITY写入操作永远被阻塞的情况。</li>
 </ol>
 <p>SELECT 查询的 HIGH_PRIORITY（高优先级）关键字也类似。它允许 SELECT 插入正<br>在等待的写入操作之前，即使在正常情况下写入操作的优先级更高。另外一种影响是，高优先级的 SELECT在正常的SELECT语句之前执行，因为这些语句会被写入操作阻塞。如果你希望所有支持LOW_PRIORITY选项的语句都默认地按照低优先级来处理，那么请使用–low-priority-updates选项来启动服务器。通过使用INSERT HIGH_PRIORITY 来把INSERT 语句提高到正常的写入优先级，可以消除该选项对单个 INSERT语句的影响。</p>
-<h3 id="其他优化措施"><a href="#其他优化措施" class="headerlink" title="其他优化措施"></a>其他优化措施</h3><p>1.使用持久的连接数据库以避免连接开销。</p>
-<ol>
+<h3 id="其他优化措施"><a href="#其他优化措施" class="headerlink" title="其他优化措施"></a>其他优化措施</h3><ol>
+<li>使用持久的连接数据库以避免连接开销。</li>
 <li>经常检查所有查询确实使用了必要的索引。</li>
 <li>避免在频繁更新的表上执行复杂的SELECT查询，以避免与锁定表有关的由于读、写冲突发生的问题。</li>
 <li>对于没有删除的行操作的MyISAM表，插入操作和查询操作可以并行进行，因为没有删除操作的表查询期间不会阻塞插入操作．对于确实需要执行删除操作的表，尽量在空闲时间进行批量删除操作，避免阻塞其他操作。</li>
@@ -545,7 +545,7 @@
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     			</div>
     	</section>
     

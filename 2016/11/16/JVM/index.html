@@ -6,13 +6,13 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>我们说说JVM | Let&#39;s do this</title>
+  <title>JVM | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
 
 JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="我们说说JVM">
+<meta property="og:title" content="JVM">
 <meta property="og:url" content="http://tiltcat.com/2016/11/16/JVM/index.html">
 <meta property="og:site_name" content="Let's do this">
 <meta property="og:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
@@ -20,9 +20,9 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
 JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.jpg">
-<meta property="og:updated_time" content="2017-02-20T12:36:37.000Z">
+<meta property="og:updated_time" content="2017-02-22T11:24:42.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="我们说说JVM">
+<meta name="twitter:title" content="JVM">
 <meta name="twitter:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
 
 JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
@@ -149,7 +149,7 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
         
   
     <h1 class="article-title" itemprop="name">
-      我们说说JVM
+      JVM
     </h1>
   
 
@@ -162,27 +162,31 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
 </blockquote>
 <p>JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。<br><a id="more"></a></p>
 <h2 id="JVM内存区域模型"><a href="#JVM内存区域模型" class="headerlink" title="JVM内存区域模型"></a>JVM内存区域模型</h2><p><img src="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg" alt=""></p>
+<!--more-->
 <blockquote>
 <ul>
-<li><p>方法区：存放类的信息，静态变量，常量，是各个线程共享的区域。可以通过-XX:PermSize=<em> 和-XX:MaxPermSize=</em> 来设置方法区的大小。默认最大64M,最小16M.<br>方法区中还有一部分叫做<code>运行时常量池</code>，常量池里主要存储两类信息，字面量和符号引用量。字面量是Java语言层面上的常量，比如String和被final修饰的局部变量。符号引用量是操作原理测光面的东西，包括以下三点:类和接口的全限定名，方法名称和描述符，字段民称和描述符。</p>
-</li>
+<li>方法区：存放类的信息，静态变量，常量，是各个线程共享的区域。<br>用于存储已被虚拟机加载的类信息，常量，静态变量等。虽然Java虚拟机把方法区描述为堆的一个逻辑部分，但是他却有一个别名叫做非堆(Non-Heap),目的是和Java堆去分开来。<br>可以通过-XX:PermSize 和-XX:MaxPermSize来设置方法区的大小。默认最大64M,最小16M.</li>
+</ul>
+</blockquote>
+<p>方法区中还有一部分叫做<code>运行时常量池</code>，常量池里主要存储两类信息，字面量和符号引用量。字面量是Java语言层面上的常量，比如String和被final修饰的局部变量。符号引用量是操作原理测光面的东西，包括以下三点:类和接口的全限定名，方法名称和描述符，字段民称和描述符。</p>
+<blockquote>
+<ul>
 <li><p>虚拟机栈：描述了Java方法执行的栈，就是我们常说的栈内存。每个方法被执行的时候，都会创建一个栈帧来存储局部变量表，操作栈，方法出口等信息。线程私有。它包含了以下几个方面：<br>局部变量表：用来存储方法中的局部变量。对于基本数据类型的变量，直接存储他的值，对于引用类型的变量，则存储他的引用。他的大小在编译期就可以确定了，在程序执行过程中是不会变化的。<br>操作数栈:使用操作数栈进行表达式求值。这也是栈的一个基本应用。可能有些朋友对表达式求值是什么不太理解，我们看下面这个例子：<br>平时我们对于四则运算的表达式是比如：“（3+3）<em>4-（8/4）”这个样子的。我们可以清楚的分辨出括号和运算符的优先级，然后进行计算。可是如何用程序来实现这一功能呢？<br>我们需要借助另一种不需要括号的后缀表示法，也称为逆波兰表示法（Reverse Polish Notation，RPN）。<br>比如说“（3+3）</em>4-（8/4）”这个表达式，转换成后缀表示，就是“3 3 + 4 * 8 4 /-”，对于这种表达式，计算机程序很容易处理，只要按照这个规则：从左到右遍历表达式，遇到数字就进栈，遇到运算符就从栈中弹出两个数值进行计算，将计算结果再进栈。最后栈中只剩下一个元素的时候就是计算结果了。<br>指向当前方法所属类的运行常量池：</p>
 </li>
 <li><p>本地方法栈： 和虚拟机栈类似，不过本地方法栈执行的是Java的native方法，而虚拟机栈执行的是JVM的Java方法。JVM并没有对此块区域做一个强制性的要求，HotSpot就将本地方法栈和虚拟机栈合二为一了。<br>Java的native方法为Java的本地方法，使用native修饰，Java Native Interface。一般存在两种情况，调用其他语言实现的方法或使用Java语言直接操作计算机硬件。</p>
 </li>
-<li><p>堆区域：是JVM最大的一块区域，也是被各个线程共享的内存区域。该区域存放了所有new的对象和数组。<br>现在的收集器使用分代算法，可以通过各种参数来设置大小。现在的垃圾收集器都是采用分代收集算法。新生代主要来存放新生成的对象，老年代存放了多次GC之后还存活的新生代对象。但是有两种情况会直接分配到老年代。<br>1 大对象，可以设置-XX:PretenureSizeThreshold=1024(单位为字节，默认为0)来代表超过多大时就不在新生代分配。<br>2 大数组，且数组中没有外部引用对象。</p>
+<li><p>堆区域：是JVM最大的一块区域，也是被各个线程共享的内存区域。<br>此区域的唯一目的就是存放对象实例。Java堆是垃圾收集器管理的主要区域。Java堆中可以细分为新生代和老年代,默认比例1:2,新生代又分为Eden,from survivor, to survivor.<br>现在的收集器使用分代算法，可以通过各种参数来设置大小。新生代主要来存放新生成的对象，老年代存放了多次GC之后还存活的新生代对象。但是有两种情况会直接分配到老年代。<br>1 大对象，可以设置-XX:PretenureSizeThreshold=1024(单位为字节，默认为0)来代表超过多大时就不在新生代分配。<br>2 大数组，且数组中没有外部引用对象。</p>
 </li>
 <li><p>程序计数器： 内存中最小的一块区域，作用是当前线程所执行字节码的行号。字节码的解释器的作用就是读取行号，来进行流程。由于Java的虚拟机是通过轮流分配处理器的时间来实现多线程的，所以一个处理器（在多核处理器中为一个内核）在一段时间内只能运行一个线程。为了实现线程的准确切换，那么程序计数器就相当重要。简单来讲就是告诉CPU要执行哪一条指令的。</p>
 </li>
 </ul>
 </blockquote>
-<p>这里要再简单说一下堆区域，分为新生代，老年代和永久代。新生代中又分为Eden space, from survivor space 和 to surviver space. </p>
-<h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><p>Java按照分代的方式来回收内存空间，这组要针对的是堆区域。<br>堆区域分为新生代，老年代和永久带。</p>
+<h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><p>Java按照分代的方式来回收内存空间，这组要针对的是堆区域。<br>堆区域分为新生代，老年代。</p>
 <h3 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h3><p>Young generation,又分Eden, from survivor, to survivor三块区域.他们默认的大小是8:1:1。存入的对象先放在Eden区域，在进行了GC之后，数据会存放到from survivor.就是说在任何状态都会有一个survivor区域是空闲的，就是说Young generation的利用率在90%左右。</p>
 <p>通常情况下会有大量的对象需要分配内存，而且他们的生命周期很短，所以新生代的GC吞吐量很高，大部分对象都要被回收，从而，剩下的活跃对象比较少，所以新生代适合使用复制算法来进行GC，这样保证复制的数据的量较小，效率最好。</p>
 <h3 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h3><p>在一个对象经过多次GC之后都没有被回收，或者新生代的额空间满了的时候，会直接分配到老年代。</p>
 <p>很多对象经过多次GC以后，经过Eden Space，多次经过From Survivor和To Survivor之后才会进入年老代，而且对象在年老代的存活时间比较长，如果进行使用复制算法来进行GC，需要移动大量的对象，导致效率很低。所以，年老代适合使用标记-清除算法（或者标记-清除-整理），需要被GC的对象很少，那么标记的对象就很少，在对标记的对象进行回收，效率就会很高。</p>
-<h3 id="永久代"><a href="#永久代" class="headerlink" title="永久代"></a>永久代</h3><p>永久带其实对应着JVM中的方法区，里面存放着常量，类信息，静态变量等数据。一般不需要GC直到JVM退出。</p>
+<h2 id="永久代"><a href="#永久代" class="headerlink" title="永久代"></a>永久代</h2><p>永久带其实对应着JVM中的方法区，里面存放着常量，类信息，静态变量等数据。一般不需要GC直到JVM退出。</p>
 <h2 id="GC搭配策略"><a href="#GC搭配策略" class="headerlink" title="GC搭配策略"></a>GC搭配策略</h2><p>GC策略搭配</p>
 <p>在进行JVM调优的过程中，并非任何一种新生代GC策略都可以和另一种年老代GC策略进行配合工作，所以，我们应该知道，哪些种组合可以有效地进行GC，而且应该在什么样的应用场景下选择哪一种组合，如下表所示：</p>
 <table>
@@ -337,7 +341,7 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
 <p>-XX:SurvivorRatio=8  设置young generation中Eden区域和每个Survivor区域的比值。在这个例子中，Eden:from:to = 8:1:1</p>
 <p>-XX:PretenureSizeThreshold=3145728 大于这个数值的对象直接进入老年代</p>
 <p>下面程序做测试，然后调整栈大小，会发现无论如何都会报出StackOverflow错误。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StackLeak</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> threadLength = <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">leakTest</span><span class="params">()</span> </span>&#123;</div><div class="line">        threadLength++;</div><div class="line">        leakTest();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">        StackLeak leak = <span class="keyword">new</span> StackLeak();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            leak.leakTest();</div><div class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</div><div class="line">            System.out.println(<span class="string">"Thread length is "</span> + leak.threadLength);</div><div class="line">            <span class="keyword">throw</span> e;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Thread length is <span class="number">2459</span></div><div class="line">Exception in thread <span class="string">"main"</span> java.lang.StackOverflowError</div><div class="line">	at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">7</span>)</div><div class="line">	at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">8</span>)</div><div class="line">	at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">8</span>)</div><div class="line">	....</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StackLeak</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> threadLength = <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">leakTest</span><span class="params">()</span> </span>&#123;</div><div class="line">        threadLength++;</div><div class="line">        leakTest();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">        StackLeak leak = <span class="keyword">new</span> StackLeak();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            leak.leakTest();</div><div class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</div><div class="line">            System.out.println(<span class="string">"Thread length is "</span> + leak.threadLength);</div><div class="line">            <span class="keyword">throw</span> e;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Thread length is <span class="number">2459</span></div><div class="line">Exception in thread <span class="string">"main"</span> java.lang.StackOverflowError</div><div class="line">  at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">7</span>)</div><div class="line">  at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">8</span>)</div><div class="line">  at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">8</span>)</div><div class="line">  ....</div></pre></td></tr></table></figure>
 <p>结果表明， 在单线程情况下，无论虚拟机栈太小还是栈帧太大，虚拟器无法分配的时候都会报出stackOverflow异常。</p>
 <p>大对象直接进入老年代.</p>
 
@@ -351,7 +355,7 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li></ul>
 	</div>
 
       
@@ -409,7 +413,7 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="JVM" data-title="我们说说JVM" data-url="http://tiltcat.com/2016/11/16/JVM/"></div>
+	<div class="ds-thread" data-thread-key="JVM" data-title="JVM" data-url="http://tiltcat.com/2016/11/16/JVM/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
@@ -486,7 +490,7 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     			</div>
     	</section>
     
