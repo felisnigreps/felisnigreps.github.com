@@ -18,7 +18,7 @@
 <meta property="og:description" content="作用事务保证了一个操作序列全部执行或者全部不执行(原子性)，从一个状态转变为另一个状态。事务是满足持久性的，所以可以被保存下来。当多个事务操作数据的时候，如果控制不好隔离级别，那么就会出现脏读，重复读，幻读等问题。
 刚开始主要是对幻读的理解不到位，现在讨论一下：
 事务的四种性质ACID,很基础，我们常常所讨论的是一致性和隔离性，解决办法往往是加锁，不过数据库又是一个高并发的应用，锁加多了会造成很大">
-<meta property="og:updated_time" content="2017-02-23T15:17:56.000Z">
+<meta property="og:updated_time" content="2017-02-27T11:00:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DBMS的事务隔离级别">
 <meta name="twitter:description" content="作用事务保证了一个操作序列全部执行或者全部不执行(原子性)，从一个状态转变为另一个状态。事务是满足持久性的，所以可以被保存下来。当多个事务操作数据的时候，如果控制不好隔离级别，那么就会出现脏读，重复读，幻读等问题。
@@ -256,8 +256,9 @@
 <p>事务的隔离级别实际上都是定义了当前读的级别，MySQL为了减少锁处理的事件，引入快照读的概念，使得select不加锁。但是对饮update,insert这些当前读来说，就需要另一些解决办法了。</p>
 <p>那么当前读中的幻读问题，该怎么解决呢？（select不会出问题，但是insert会出问题）</p>
 <h2 id="Next-key锁"><a href="#Next-key锁" class="headerlink" title="Next-key锁"></a>Next-key锁</h2><p>Next-key锁是行锁和GAP(间隙锁)的合并，行锁我们已经很熟悉了，那么GAP锁是什么呢？简单来说，就是锁一段空间，当没有释放的时候，其他事务是无法对其进行更改的。</p>
-<p>那么结合他俩的远离理解起来比较简单，假设我们更新id=30的数据，行锁会锁住30，而且会锁住和他临近的两段区间</p>
-<h3 id="Serializable"><a href="#Serializable" class="headerlink" title="Serializable"></a>Serializable</h3>
+<p>那么结合他俩的远离理解起来比较简单，假设我们更新id=30的数据，数据库里有id值为(1,2,4,13,22,30,40,56)，行锁会锁住30，而且会锁住和他临近的两段区间，左开右闭,即为(22,40]之间的数据都会被锁定，如果一侧区间为空，那么就去正无穷或者负无穷。</p>
+<h3 id="Serializable"><a href="#Serializable" class="headerlink" title="Serializable"></a>Serializable</h3><p>这个级别很简单，读加共享锁，写加排他锁，读写互斥。使用的悲观锁的理论，实现简单，数据更加安全，但是并发能力非常差。如果你的业务并发的特别少或者没有并发，同时又要求数据及时可靠的话，可以使用这种模式。不要看到select就说不会加锁了，在Serializable这个级别，还是会加锁的！</p>
+
       
     </div>
     <div class="article-info article-info-index">
