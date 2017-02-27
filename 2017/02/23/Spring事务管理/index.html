@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>newFixedThreadpool(n) | Let&#39;s do this</title>
+  <title>Spring事务管理 | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="面试总会遇到自己答不出来或者不熟悉的问题，也代表了自己知识的薄弱之处，在这边记录一下，也提醒一下自己简直是弱的不行,对学习的需求要像婴儿需要奶水一样。">
+  <meta name="description" content="刚刚写了数据库的事务隔离级别，现在我们再回头看看Spring的事务管理是怎么回事，我们该怎么用。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="newFixedThreadpool(n)">
-<meta property="og:url" content="http://tiltcat.com/2017/02/22/newFixedThreadpool(n)/index.html">
+<meta property="og:title" content="Spring事务管理">
+<meta property="og:url" content="http://tiltcat.com/2017/02/23/Spring事务管理/index.html">
 <meta property="og:site_name" content="Let's do this">
-<meta property="og:description" content="面试总会遇到自己答不出来或者不熟悉的问题，也代表了自己知识的薄弱之处，在这边记录一下，也提醒一下自己简直是弱的不行,对学习的需求要像婴儿需要奶水一样。">
-<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/little%27s%20law.jpg">
-<meta property="og:updated_time" content="2017-02-22T12:53:52.000Z">
+<meta property="og:description" content="刚刚写了数据库的事务隔离级别，现在我们再回头看看Spring的事务管理是怎么回事，我们该怎么用。">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Spring%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86.jpg">
+<meta property="og:updated_time" content="2017-02-27T12:15:36.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="newFixedThreadpool(n)">
-<meta name="twitter:description" content="面试总会遇到自己答不出来或者不熟悉的问题，也代表了自己知识的薄弱之处，在这边记录一下，也提醒一下自己简直是弱的不行,对学习的需求要像婴儿需要奶水一样。">
-<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/little%27s%20law.jpg">
+<meta name="twitter:title" content="Spring事务管理">
+<meta name="twitter:description" content="刚刚写了数据库的事务隔离级别，现在我们再回头看看Spring的事务管理是怎么回事，我们该怎么用。">
+<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/Spring%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86.jpg">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -132,7 +132,7 @@
 </nav>
 
       <div class="body-wrap">
-        <article id="post-newFixedThreadpool(n)" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Spring事务管理" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -142,7 +142,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      newFixedThreadpool(n)
+      Spring事务管理
     </h1>
   
 
@@ -150,46 +150,51 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>面试总会遇到自己答不出来或者不熟悉的问题，也代表了自己知识的薄弱之处，在这边记录一下，也提醒一下自己简直是弱的不行,对学习的需求要像婴儿需要奶水一样。</p>
-<a id="more"></a>
-<h2 id="newFixedThreadpool-n"><a href="#newFixedThreadpool-n" class="headerlink" title="newFixedThreadpool(n)"></a>newFixedThreadpool(n)</h2><p>有一个问题是这样的，我们可以用newFixedThreadpool(n)来设置线程池大小，那么到底设置成多少为好呢？其实这个问题就是，线程池的大小，该怎么确定？</p>
-<p>我当时是一脸懵逼的状态，瞎答的什么我都不好意思说。</p>
-<p>要回答这个问题，我们首先要了解为什么设置合适线程的重要性。如果配置的线程过少，那么就无法利用系统的资源，这显然是我们不愿意见到的。但是如果设置了过多的线程，又会导致系统的崩溃。那么设置多少合适的？</p>
-<p>有这么一个大致的指导思路：</p>
-<h3 id="李尔特法则"><a href="#李尔特法则" class="headerlink" title="李尔特法则"></a>李尔特法则</h3><p><img src="http://ogeojkg3t.bkt.clouddn.com/little%27s%20law.jpg" alt=""></p>
-<p>系统需要处理的请求数等于到达率乘以平均消耗时间。</p>
-<p>这个arrival rate需要理解一下，虽然是率，不过不不是一个比例，而是一个数值。</p>
-<p>比如说一分钟大约有100个客户来访问服务器，那么这个到达率就是1000，如果每个请求需要处理2s,那么系统在1S中需要处理的请求就是2000.</p>
-<p>对于SOA服务来说，有很多对于后端服务的请求，这个时候就要谨慎的配置线程池。如果应用的效率下降，那么线程池就会迅速的被占满。<br>可以使用多个线程池来解决这个问题，入口还是一个线程池，如果用户请求某项后端服务，这个请求就会被传递到某个线程池来处理。这样用户请求的主线程池才不会受到很大影响。即使后端服务出现问题，也不会导致大面积的失败。这种分离也可以很好的避免死锁。</p>
-<h3 id="截止时间"><a href="#截止时间" class="headerlink" title="截止时间"></a>截止时间</h3><p>当一个请求超过一个定义的时间之后那么就丢弃这个请求，就像是给用户平均消耗时间W设置一个上线。这就是快速失败策略。</p>
-<h3 id="资源耗尽"><a href="#资源耗尽" class="headerlink" title="资源耗尽"></a>资源耗尽</h3><p>每个线程都需要一定的栈空间，64位JMV里默认的栈大小是1024kb，如果1000个并行请求，则需要1GB的栈空间。如果每个请求都创建一个对象，那么也许会导致OutOfMemmory异常。</p>
-<p>顺便说下，由于线程栈大小引发的内存问题，可以通过-Xss开关来调整栈大小。缩小线程栈大小之后，可以减少每个线程的开销，但是可能会引发栈溢出（StackOverflowErrors）。对于一般应用程序而言，默认的1024KB过于富裕，调小为256KB或者512KB可能更为合适。Java允许的最小值是160KB。</p>
-<h3 id="合理配置线程池"><a href="#合理配置线程池" class="headerlink" title="合理配置线程池"></a>合理配置线程池</h3><p>上网找了挺多资料，后来发现，还是要以书为准。</p>
-<p>在《java并发编程实战》中提到，</p>
-<p>要想合理的配置线程池，就必须首先分析任务特性，可以从以下几个角度来进行分析：</p>
-<p>任务的性质：CPU密集型任务，IO密集型任务和混合型任务。<br>任务的优先级：高，中和低。<br>任务的执行时间：长，中和短。<br>任务的依赖性：是否依赖其他系统资源，如数据库连接。<br>任务性质不同的任务可以用不同规模的线程池分开处理。</p>
-<ol>
-<li>CPU密集型任务配置尽可能小的线程，如配置Ncpu+1个线程的线程池。</li>
-<li>IO密集型任务则由于线程并不是一直在执行任务，则配置尽可能多的线程，如2*Ncpu。</li>
-<li>混合型的任务，如果可以拆分，则将其拆分成一个CPU密集型任务和一个IO密集型任务，只要这两个任务执行的时间相差不是太大，那么分解后执行的吞吐率要高于串行执行的吞吐率，如果这两个任务执行时间相差太大，则没必要进行分解。<br>我们可以通过Runtime.getRuntime().availableProcessors()方法获得当前设备的CPU个数。</li>
-</ol>
-<p>优先级不同的任务可以使用优先级队列PriorityBlockingQueue来处理。它可以让优先级高的任务先得到执行，需要注意的是如果一直有优先级高的任务提交到队列里，那么优先级低的任务可能永远不能执行。</p>
-<p>执行时间不同的任务可以交给不同规模的线程池来处理，或者也可以使用优先级队列，让执行时间短的任务先执行。</p>
-<p>依赖数据库连接池的任务，因为线程提交SQL后需要等待数据库返回结果，如果等待的时间越长CPU空闲时间就越长，那么线程数应该设置越大，这样才能更好的利用CPU。</p>
-<p>建议使用有界队列，有界队列能增加系统的稳定性和预警能力，可以根据需要设大一点，比如几千。<br>有一次我们组使用的后台任务线程池的队列和线程池全满了，不断的抛出抛弃任务的异常，通过排查发现是数据库出现了问题，<br>导致执行SQL变得非常缓慢，因为后台任务线程池里的任务全是需要向数据库查询和插入数据的，所以导致线程池里的工作线程全部阻塞住，任务积压在线程池里。<br>如果当时我们设置成无界队列，线程池的队列就会越来越多，有可能会撑满内存，导致整个系统不可用，而不只是后台任务出现问题。<br>当然我们的系统所有的任务是用的单独的服务器部署的，而我们使用不同规模的线程池跑不同类型的任务，但是出现这样问题时也会影响到其他任务。</p>
-<p>当然这个数值只是一个参考值，也需要根据自己的应用去做实验才能得出正确结果。</p>
+        <p>刚刚写了数据库的事务隔离级别，现在我们再回头看看Spring的事务管理是怎么回事，我们该怎么用。<br><a id="more"></a></p>
+<p>Spring的事务管理分为编程式和声明式，编程式的侵入型较高，我们可以使用Spring完成无侵入式的声明管理。</p>
+<p>Spring事务的抽象主要是由PlatformTransactionManager来实现的，该接口如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PlatformTransactionManager</span> </span>&#123;</div><div class="line"><span class="comment">//返回一个已经激活的事务或者创建一个新的事务，</span></div><div class="line">    <span class="function">TransactionStatus <span class="title">getTransaction</span><span class="params">(TransactionDefinition var1)</span> <span class="keyword">throws</span> TransactionException</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">commit</span><span class="params">(TransactionStatus var1)</span> <span class="keyword">throws</span> TransactionException</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">rollback</span><span class="params">(TransactionStatus var1)</span> <span class="keyword">throws</span> TransactionException</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://ogeojkg3t.bkt.clouddn.com/Spring%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86.jpg" alt=""></p>
+<h2 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h2><p>Spring使用以下的数据库隔离级别：</p>
+<blockquote>
+<ul>
+<li>ISOLATION_DEFAULT：默认隔离级别，即使用底层数据库默认的隔离级别；</li>
+<li>ISOLATION_READ_UNCOMMITTED：未提交读；</li>
+<li>ISOLATION_READ_COMMITTED：提交读，一般情况下我们使用这个；</li>
+<li>ISOLATION_REPEATABLE_READ：可重复读；</li>
+<li>ISOLATION_SERIALIZABLE：序列化。</li>
+</ul>
+</blockquote>
+<p>以使用DefaultTransactionDefination中的setIsolationLevel（int isolationLevel）来指定隔离级别。</p>
+<h2 id="事务的传播行为"><a href="#事务的传播行为" class="headerlink" title="事务的传播行为"></a>事务的传播行为</h2><p>我们刚刚在另一篇blog讨论了DBMS的事务隔离级别，我们所说的Sping的事务是逻辑事务，而数据库的事务是物理事务。物理事务和逻辑事务的最大区别就是事务的传播行为，事务传播行为代表事务在多个方法间进行传播时，事务是如何在这些方法间传播的，Spring共支持其中传播行为：</p>
+<blockquote>
+<ul>
+<li>Required:使用PROPAGATION_REQUIRED来指定，如果存在一个逻辑事务，那么加入这个逻辑事务，否则新建一个事务。</li>
+<li>RequiresNew:创建新的逻辑事务，使用PROPAGATION_REQUIRES_NEW指定，表示每次都创建新的逻辑事务（物理事务也不同）。</li>
+<li>Support:支持当前事务，使用PROPAGATION_SUPPORTS指定，如果当前存在逻辑事务，就加入到该逻辑事务。如果当前没有逻辑事务，就已非事务方式执行。</li>
+<li>NotSupported:不支持事务，如果当前存在事务则暂停该事务，使用PROPAGATION_NOT_SUPPORTED指定。</li>
+<li>Mandatory:必须有事务，否则抛出异常，使用PROPAGATION_MANDAORY.</li>
+<li>Never: 不支持事务，如果当前存在事务则抛出异常，使用PROPAGATION_NEVER指定。</li>
+<li>Nested: 嵌套事务支持，使用PROPAGATION_NESTED指定。若果当前存在事务，则在嵌套事务内执行，如果当前不存在事务，则创建一个新的事务。嵌套事务使用数据库的保存点来实现。嵌套事务回滚不影响外部事物，当时外部事物回滚会导致嵌套事务回滚。</li>
+</ul>
+</blockquote>
+<h2 id="捕获异常-amp-事务回滚"><a href="#捕获异常-amp-事务回滚" class="headerlink" title="捕获异常&amp;事务回滚"></a>捕获异常&amp;事务回滚</h2><p>事务期待的表现为：事务中的一个逻辑出现错误时，整个事务都会回滚。但是我们使用的时候会出现这种情况：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;  </div><div class="line">            userDao.save(user);  </div><div class="line">            <span class="comment">//如果下面的这个方法发生错误，那么上面的方法是不会回滚的</span></div><div class="line">            access.save(access);  </div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;  </div><div class="line">            logger.info(<span class="string">"能力开通接口，开户异常，异常信息："</span>+e); </div><div class="line">            <span class="comment">//解决办法</span></div><div class="line">            <span class="comment">//TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); </span></div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
+<p>AOP的处理机制是这样的，被拦截的方法必须显示抛出RuntimeException异常，SpringAOP才能捕获（我们可以通过以下配置来捕获特定的异常并回滚）。<br><figure class="highlight xml"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"upd*"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span> <span class="attr">rollback-for</span>=<span class="string">"Java.lang.Exception"</span>/&gt;</span></div></pre></td></tr></table></figure></p>
+<p>那么我们该如何处理呢?这里有两种办法：<br>1.在catch上加上throw new RuntimeException(),以便让AOP捕获异常并回滚，但是必须在上层继续处理这个异常，可以处理，但是感觉不够好。</p>
+<p>2.我们在catch里加上以下的语句，就如同上面例子代码中注释的语句一样，这样事务就可以正确的会滚了。<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line">TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();</div></pre></td></tr></table></figure></p>
+<p>（这个具体的实现逻辑目前还不是很透彻，在学习事务的过程中会回来补充）</p>
 
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2017/02/22/newFixedThreadpool(n)/" class="archive-article-date">
-  	<time datetime="2017-02-22T03:46:48.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-02-22</time>
+      <a href="/2017/02/23/Spring事务管理/" class="archive-article-date">
+  	<time datetime="2017-02-23T00:56:10.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-02-23</time>
 </a>
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务管理/">事务管理</a></li></ul>
 	</div>
 
       
@@ -202,18 +207,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/02/23/Spring事务管理/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/02/23/DBMS事务隔离级别/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Spring事务管理
+          DBMS的事务隔离级别
         
       </div>
     </a>
   
   
-    <a href="/2017/02/20/SpringIOC/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Spring IoC</div>
+    <a href="/2017/02/22/newFixedThreadpool(n)/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">newFixedThreadpool(n)</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -247,7 +252,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="newFixedThreadpool(n)" data-title="newFixedThreadpool(n)" data-url="http://tiltcat.com/2017/02/22/newFixedThreadpool(n)/"></div>
+	<div class="ds-thread" data-thread-key="Spring事务管理" data-title="Spring事务管理" data-url="http://tiltcat.com/2017/02/23/Spring事务管理/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
