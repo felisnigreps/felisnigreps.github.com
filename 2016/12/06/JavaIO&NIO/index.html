@@ -16,7 +16,7 @@
 <meta property="og:description" content="刚开始看IO的时候还没有这个blog,昨天用到感觉没有以前那么熟练了。在公司想找以前联系时候的源码还没找到，不过问题不大，今天过一遍复习一下。">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/JavaIO.png">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/channel&buffer.png">
-<meta property="og:updated_time" content="2016-12-07T10:51:51.000Z">
+<meta property="og:updated_time" content="2017-02-27T11:10:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java IO & NIO">
 <meta name="twitter:description" content="刚开始看IO的时候还没有这个blog,昨天用到感觉没有以前那么熟练了。在公司想找以前联系时候的源码还没找到，不过问题不大，今天过一遍复习一下。">
@@ -161,8 +161,7 @@
 <h3 id="取文件"><a href="#取文件" class="headerlink" title="取文件"></a>取文件</h3><p>FileWriter和FileOutputStream</p>
 <h3 id="随机存取文件"><a href="#随机存取文件" class="headerlink" title="随机存取文件"></a>随机存取文件</h3><p>使用RandomAccessFile对文件进行存取，这个存取并不是‘随机’，而是可以让你跳过某些字符来进行读写。</p>
 <h3 id="文件和目录信息的获取"><a href="#文件和目录信息的获取" class="headerlink" title="文件和目录信息的获取"></a>文件和目录信息的获取</h3><p>通过File类来获取文件和目录的信息。</p>
-<p>##管道</p>
-<p>管道可以为JVM中两个线程进行通讯。管道是PipedInputStream和PipedOutputStream. 一个PIS流应该和一个POS流相关联。一个通过PIS流写入的数据可以被另一个和其相关联的POS流读取出来。</p>
+<h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><p>管道可以为JVM中两个线程进行通讯。管道是PipedInputStream和PipedOutputStream. 一个PIS流应该和一个POS流相关联。一个通过PIS流写入的数据可以被另一个和其相关联的POS流读取出来。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PipedStreamTest</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        PipedInputStream inputStream = <span class="keyword">new</span> PipedInputStream();</div><div class="line">        PipedOutputStream outputStream = <span class="keyword">new</span> PipedOutputStream();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            inputStream.connect(outputStream);</div><div class="line">            Thread a = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        outputStream.write(<span class="string">"wub lad dup dup"</span>.getBytes());</div><div class="line">                        outputStream.close();</div><div class="line">                    &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                        e.printStackTrace();</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">            Thread b = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        <span class="keyword">int</span> data = inputStream.read();</div><div class="line">                        <span class="keyword">while</span> (data != -<span class="number">1</span>) &#123;</div><div class="line">                            System.out.print((<span class="keyword">char</span>) data);</div><div class="line">                            data = inputStream.read();</div><div class="line">                        &#125;</div><div class="line">                        inputStream.close();</div><div class="line">                    &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                        e.printStackTrace();</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">            a.start();</div><div class="line">            b.start();</div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>尝试着用try-with-resource来关闭流，结果未遂。各种错误都有。上网搜索了一圈也未果。</p>
 <p>字节流一般用*Stream来命名，字符流一般用Reader/Writer来命名。</p>
@@ -282,7 +281,7 @@
   
   
     <a href="/2016/11/16/JVM/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">我们说说JVM</div>
+      <div class="article-nav-title">JVM</div>
       <i class="icon-circle-right"></i>
     </a>
   
