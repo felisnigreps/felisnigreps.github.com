@@ -6,18 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>CAS | Let&#39;s do this</title>
+  <title>Spring事务管理 | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在看j.u.c的时候绕不开的一个概念就是CAS,所谓CAS就是compare and swap,比较然后交换，可以保证操作的原子性，我们常用的i++就是通过CAS来保证的，那么具体来说，CAS是怎么一回事呢？">
+  <meta name="description" content="刚刚写了数据库的事务隔离级别，现在我们再回头看看Spring的事务管理是怎么回事，我们该怎么用。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CAS">
-<meta property="og:url" content="http://tiltcat.com/2017/02/27/CAS/index.html">
+<meta property="og:title" content="Spring事务管理">
+<meta property="og:url" content="http://tiltcat.com/2017/02/26/Spring事务管理/index.html">
 <meta property="og:site_name" content="Let's do this">
-<meta property="og:description" content="在看j.u.c的时候绕不开的一个概念就是CAS,所谓CAS就是compare and swap,比较然后交换，可以保证操作的原子性，我们常用的i++就是通过CAS来保证的，那么具体来说，CAS是怎么一回事呢？">
-<meta property="og:updated_time" content="2017-02-27T12:03:33.000Z">
+<meta property="og:description" content="刚刚写了数据库的事务隔离级别，现在我们再回头看看Spring的事务管理是怎么回事，我们该怎么用。">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Spring%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86.jpg">
+<meta property="og:updated_time" content="2017-02-27T12:17:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CAS">
-<meta name="twitter:description" content="在看j.u.c的时候绕不开的一个概念就是CAS,所谓CAS就是compare and swap,比较然后交换，可以保证操作的原子性，我们常用的i++就是通过CAS来保证的，那么具体来说，CAS是怎么一回事呢？">
+<meta name="twitter:title" content="Spring事务管理">
+<meta name="twitter:description" content="刚刚写了数据库的事务隔离级别，现在我们再回头看看Spring的事务管理是怎么回事，我们该怎么用。">
+<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/Spring%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86.jpg">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -130,7 +132,7 @@
 </nav>
 
       <div class="body-wrap">
-        <article id="post-CAS" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Spring事务管理" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -140,7 +142,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      CAS
+      Spring事务管理
     </h1>
   
 
@@ -148,28 +150,51 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在看j.u.c的时候绕不开的一个概念就是CAS,所谓CAS就是compare and swap,比较然后交换，可以保证操作的原子性，我们常用的i++就是通过CAS来保证的，那么具体来说，CAS是怎么一回事呢？</p>
-<a id="more"></a>
-<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>CAS里面涉及到三个值，我们拿i++举例子，三个值分别为内存中的值，读取到的值，完成计算后的值。i++的操作分为三步，getI,i=i+1和setI.</p>
-<p>在说CAS之前我们要知道处理器会保证内存的原子性，意思是当处理器都去一个字节，其他处理器是不能访问这个字节的地址的。假设i=1,我们运行了两次i++,那么结果是有可能出现i=2的。因为两个CPU同时取到了1，然后+1，再赋值。这个很容易理解，那么CPU是怎么保证内存的原子性的呢？</p>
-<h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><p>缓存(cache memory)：CPU缓存是位于CPU和内存之间的临时存储器，他的容量比内存小但是交换速度快。在缓存中的数据是内存的一小部分，但是这一小部分是短时间内CPU即将访问的。当CPU调用数据时，可避开内存直接匆匆缓存中调用，从而加快读取速度。</p>
-<p>缓存行(cache line)：每个缓存里面都是由缓存行组成的，缓存系统是以缓存行为单位存储的。缓存行的大小是2的整数幂个连续字节，一般为32-256个字节。最常见的大小为64字节。当多线程修改相互独立的变量时，如果这些变量共享一个缓存行，就会无意间影响彼此的性能，这就是伪共享。缓存上的写竞争是晕想在SMP系统中多线程可伸缩性最重要的限制因素，伪共享被描述为性能的无声杀手，因为在代码中很难看出是否会出现伪共享。</p>
+        <p>刚刚写了数据库的事务隔离级别，现在我们再回头看看Spring的事务管理是怎么回事，我们该怎么用。<br><a id="more"></a></p>
+<p>Spring的事务管理分为编程式和声明式，编程式的侵入型较高，我们可以使用Spring完成无侵入式的声明管理。</p>
+<p>Spring事务的抽象主要是由PlatformTransactionManager来实现的，该接口如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PlatformTransactionManager</span> </span>&#123;</div><div class="line"><span class="comment">//返回一个已经激活的事务或者创建一个新的事务，</span></div><div class="line">    <span class="function">TransactionStatus <span class="title">getTransaction</span><span class="params">(TransactionDefinition var1)</span> <span class="keyword">throws</span> TransactionException</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">commit</span><span class="params">(TransactionStatus var1)</span> <span class="keyword">throws</span> TransactionException</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">rollback</span><span class="params">(TransactionStatus var1)</span> <span class="keyword">throws</span> TransactionException</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://ogeojkg3t.bkt.clouddn.com/Spring%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86.jpg" alt=""></p>
+<h2 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h2><p>Spring使用以下的数据库隔离级别：</p>
 <blockquote>
-<p>SMP的全称是”对称多处理”（Symmetrical Multi-Processing）技术,是指在一个计算机上汇集了一组处理器(多CPU),各CPU之间共享内存子系统以及总线结构.</p>
+<ul>
+<li>ISOLATION_DEFAULT：默认隔离级别，即使用底层数据库默认的隔离级别；</li>
+<li>ISOLATION_READ_UNCOMMITTED：未提交读；</li>
+<li>ISOLATION_READ_COMMITTED：提交读，一般情况下我们使用这个；</li>
+<li>ISOLATION_REPEATABLE_READ：可重复读；</li>
+<li>ISOLATION_SERIALIZABLE：序列化。</li>
+</ul>
 </blockquote>
-<p>缓存命中率(cache rate)：缓存之所以有效，主要是因为程序运行时对内存的访问呈现局部性（Locality）特征。这种局部性既包括空间局部性（Spatial Locality），也包括时间局部性（Temporal Locality）。有效利用这种局部性，缓存可以达到极高的命中率。</p>
+<p>以使用DefaultTransactionDefination中的setIsolationLevel（int isolationLevel）来指定隔离级别。</p>
+<h2 id="事务的传播行为"><a href="#事务的传播行为" class="headerlink" title="事务的传播行为"></a>事务的传播行为</h2><p>我们刚刚在另一篇blog讨论了DBMS的事务隔离级别，我们所说的Sping的事务是逻辑事务，而数据库的事务是物理事务。物理事务和逻辑事务的最大区别就是事务的传播行为，事务传播行为代表事务在多个方法间进行传播时，事务是如何在这些方法间传播的，Spring共支持其中传播行为：</p>
+<blockquote>
+<ul>
+<li>Required:使用PROPAGATION_REQUIRED来指定，如果存在一个逻辑事务，那么加入这个逻辑事务，否则新建一个事务。</li>
+<li>RequiresNew:创建新的逻辑事务，使用PROPAGATION_REQUIRES_NEW指定，表示每次都创建新的逻辑事务（物理事务也不同）。</li>
+<li>Support:支持当前事务，使用PROPAGATION_SUPPORTS指定，如果当前存在逻辑事务，就加入到该逻辑事务。如果当前没有逻辑事务，就已非事务方式执行。</li>
+<li>NotSupported:不支持事务，如果当前存在事务则暂停该事务，使用PROPAGATION_NOT_SUPPORTED指定。</li>
+<li>Mandatory:必须有事务，否则抛出异常，使用PROPAGATION_MANDAORY.</li>
+<li>Never: 不支持事务，如果当前存在事务则抛出异常，使用PROPAGATION_NEVER指定。</li>
+<li>Nested: 嵌套事务支持，使用PROPAGATION_NESTED指定。若果当前存在事务，则在嵌套事务内执行，如果当前不存在事务，则创建一个新的事务。嵌套事务使用数据库的保存点来实现。嵌套事务回滚不影响外部事物，当时外部事物回滚会导致嵌套事务回滚。</li>
+</ul>
+</blockquote>
+<h2 id="捕获异常-amp-事务回滚"><a href="#捕获异常-amp-事务回滚" class="headerlink" title="捕获异常&amp;事务回滚"></a>捕获异常&amp;事务回滚</h2><p>事务期待的表现为：事务中的一个逻辑出现错误时，整个事务都会回滚。但是我们使用的时候会出现这种情况：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;  </div><div class="line">            userDao.save(user);  </div><div class="line">            <span class="comment">//如果下面的这个方法发生错误，那么上面的方法是不会回滚的</span></div><div class="line">            access.save(access);  </div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;  </div><div class="line">            logger.info(<span class="string">"能力开通接口，开户异常，异常信息："</span>+e); </div><div class="line">            <span class="comment">//解决办法</span></div><div class="line">            <span class="comment">//TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); </span></div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
+<p>AOP的处理机制是这样的，被拦截的方法必须显示抛出RuntimeException异常，SpringAOP才能捕获（我们可以通过以下配置来捕获特定的异常并回滚）。<br><figure class="highlight xml"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"upd*"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span> <span class="attr">rollback-for</span>=<span class="string">"Java.lang.Exception"</span>/&gt;</span></div></pre></td></tr></table></figure></p>
+<p>那么我们该如何处理呢?这里有两种办法：<br>1.在catch上加上throw new RuntimeException(),以便让AOP捕获异常并回滚，但是必须在上层继续处理这个异常，可以处理，但是感觉不够好。</p>
+<p>2.我们在catch里加上以下的语句，就如同上面例子代码中注释的语句一样，这样事务就可以正确的会滚了。<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line">TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();</div></pre></td></tr></table></figure></p>
+<p>（这个具体的实现逻辑目前还不是很透彻，在学习事务的过程中会回来补充）</p>
 
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2017/02/27/CAS/" class="archive-article-date">
-  	<time datetime="2017-02-27T07:40:36.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-02-27</time>
+      <a href="/2017/02/26/Spring事务管理/" class="archive-article-date">
+  	<time datetime="2017-02-26T00:56:10.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-02-26</time>
 </a>
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CAS/">CAS</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务管理/">事务管理</a></li></ul>
 	</div>
 
       
@@ -182,9 +207,18 @@
   
 <nav id="article-nav">
   
+    <a href="/2017/02/27/CAS/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          CAS
+        
+      </div>
+    </a>
   
-    <a href="/2017/02/26/Spring事务管理/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Spring事务管理</div>
+  
+    <a href="/2017/02/23/DBMS事务隔离级别/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">DBMS的事务隔离级别</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -218,7 +252,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="CAS" data-title="CAS" data-url="http://tiltcat.com/2017/02/27/CAS/"></div>
+	<div class="ds-thread" data-thread-key="Spring事务管理" data-title="Spring事务管理" data-url="http://tiltcat.com/2017/02/26/Spring事务管理/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
