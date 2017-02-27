@@ -6,14 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>Tag: HashMap | Let&#39;s do this</title>
+  <title>CAS | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Let's do this">
-<meta property="og:url" content="http://tiltcat.com/tags/HashMap/index.html">
+  <meta name="description" content="在看j.u.c的时候绕不开的一个概念就是CAS,所谓CAS就是compare and swap,比较然后交换，可以保证操作的原子性，我们常用的i++就是通过CAS来保证的，那么具体来说，CAS是怎么一回事呢？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CAS">
+<meta property="og:url" content="http://tiltcat.com/2017/02/27/CAS/index.html">
 <meta property="og:site_name" content="Let's do this">
+<meta property="og:description" content="在看j.u.c的时候绕不开的一个概念就是CAS,所谓CAS就是compare and swap,比较然后交换，可以保证操作的原子性，我们常用的i++就是通过CAS来保证的，那么具体来说，CAS是怎么一回事呢？">
+<meta property="og:updated_time" content="2017-02-27T12:03:33.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Let's do this">
+<meta name="twitter:title" content="CAS">
+<meta name="twitter:description" content="在看j.u.c的时候绕不开的一个概念就是CAS,所谓CAS就是compare and swap,比较然后交换，可以保证操作的原子性，我们常用的i++就是通过CAS来保证的，那么具体来说，CAS是怎么一回事呢？">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -126,54 +130,113 @@
 </nav>
 
       <div class="body-wrap">
+        <article id="post-CAS" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
         
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/10/19/ConcurrentHashMap & HashMap/" class="archive-article-date">
-  	<time datetime="2016-10-19T13:20:37.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/10/19/ConcurrentHashMap & HashMap/">ConcurrentHashMap &amp; HashMap</a>
+    <h1 class="article-title" itemprop="name">
+      CAS
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在看j.u.c的时候绕不开的一个概念就是CAS,所谓CAS就是compare and swap,比较然后交换，可以保证操作的原子性，我们常用的i++就是通过CAS来保证的，那么具体来说，CAS是怎么一回事呢？</p>
+<a id="more"></a>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>CAS里面涉及到三个值，我们拿i++举例子，三个值分别为内存中的值，读取到的值，完成计算后的值。i++的操作分为三步，getI,i=i+1和setI.</p>
+<p>在说CAS之前我们要知道处理器会保证内存的原子性，意思是当处理器都去一个字节，其他处理器是不能访问这个字节的地址的。假设i=1,我们运行了两次i++,那么结果是有可能出现i=2的。因为两个CPU同时取到了1，然后+1，再赋值。这个很容易理解，那么CPU是怎么保证内存的原子性的呢？</p>
+<h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><p>缓存(cache memory)：CPU缓存是位于CPU和内存之间的临时存储器，他的容量比内存小但是交换速度快。在缓存中的数据是内存的一小部分，但是这一小部分是短时间内CPU即将访问的。当CPU调用数据时，可避开内存直接匆匆缓存中调用，从而加快读取速度。</p>
+<p>缓存行(cache line)：每个缓存里面都是由缓存行组成的，缓存系统是以缓存行为单位存储的。缓存行的大小是2的整数幂个连续字节，一般为32-256个字节。最常见的大小为64字节。当多线程修改相互独立的变量时，如果这些变量共享一个缓存行，就会无意间影响彼此的性能，这就是伪共享。缓存上的写竞争是晕想在SMP系统中多线程可伸缩性最重要的限制因素，伪共享被描述为性能的无声杀手，因为在代码中很难看出是否会出现伪共享。</p>
+<blockquote>
+<p>SMP的全称是”对称多处理”（Symmetrical Multi-Processing）技术,是指在一个计算机上汇集了一组处理器(多CPU),各CPU之间共享内存子系统以及总线结构.</p>
+</blockquote>
+<p>缓存命中率(cache rate)：缓存之所以有效，主要是因为程序运行时对内存的访问呈现局部性（Locality）特征。这种局部性既包括空间局部性（Spatial Locality），也包括时间局部性（Temporal Locality）。有效利用这种局部性，缓存可以达到极高的命中率。</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2017/02/27/CAS/" class="archive-article-date">
+  	<time datetime="2017-02-27T07:40:36.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-02-27</time>
+</a>
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Concurrent/">Concurrent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HashMap/">HashMap</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CAS/">CAS</a></li></ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-  
-    </div></section>
-  
 
-    
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2017/02/23/DBMS事务隔离级别/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">DBMS的事务隔离级别</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="CAS" data-title="CAS" data-url="http://tiltcat.com/2017/02/27/CAS/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
 
 
       </div>
@@ -196,9 +259,9 @@
 		mathjax: false,
 		animate: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",

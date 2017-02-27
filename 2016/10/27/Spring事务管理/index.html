@@ -6,24 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>ConcurrentHashMap &amp; HashMap | Let&#39;s do this</title>
+  <title>Spring事务管理 | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。
-本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。图片都是google的，出处不详。">
+  <meta name="description" content="刚刚写了数据库的事务隔离级别，现在我们再回头看看Spring的事务管理是怎么回事，我们该怎么用。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ConcurrentHashMap & HashMap">
-<meta property="og:url" content="http://tiltcat.com/2016/10/19/ConcurrentHashMap & HashMap/index.html">
+<meta property="og:title" content="Spring事务管理">
+<meta property="og:url" content="http://tiltcat.com/2016/10/27/Spring事务管理/index.html">
 <meta property="og:site_name" content="Let's do this">
-<meta property="og:description" content="ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。
-本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。图片都是google的，出处不详。">
-<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/HashMap.png">
-<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/HashMapResize1.jpg">
-<meta property="og:updated_time" content="2016-12-29T13:18:19.000Z">
+<meta property="og:description" content="刚刚写了数据库的事务隔离级别，现在我们再回头看看Spring的事务管理是怎么回事，我们该怎么用。">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Spring%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86.jpg">
+<meta property="og:updated_time" content="2017-02-27T12:05:01.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ConcurrentHashMap & HashMap">
-<meta name="twitter:description" content="ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。
-本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。图片都是google的，出处不详。">
-<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/HashMap.png">
+<meta name="twitter:title" content="Spring事务管理">
+<meta name="twitter:description" content="刚刚写了数据库的事务隔离级别，现在我们再回头看看Spring的事务管理是怎么回事，我们该怎么用。">
+<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/Spring%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86.jpg">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -136,7 +132,7 @@
 </nav>
 
       <div class="body-wrap">
-        <article id="post-ConcurrentHashMap &amp; HashMap" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Spring事务管理" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -146,7 +142,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      ConcurrentHashMap &amp; HashMap
+      Spring事务管理
     </h1>
   
 
@@ -154,30 +150,51 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。</p>
-<p>本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。<br>图片都是google的，出处不详。<br><a id="more"></a></p>
-<h2 id="HashMap的数据结构"><a href="#HashMap的数据结构" class="headerlink" title="HashMap的数据结构"></a>HashMap的数据结构</h2><p>先简单看下图解：</p>
-<p><img src="http://ogeojkg3t.bkt.clouddn.com/HashMap.png" alt="HashMap"></p>
-<p>当我们要put一个数据的时候，首先会算出这个值得Hash值，然后根据算法来确定Key的值（先简单理解成取模，不过源码中的代码可以减少碰撞），如果多个数据放在了同一个entry中，那么就会形成链表，当sum(数据)&gt;=lengh(table) * 加载因子，那么就会扩容。JDK1.8中的区别是在entry的长度大于8的时候会把链表转换成红黑树。</p>
-<p>我们知道HashMap是使用链表来处理哈希碰撞的，如果多个进程找到了一个bucket(table(i))上，那么根据Entry的特性，他的next只能指向一个Entry,这必然会造成线程不安全。</p>
-<p>除此之外，多个线程的扩容（rehash）也会导致线程不安全。简单来说，当put的时候发现内部元素多余threshold，那么就会进行扩容，怎么扩容呢？先把buckets扩容一倍，从每一个bucket的每一个entry开始遍历，把他的指向根据算法放到新的bucket里。如果两个线程同时扩容，那么总会有一个线程的操作会被废弃，数据也会丢失。</p>
-<p>先来个单线程扩容，我们假设就直接key mod length:</p>
-<p><img src="http://ogeojkg3t.bkt.clouddn.com/HashMapResize1.jpg" alt="resize"></p>
-<p>3,5,7在length为2的bucket里发生了碰撞，都跑到1里去了，现在rezise,从每一个bucket的每一个entry开始遍历，e指向3，next子项7. 第一步先处理3，3%4=3，放到3上。然后是7，一样，但是这块要注意要插在3前面而不是后面，这是为什么呢？因为我们更喜欢O(1)而不是）O(n). 行了，单线程的rehash没啥问题。</p>
-<p>图是网上抄的。</p>
-<h4 id="CHM的数据结构"><a href="#CHM的数据结构" class="headerlink" title="CHM的数据结构"></a>CHM的数据结构</h4><p>CHM在JDK 1.7之后发生了很大的变化，在1.7之前，是通过分段锁技术来实现同步的，建构图应该如下所示：</p>
+        <p>刚刚写了数据库的事务隔离级别，现在我们再回头看看Spring的事务管理是怎么回事，我们该怎么用。<br><a id="more"></a></p>
+<p>Spring的事务管理分为编程式和声明式，编程式的侵入型较高，我们可以使用Spring完成无侵入式的声明管理。</p>
+<p>Spring事务的抽象主要是由PlatformTransactionManager来实现的，该接口如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">PlatformTransactionManager</span> </span>&#123;</div><div class="line"><span class="comment">//返回一个已经激活的事务或者创建一个新的事务，</span></div><div class="line">    <span class="function">TransactionStatus <span class="title">getTransaction</span><span class="params">(TransactionDefinition var1)</span> <span class="keyword">throws</span> TransactionException</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">commit</span><span class="params">(TransactionStatus var1)</span> <span class="keyword">throws</span> TransactionException</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">rollback</span><span class="params">(TransactionStatus var1)</span> <span class="keyword">throws</span> TransactionException</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://ogeojkg3t.bkt.clouddn.com/Spring%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86.jpg" alt=""></p>
+<h2 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h2><p>Spring使用以下的数据库隔离级别：</p>
+<blockquote>
+<ul>
+<li>ISOLATION_DEFAULT：默认隔离级别，即使用底层数据库默认的隔离级别；</li>
+<li>ISOLATION_READ_UNCOMMITTED：未提交读；</li>
+<li>ISOLATION_READ_COMMITTED：提交读，一般情况下我们使用这个；</li>
+<li>ISOLATION_REPEATABLE_READ：可重复读；</li>
+<li>ISOLATION_SERIALIZABLE：序列化。</li>
+</ul>
+</blockquote>
+<p>以使用DefaultTransactionDefination中的setIsolationLevel（int isolationLevel）来指定隔离级别。</p>
+<h2 id="事务的传播行为"><a href="#事务的传播行为" class="headerlink" title="事务的传播行为"></a>事务的传播行为</h2><p>我们刚刚在另一篇blog讨论了DBMS的事务隔离级别，我们所说的Sping的事务是逻辑事务，而数据库的事务是物理事务。物理事务和逻辑事务的最大区别就是事务的传播行为，事务传播行为代表事务在多个方法间进行传播时，事务是如何在这些方法间传播的，Spring共支持其中传播行为：</p>
+<blockquote>
+<ul>
+<li>Required:使用PROPAGATION_REQUIRED来指定，如果存在一个逻辑事务，那么加入这个逻辑事务，否则新建一个事务。</li>
+<li>RequiresNew:创建新的逻辑事务，使用PROPAGATION_REQUIRES_NEW指定，表示每次都创建新的逻辑事务（物理事务也不同）。</li>
+<li>Support:支持当前事务，使用PROPAGATION_SUPPORTS指定，如果当前存在逻辑事务，就加入到该逻辑事务。如果当前没有逻辑事务，就已非事务方式执行。</li>
+<li>NotSupported:不支持事务，如果当前存在事务则暂停该事务，使用PROPAGATION_NOT_SUPPORTED指定。</li>
+<li>Mandatory:必须有事务，否则抛出异常，使用PROPAGATION_MANDAORY.</li>
+<li>Never: 不支持事务，如果当前存在事务则抛出异常，使用PROPAGATION_NEVER指定。</li>
+<li>Nested: 嵌套事务支持，使用PROPAGATION_NESTED指定。若果当前存在事务，则在嵌套事务内执行，如果当前不存在事务，则创建一个新的事务。嵌套事务使用数据库的保存点来实现。嵌套事务回滚不影响外部事物，当时外部事物回滚会导致嵌套事务回滚。</li>
+</ul>
+</blockquote>
+<h2 id="捕获异常-amp-事务回滚"><a href="#捕获异常-amp-事务回滚" class="headerlink" title="捕获异常&amp;事务回滚"></a>捕获异常&amp;事务回滚</h2><p>事务期待的表现为：事务中的一个逻辑出现错误时，整个事务都会回滚。但是我们使用的时候会出现这种情况：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;  </div><div class="line">            userDao.save(user);  </div><div class="line">            <span class="comment">//如果下面的这个方法发生错误，那么上面的方法是不会回滚的</span></div><div class="line">            access.save(access);  </div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;  </div><div class="line">            logger.info(<span class="string">"能力开通接口，开户异常，异常信息："</span>+e); </div><div class="line">            <span class="comment">//解决办法</span></div><div class="line">            <span class="comment">//TransactionAspectSupport.currentTransactionStatus().setRollbackOnly(); </span></div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
+<p>AOP的处理机制是这样的，被拦截的方法必须显示抛出RuntimeException异常，SpringAOP才能捕获（我们可以通过以下配置来捕获特定的异常并回滚）。<br><figure class="highlight xml"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">"upd*"</span> <span class="attr">propagation</span>=<span class="string">"REQUIRED"</span> <span class="attr">rollback-for</span>=<span class="string">"Java.lang.Exception"</span>/&gt;</span></div></pre></td></tr></table></figure></p>
+<p>那么我们该如何处理呢?这里有两种办法：<br>1.在catch上加上throw new RuntimeException(),以便让AOP捕获异常并回滚，但是必须在上层继续处理这个异常，可以处理，但是感觉不够好。</p>
+<p>2.我们在catch里加上以下的语句，就如同上面例子代码中注释的语句一样，这样事务就可以正确的会滚了。<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line">TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();</div></pre></td></tr></table></figure></p>
+<p>（这个具体的实现逻辑目前还不是很透彻，在学习事务的过程中会回来补充）</p>
 
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2016/10/19/ConcurrentHashMap & HashMap/" class="archive-article-date">
-  	<time datetime="2016-10-19T13:20:37.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-19</time>
+      <a href="/2016/10/27/Spring事务管理/" class="archive-article-date">
+  	<time datetime="2016-10-26T16:01:01.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-27</time>
 </a>
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Concurrent/">Concurrent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HashMap/">HashMap</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务管理/">事务管理</a></li></ul>
 	</div>
 
       
@@ -190,18 +207,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2016/10/27/Spring事务管理/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/10/27/SpringAOP/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Spring事务管理
+          Spring AOP
         
       </div>
     </a>
   
   
-    <a href="/2016/10/18/Java.util.concurrent/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">初识 Java.util.concurrent</div>
+    <a href="/2016/10/19/ConcurrentHashMap & HashMap/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ConcurrentHashMap &amp; HashMap</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -235,7 +252,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="ConcurrentHashMap &amp; HashMap" data-title="ConcurrentHashMap &amp; HashMap" data-url="http://tiltcat.com/2016/10/19/ConcurrentHashMap &amp; HashMap/"></div>
+	<div class="ds-thread" data-thread-key="Spring事务管理" data-title="Spring事务管理" data-url="http://tiltcat.com/2016/10/27/Spring事务管理/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
