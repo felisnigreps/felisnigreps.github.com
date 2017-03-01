@@ -18,7 +18,7 @@
 <meta property="og:description" content="作用事务保证了一个操作序列全部执行或者全部不执行(原子性)，从一个状态转变为另一个状态。事务是满足持久性的，所以可以被保存下来。当多个事务操作数据的时候，如果控制不好隔离级别，那么就会出现脏读，重复读，幻读等问题。
 刚开始主要是对幻读的理解不到位，现在讨论一下：
 事务的四种性质ACID,很基础，我们常常所讨论的是一致性和隔离性，解决办法往往是加锁，不过数据库又是一个高并发的应用，锁加多了会造成很大">
-<meta property="og:updated_time" content="2017-02-27T11:51:47.000Z">
+<meta property="og:updated_time" content="2017-03-01T10:19:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DBMS的事务隔离级别">
 <meta name="twitter:description" content="作用事务保证了一个操作序列全部执行或者全部不执行(原子性)，从一个状态转变为另一个状态。事务是满足持久性的，所以可以被保存下来。当多个事务操作数据的时候，如果控制不好隔离级别，那么就会出现脏读，重复读，幻读等问题。
@@ -239,9 +239,9 @@
 </table>
 <p>为了防止并发过程中的修改冲突，事务A中给teacher_id=1的行加了X锁，并且一直不释放锁，那么事务B就一直拿不到该锁，wait直到超时。</p>
 <p>在这里teacher_id是有索引的，那么会给这一行加锁，那么如果where后面是没有索引的列呢？很不幸，MySQL会对整张表进行加锁，因为他无法判断出到底要更新的是哪行。但是在实际应用过程中MySQL做了一些改进，会在MySQL server过滤相关条件，发现不满足后会调用unlock_row方法，释放一部分锁。（违背了二段锁协议的约束）</p>
-<h3 id="Read-Repetable"><a href="#Read-Repetable" class="headerlink" title="Read Repetable"></a>Read Repetable</h3><p>可重读，这是MySQL InnoDB默认的隔离级别（为什么MySQL的默认隔离级别和其他的DBMS不一致呢？）。因为事务具有隔离性，RR的隔离级别要比RC更高一些，不过之前一直困扰我的是，这个RR有什么应用场景呢?况且其他DBMS默认都是RC,为什么MySQL就是RR? 在我的认知中RC才是更好的隔离级别，我提交了，就应该读出来，难道不是这样么？我如果使用MySQL设置为RC级别，会有什么问题发生呢？</p>
+<h3 id="REPEATABLE-READ"><a href="#REPEATABLE-READ" class="headerlink" title="REPEATABLE READ"></a>REPEATABLE READ</h3><p>可重读，这是MySQL InnoDB默认的隔离级别（为什么MySQL的默认隔离级别和其他的DBMS不一致呢？）。因为事务具有隔离性，RR的隔离级别要比RC更高一些，不过之前一直困扰我的是，这个RR有什么应用场景呢?况且其他DBMS默认都是RC,为什么MySQL就是RR? 在我的认知中RC才是更好的隔离级别，我提交了，就应该读出来，难道不是这样么？我如果使用MySQL设置为RC级别，会有什么问题发生呢？</p>
 <blockquote>
-<p>我有点明白了，如果是RR级别的话，在事务过程中会加下面提到的next-key锁，事务二的提交被锁住，所以保证了binlog的记录是串行的。</p>
+<p>我有点明白了，如果是RR级别的话，在事务过程中会加下面提到的next-key锁，事务二的提交被锁住，所以保证了binlog的记录是串行的。<br>刚刚试了一下，如果是RR，那么会使用next-key锁，相关的记录会被锁住，左开右闭的区间，另一个进程的语句会无法插入。但是RC情况下就可以插入。而且可以查询出来，如果业务逻辑是先判断数目，然后取某第N条数据，那么就会出现错误了。nice! 这就是RC和RR本质上的区别，这样一看RR的效果果然更好！！</p>
 </blockquote>
 <p>这篇博文有关于binlog的<a href="http://blog.csdn.net/zxk364961978/article/details/51564832" target="_blank" rel="external">详细解释</a>(我的天，终于感觉有点弄顺了，找了两三天才理解….)</p>
 <p>简单说下可重复读的表现吧，两个事务A和B,A select,B update, B commit, A select again,第二次读到的数字和第一次读的一致，即使B已经把他update了。</p>
@@ -408,7 +408,7 @@
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 15px;">事务管理</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 16.67px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 13.33px;">事务管理</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     			</div>
     	</section>
     

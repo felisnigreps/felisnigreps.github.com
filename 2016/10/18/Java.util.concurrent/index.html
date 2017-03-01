@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>初识 Java.util.concurrent | Let&#39;s do this</title>
+  <title>Java.util.concurrent | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~
 
@@ -19,7 +19,7 @@ Semaphore
 ReentrantLock            
 Bl">
 <meta property="og:type" content="article">
-<meta property="og:title" content="初识 Java.util.concurrent">
+<meta property="og:title" content="Java.util.concurrent">
 <meta property="og:url" content="http://tiltcat.com/2016/10/18/Java.util.concurrent/index.html">
 <meta property="og:site_name" content="Let's do this">
 <meta property="og:description" content="concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~
@@ -32,9 +32,9 @@ ThreadPoolExecutor
 Semaphore                
 ReentrantLock            
 Bl">
-<meta property="og:updated_time" content="2017-02-27T12:04:07.000Z">
+<meta property="og:updated_time" content="2017-03-01T10:21:33.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="初识 Java.util.concurrent">
+<meta name="twitter:title" content="Java.util.concurrent">
 <meta name="twitter:description" content="concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~
 
 部分细节文中没有提到，请查询 API
@@ -167,7 +167,7 @@ Bl">
         
   
     <h1 class="article-title" itemprop="name">
-      初识 Java.util.concurrent
+      Java.util.concurrent
     </h1>
   
 
@@ -206,71 +206,7 @@ Bl">
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyExecutor</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line">    <span class="comment">//创建一个fix线程池 含有5个线程 执行10个命令 每个命令打印一句话 休眠一段时间 看执行效果</span></div><div class="line">    <span class="keyword">private</span> String name;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyExecutor</span><span class="params">(String name)</span></span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            System.out.println(<span class="string">"Hi! I'm "</span>+<span class="keyword">this</span>.name+<span class="string">"， look at me!"</span>);</div><div class="line">            Thread.sleep(<span class="number">3000</span>);</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        ExecutorService service = Executors.newFixedThreadPool(<span class="number">5</span>);</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</div><div class="line">                service.execute(<span class="keyword">new</span> MyExecutor(<span class="string">"Mr.Meese"</span>+i));</div><div class="line">        &#125;</div><div class="line">        service.shutdown();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>可以看到包含了5个线程的线程池只能执行5个线程，只有前5个线程执行完毕，才能继续执行。</p>
 <p>多说一句，这些提交的线程被存放在一个无界队列里，这个无界队列是一个有序队列。（BlockingQueue）</p>
-<h3 id="ThreadPoolExcutors"><a href="#ThreadPoolExcutors" class="headerlink" title="ThreadPoolExcutors"></a>ThreadPoolExcutors</h3><p>当被问到怎么确定线程池的大小的时候，我发觉对很多知识还是欠缺，这边补充一下<br>线程池的相关信息。</p>
-<p>ThreadPoolExcutors是线程池中最核心的一个类，先看下构造方法：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></div><div class="line">                          <span class="keyword">int</span> maximumPoolSize,</div><div class="line">                          <span class="keyword">long</span> keepAliveTime,</div><div class="line">                          TimeUnit unit,</div><div class="line">                          BlockingQueue&lt;Runnable&gt; workQueue) &#123;</div><div class="line">    <span class="keyword">this</span>(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,</div><div class="line">         Executors.defaultThreadFactory(), defaultHandler);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></div><div class="line">                          <span class="keyword">int</span> maximumPoolSize,</div><div class="line">                          <span class="keyword">long</span> keepAliveTime,</div><div class="line">                          TimeUnit unit,</div><div class="line">                          BlockingQueue&lt;Runnable&gt; workQueue,</div><div class="line">                          ThreadFactory threadFactory) &#123;</div><div class="line">    <span class="keyword">this</span>(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,</div><div class="line">         threadFactory, defaultHandler);</div><div class="line">&#125;</div><div class="line"></div><div class="line">  </div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></div><div class="line">                          <span class="keyword">int</span> maximumPoolSize,</div><div class="line">                          <span class="keyword">long</span> keepAliveTime,</div><div class="line">                          TimeUnit unit,</div><div class="line">                          BlockingQueue&lt;Runnable&gt; workQueue,</div><div class="line">                          RejectedExecutionHandler handler) &#123;</div><div class="line">    <span class="keyword">this</span>(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,</div><div class="line">         Executors.defaultThreadFactory(), handler);</div><div class="line">&#125;</div><div class="line"></div><div class="line">  </div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></div><div class="line">                          <span class="keyword">int</span> maximumPoolSize,</div><div class="line">                          <span class="keyword">long</span> keepAliveTime,</div><div class="line">                          TimeUnit unit,</div><div class="line">                          BlockingQueue&lt;Runnable&gt; workQueue,</div><div class="line">                          ThreadFactory threadFactory,</div><div class="line">                          RejectedExecutionHandler handler) &#123;</div><div class="line">    <span class="keyword">if</span> (corePoolSize &lt; <span class="number">0</span> ||</div><div class="line">        maximumPoolSize &lt;= <span class="number">0</span> ||</div><div class="line">        maximumPoolSize &lt; corePoolSize ||</div><div class="line">        keepAliveTime &lt; <span class="number">0</span>)</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</div><div class="line">    <span class="keyword">if</span> (workQueue == <span class="keyword">null</span> || threadFactory == <span class="keyword">null</span> || handler == <span class="keyword">null</span>)</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</div><div class="line">    <span class="keyword">this</span>.corePoolSize = corePoolSize;</div><div class="line">    <span class="keyword">this</span>.maximumPoolSize = maximumPoolSize;</div><div class="line">    <span class="keyword">this</span>.workQueue = workQueue;</div><div class="line">    <span class="keyword">this</span>.keepAliveTime = unit.toNanos(keepAliveTime);</div><div class="line">    <span class="keyword">this</span>.threadFactory = threadFactory;</div><div class="line">    <span class="keyword">this</span>.handler = handler;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>前三个构造方法都是调用第四个构造方法进行实例化的。</p>
-<blockquote>
-<ul>
-<li>corePoolSize: 核心池的大小。当创建完毕线程池的的时候，并不会创建线程，只有当用户进行请求的时候才会创建线程。除非调用prestartAllCoreThreads()或者prestartCoreThread()方法。当创建完线程池的时候，默认线程为0.当有请求的时候创建线程直到corePoolSize，如果还有线程继续进来那么就会放到缓存队列里。</li>
-<li>maximumPoolSize：线程池最大线程数，它表示在线程池中最多能创建多少个线程.</li>
-<li>keepAliveTime:表示过了多久线程会终止，一般情况下只有在线程数目大雨corePoolSize的时候才会起作用。到达最大空闲时间的线程会停止。但是如果调用了allowCoreThreadTimeOut(boolean)方法，在线程池中的线程数不大于corePoolSize时，keepAliveTime参数也会起作用，直到线程池中的线程数为0；</li>
-<li>unit:keepAliveTime的时间单位，有各种格式。</li>
-<li>workQueue:一个阻塞队列，用来存储要执行的任务，会对线程池产生重大影响。</li>
-</ul>
-<p>Java提供七个阻塞队列，这边先提一下，有机会会详细说一下这些阻塞队列。<br>ArrayBlockingQueue ：一个由数组结构组成的有界阻塞队列。<br>LinkedBlockingQueue ：一个由链表结构组成的有界阻塞队列（常用）。<br>PriorityBlockingQueue ：一个支持优先级排序的无界阻塞队列。<br>DelayQueue：一个使用优先级队列实现的无界阻塞队列。<br>SynchronousQueue：一个不存储元素的阻塞队列（常用）。<br>LinkedTransferQueue：一个由链表结构组成的无界阻塞队列。<br>LinkedBlockingDeque：一个由链表结构组成的双向阻塞队列。</p>
-<ul>
-<li>threadFactory: 线程工厂，用来创建线程。</li>
-<li>handler:表示当拒绝处理任务时的策略.</li>
-</ul>
-</blockquote>
-<p>ThreadPoolExecutor有几个很重要的方法：</p>
-<blockquote>
-<ul>
-<li>execute():这方法实际上是Exexutor中声明的方法，是ThreadPoolExecutor的核心方法，这个方法可以向线程池提交一个任务，交由线程池去执行。</li>
-<li>submit():其中调用了execute方法，不同的地方在于他返回了Future.</li>
-<li>shutdown():关闭线程池。</li>
-<li>shutdownNow()：同样关闭线程池，不过是now.</li>
-</ul>
-</blockquote>
-<h3 id="线程池的状态"><a href="#线程池的状态" class="headerlink" title="线程池的状态"></a>线程池的状态</h3><p>我们看看代码是咋写的：</p>
-<pre><code>* The runState provides the main lifecycle control, taking on values:
-*
-*   RUNNING:  Accept new tasks and process queued tasks
-*   SHUTDOWN: Don&apos;t accept new tasks, but process queued tasks
-*   STOP:     Don&apos;t accept new tasks, don&apos;t process queued tasks,
-*             and interrupt in-progress tasks
-*   TIDYING:  All tasks have terminated, workerCount is zero,
-*             the thread transitioning to state TIDYING
-*             will run the terminated() hook method
-*   TERMINATED: terminated() has completed
-*
-* The numerical order among these values matters, to allow
-* ordered comparisons. The runState monotonically increases over
-* time, but need not hit each state. The transitions are:
-*
-* RUNNING -&gt; SHUTDOWN
-*    On invocation of shutdown(), perhaps implicitly in finalize()
-* (RUNNING or SHUTDOWN) -&gt; STOP
-*    On invocation of shutdownNow()
-* SHUTDOWN -&gt; TIDYING
-*    When both queue and pool are empty
-* STOP -&gt; TIDYING
-*    When pool is empty
-* TIDYING -&gt; TERMINATED
-*    When the terminated() hook method has completed
-*
-</code></pre><p>写的挺明白。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="comment">// runState is stored in the high-order bits</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> RUNNING    = -<span class="number">1</span> &lt;&lt; COUNT_BITS;</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SHUTDOWN   =  <span class="number">0</span> &lt;&lt; COUNT_BITS;</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> STOP       =  <span class="number">1</span> &lt;&lt; COUNT_BITS;</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TIDYING    =  <span class="number">2</span> &lt;&lt; COUNT_BITS;</div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TERMINATED =  <span class="number">3</span> &lt;&lt; COUNT_BITS;</div></pre></td></tr></table></figure>
-<p>这边为什么要采取左移来实现，有什么好处呢? 目前还不知道….机会合适的时候可以研究一下….</p>
-<p>好，到现在我们尝试着自己理解一下execute()的实现原理是什么：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Runnable command)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (command == <span class="keyword">null</span>)</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</div><div class="line">        <span class="comment">/*</span></div><div class="line">         * Proceed in 3 steps:</div><div class="line">         *</div><div class="line">         * 1. If fewer than corePoolSize threads are running, try to</div><div class="line">         * start a new thread with the given command as its first</div><div class="line">         * task.  The call to addWorker atomically checks runState and</div><div class="line">         * workerCount, and so prevents false alarms that would add</div><div class="line">         * threads when it shouldn't, by returning false.</div><div class="line">         *</div><div class="line">         * 2. If a task can be successfully queued, then we still need</div><div class="line">         * to double-check whether we should have added a thread</div><div class="line">         * (because existing ones died since last checking) or that</div><div class="line">         * the pool shut down since entry into this method. So we</div><div class="line">         * recheck state and if necessary roll back the enqueuing if</div><div class="line">         * stopped, or start a new thread if there are none.</div><div class="line">         *</div><div class="line">         * 3. If we cannot queue task, then we try to add a new</div><div class="line">         * thread.  If it fails, we know we are shut down or saturated</div><div class="line">         * and so reject the task.</div><div class="line">         */</div><div class="line">        <span class="keyword">int</span> c = ctl.get();</div><div class="line">        <span class="keyword">if</span> (workerCountOf(c) &lt; corePoolSize) &#123;</div><div class="line">            <span class="keyword">if</span> (addWorker(command, <span class="keyword">true</span>))</div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            c = ctl.get();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (isRunning(c) &amp;&amp; workQueue.offer(command)) &#123;</div><div class="line">            <span class="keyword">int</span> recheck = ctl.get();</div><div class="line">            <span class="keyword">if</span> (! isRunning(recheck) &amp;&amp; remove(command))</div><div class="line">                reject(command);</div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (workerCountOf(recheck) == <span class="number">0</span>)</div><div class="line">                addWorker(<span class="keyword">null</span>, <span class="keyword">false</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (!addWorker(command, <span class="keyword">false</span>))</div><div class="line">            reject(command);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">workerCountOf</span><span class="params">(<span class="keyword">int</span> c)</span>  </span>&#123; <span class="keyword">return</span> c &amp; CAPACITY; &#125;</div></pre></td></tr></table></figure>
-<p>　不过在java doc中，并不提倡我们直接使用ThreadPoolExecutor，而是使用Executors类中提供的几个静态方法来创建线程池：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line">Executors.newCachedThreadPool();        <span class="comment">//创建一个缓冲池，缓冲池容量大小为Integer.MAX_VALUE</span></div><div class="line">Executors.newSingleThreadExecutor();   <span class="comment">//创建容量为1的缓冲池</span></div><div class="line">Executors.newFixedThreadPool(<span class="keyword">int</span>);    <span class="comment">//创建固定容量大小的缓冲池</span></div></pre></td></tr></table></figure></p>
-<p>newFixedThreadPool创建的线程池corePoolSize和maximumPoolSize值是相等的，它使用的LinkedBlockingQueue；</p>
-<p>　　newSingleThreadExecutor将corePoolSize和maximumPoolSize都设置为1，也使用的LinkedBlockingQueue；</p>
-<p>　　newCachedThreadPool将corePoolSize设置为0，将maximumPoolSize设置为Integer.MAX_VALUE，使用的SynchronousQueue，也就是说来了任务就创建线程运行，当线程空闲超过60秒，就销毁线程。</p>
-<p>　　实际中，如果Executors提供的三个静态方法能满足要求，就尽量使用它提供的三个方法，因为自己去手动配置ThreadPoolExecutor的参数有点麻烦，要根据实际任务的类型和数量来进行配置。</p>
-<p>　　另外，如果ThreadPoolExecutor达不到要求，可以自己继承ThreadPoolExecutor类进行重写。</p>
+<h3 id="ThreadPoolExcutor"><a href="#ThreadPoolExcutor" class="headerlink" title="ThreadPoolExcutor"></a>ThreadPoolExcutor</h3><p>这部分内容请参加博文<a href="">ThreadPoolExcutor</a></p>
 <h3 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h3><p>维护一组信号量，对号码进行计数，就像去医院看病，1个医生维护一个信号量，1个房间2个医生，就维护2信号量，出1个，进1个，就这样。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestSemaphore</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line">    <span class="comment">//latrine问题 一次只能容纳2个人 有10个人在排队 每个人都需要占用一会 等10个人使用结束后进行清扫</span></div><div class="line">    <span class="keyword">int</span> id;</div><div class="line">    <span class="comment">//创建信号量</span></div><div class="line">    Semaphore limit;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TestSemaphore</span><span class="params">(<span class="keyword">int</span> id, Semaphore limit)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.id = id;</div><div class="line">        <span class="keyword">this</span>.limit = limit;</div><div class="line">    &#125;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            limit.acquire();</div><div class="line">            System.out.println(<span class="keyword">this</span>.id + <span class="string">"is using...."</span>);</div><div class="line">            Thread.sleep(<span class="number">2000</span>);</div><div class="line">            System.out.println(<span class="keyword">this</span>.id + <span class="string">"is done here"</span>);</div><div class="line">            limit.release();</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        ExecutorService service = Executors.newCachedThreadPool();</div><div class="line">        Semaphore semaphore = <span class="keyword">new</span> Semaphore(<span class="number">2</span>);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">            service.submit(<span class="keyword">new</span> TestSemaphore(i, semaphore));</div><div class="line">        &#125;</div><div class="line">        service.shutdown();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h3><blockquote>
@@ -371,7 +307,7 @@ Bl">
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="Java.util.concurrent" data-title="初识 Java.util.concurrent" data-url="http://tiltcat.com/2016/10/18/Java.util.concurrent/"></div>
+	<div class="ds-thread" data-thread-key="Java.util.concurrent" data-title="Java.util.concurrent" data-url="http://tiltcat.com/2016/10/18/Java.util.concurrent/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
@@ -448,7 +384,7 @@ Bl">
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 15px;">事务管理</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 16.67px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 13.33px;">事务管理</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     			</div>
     	</section>
     

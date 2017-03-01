@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://tiltcat.com/2017/02/16/MySQL/index.html">
 <meta property="og:site_name" content="Let's do this">
 <meta property="og:description" content="这个文章主要复习一下以前学习的mysql相关知识，在onenote上还有一个笔记，这边也会转移过来。">
-<meta property="og:updated_time" content="2017-02-20T14:25:01.000Z">
+<meta property="og:updated_time" content="2017-03-01T10:18:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL">
 <meta name="twitter:description" content="这个文章主要复习一下以前学习的mysql相关知识，在onenote上还有一个笔记，这边也会转移过来。">
@@ -165,7 +165,7 @@
 </blockquote>
 <h2 id="选择合适的数据类型"><a href="#选择合适的数据类型" class="headerlink" title="选择合适的数据类型"></a>选择合适的数据类型</h2><p>数据类型是在合适的存储引擎基础上决定的，</p>
 <p>myisam:最好使用固定长度的数据列代替可变长度的数据列。</p>
-<p>innodb:建议使用varchar类型，对于InnoDB数据表，内部的行存储格式没有区分固定长度和可变长度列（所有数据行都使用指向数据列值的头指针），因此在本质上，使用固定长度的CHAR列不一定比使用可变长度VARCHAR列简单。因而，主要的性能因素是数据行使用的存储总量。由于CHAR平均占用的空间多于VARCHAR，因 此使用VARCHAR来最小化需要处理的数据行的存储总量和磁盘I/O是比较好的。</p>
+<p>innodb:建议使用varchar类型，对于InnoDB数据表，内部的行存储格式没有区分固定长度和可变长度列（所有数据行都使用指向数据列值的头指针），因此在本质上，使用固定长度的CHAR列不一定比使用可变长度VARCHAR列简单。因而，主要的性能因素是数据行使用的存储总量。由于CHAR平均占用的空间多于VARCHAR，因 此使用VARCHAR来最小化需要处理的数据行的存储总<br>量和磁盘I/O是比较好的。</p>
 <p>memory:MEMORY数据表目前都使用固定长度的数据行存储，因此无论使用CHAR或VARCHAR列都没有关系。两者都是作为CHAR类型处理的。</p>
 <h2 id="固定长度数据列和可变长度数据列"><a href="#固定长度数据列和可变长度数据列" class="headerlink" title="固定长度数据列和可变长度数据列"></a>固定长度数据列和可变长度数据列</h2><h3 id="char和varchar"><a href="#char和varchar" class="headerlink" title="char和varchar"></a>char和varchar</h3><p>他们的数据格式类似，但是保存和检索方式不同，最大长度和尾部空格是否保留也不同。在存储过程中不进行大小写转换。</p>
 <p>在进行检索时char列尾部会删除空格。</p>
@@ -191,13 +191,13 @@
 <p>在 mysql 中 float、double（或 real）是浮点数，decimal（或 numberic）是定点数。<br>浮点数相对于定点数的优点是在长度一定的情况下，浮点数能够表示更大的数据范围；<br>它的缺点是会引起精度问题。<br>在今后关于浮点数和定点数的应用中，大家要记住以下几点：<br>1、浮点数存在误差问题；<br>2、对货币等对精度敏感的数据，应该用定点数表示或存储；<br>3、编程中，如果用到浮点数，要特别注意误差问题，并尽量避免做浮点数比较；<br>4、要注意浮点数中一些特殊值的处理。</p>
 <h2 id="字符集"><a href="#字符集" class="headerlink" title="字符集"></a>字符集</h2><p>字符集是一套符号和编码的规则，oracle和mysql中都存在一套字符集的规则，如果前期没有选择正确，后期的更换是代价比较高的操作。</p>
 <p>mysql服务器可以支持多种字符集（可以用show character set命令查看所有mysql支持的字符集），在同一台服务器、同一个数据库、甚至同一个表的不同字段都可以指定使用不同的字符集，相比oracle等其他数据库管理系统，在同一个数据库只能使用相同的字符集，mysql明显存在更大的灵活性。</p>
-<p>mysql的字符集包括字符集（CHARACTER）和校对规则（COLLATION）两个概念。字符集是用来定义mysql存储字符串的方式，校对规则则是定义了比较字符串的方式。字符集和校对规则是一对多的关系,MySQL支持30多种字符集的70多种校对规则。</p>
+<p>mysql的字符集包括字符集（CHARACTER）和校对规则（COLLATION）两个概念。字符集是用来定义mysql存储字符串的方式，校对规则则是定义了比较字符串的方式。字符集和校对规则是一对多的关系, MySQL支持30多种字符集的70多种校对规则。</p>
 <h3 id="怎样选择字符集"><a href="#怎样选择字符集" class="headerlink" title="怎样选择字符集"></a>怎样选择字符集</h3><p>我们建议在能够完全满足应用的前提下，尽量使用小的字符集。因为更小的字符集意</p>
 <h2 id="索引的设计和使用"><a href="#索引的设计和使用" class="headerlink" title="索引的设计和使用"></a>索引的设计和使用</h2><p>所有mysql的列都可以进行索引，对相关列进行索引是提高select查询的最佳方式。根据存储引擎定义每个表的最大索引数和最大索引长度。所有存储引擎支持每个表至少16个索引，总索引长度至少为 256 字节。大多数存储引擎有更高的限制。</p>
 <h3 id="设计索引的原则"><a href="#设计索引的原则" class="headerlink" title="设计索引的原则"></a>设计索引的原则</h3><p>1.搜索的索引列，不一定是所要选择的列。换句话说，最适合索引的列是出现在 WHERE 子句中的列，或连接子句中指定的列，而不是出现在 SELECT关键字后的选择列表中的列。</p>
 <p>2.使用惟一索引。考虑某列中值的分布。对于惟一值的列，索引的效果最好，而具有多个重复值的列，其索引效果最差。例如，存放年龄的列具有不同值，很容易区分各行。而用来记录性别的列，只含有“M”和“F”，则对此列进行索引没有多大用处（不管搜索哪个值，都会得出大约一半的行）</p>
 <p>3.使用短索引。如果对串列进行索引，应该指定一个前缀长度，只要有可能就应该这样做 。例如，如果有一个 CHAR(200) 列，如果在前 10 个或 20个字符内，多数值是惟一的，那么就不要对整个列进行索引。对前 10 个或 20 个字符进行索引能够节省大量索引空间，也可能会使查询更快。较小的索引涉及的磁盘 I/O 较少，较短的值比较起来更快。更为重要的是，对于较短的键值，索引高速缓存中的块能容纳更多的键值，因此，MySQL也可以在内存中容纳更多的值。这增加了找到行而不用读取索引中较多块的可能性。（当然，应该利用一些常识。如仅用列值的第一个字符进行索引是不可能有多大好处的，因为这个索引中不会有许多不 同的值。）</p>
-<p>4.不要过度索引。不要以为索引“越多越好”，什么东西都用索引是错的。每个额外的索引都要占用额外的磁盘空间，并降低写操作的性能，这一点我们前面已经介绍过。在修改表的内容时，索引必须进行更新，有时可能需要重构，因此，索引越多，所花的时间越长。如果有一个索引很少利用或从不使用，那么会不必要地减缓表的修改速度。此外，MySQL在生成一个执行计划时，要考虑各个索引，这也要费时间。创建多余的索引给查询优化带来了更多的工作。索引太多，也可能会使MySQL选择不到所要使用的最好索引。只保持所需的索引有利于查询优化。如果想给已索引的表增加索引，应该考虑所要增加的索引是否是现有多列索引的最左索引。如果是，则就不要费力去增加这个索引了，因为已经有了。</p>
+<p>4.不要过度索引。不要以为索引“越多越好”，什么东西都用索引是错的。每个额外的索引都要占用额外的磁盘空间，并降低写操作的性能，这一点我们前面已经介绍 过。在修改表的内容时，索引必须进行更新，有时可能需要重构，因此，索引越多，所花的时间越长。如果有一个索引很少利用或从不使用，那么会不必要地减缓表 的修改速度。此外，MySQL在生成一个执行计划时，要考虑各个索引，这也要费时间。创建多余的索引给查询优化带来了更多的工作。索引太多，也可能会使 MySQL选择不到所要使用的最好索引。只保持所需的索引有利于查询优化。如果想给已索引的表增加索引，应该考虑所要增加的索引是否是现有多列索引的最左索引。如果是，则就不要费力去增加这个索引了，因为已经有了。</p>
 <h3 id="如何使用索引"><a href="#如何使用索引" class="headerlink" title="如何使用索引"></a>如何使用索引</h3><p>索引用于快速找出在某个列中有一特定值的行。不使用索引，MySQL 必须从第 1 条记录开始然后读完整个表直到找出相关的行。表越大，花费的时间越多。如果表中查询的列有一个索引，MySQL能快速到达一个位置去搜寻到数据文件的中间，没有必要看所有数据。如果一个表有1000行，这比顺序读取至少快100倍。注意如果你需要访问大部分行，顺序读取要快得多，因为此时我们避免磁盘搜索。大多数 MySQL 索引(PRIMARY KEY、UNIQUE、INDEX和FULLTEXT)在B树中存储。只是空间列类型的索引使用 R-树，并且 MEMORY 表还支持 hash 索引。</p>
 <h2 id="锁机制和事务控制"><a href="#锁机制和事务控制" class="headerlink" title="锁机制和事务控制"></a>锁机制和事务控制</h2><p>锁表：</p>
 <p>lock tables [table1] read,[table2] write,[table3] read;</p>
@@ -398,7 +398,13 @@
 <ol>
 <li>对 Innodb 类型的表：<br>1) 首先要确认，在对表获取行锁的时候，要尽量的使用索引检索纪录，如果没有使用<br>索引访问，那么即便你只是要更新其中的一行纪录，也是全表锁定的。要确保 sql<br>是使用索引来访问纪录的，必要的时候，请使用 explain 检查 sql 的执行计划，判<br>断是否按照预期使用了索引。<br>2) 由于 mysql 的行锁是针对索引加的锁，不是针对纪录加的锁，所以虽然是访问不同<br>行的纪录，但是如果是相同的索引键，是会被加锁的。应用设计的时候也要注意，这里和 Oracle 有比较大的不同。<br>3) 当表有多个索引的时候，不同的事务可以使用不同的索引锁定不同的行，当表有主<br>键或者唯一索引的时候，不是必须使用主键或者唯一索引锁定纪录，其他普通索引<br>同样可以用来检索纪录，并只锁定符合条件的行。<br>4) 用 SHOW INNODB STATUS 来确定最后一个死锁的原因。查询的结果中，包括死锁的<br>事务的详细信息，包括执行的 SQL 语句的内容，每个线程已经获得了什么锁，在等<br>待什么锁，以及最后是哪个线程被回滚。详细的分析死锁产生的原因，可以通过改<br>进程序有效的避免死锁的产生。<br>5) 如果应用并不介意死锁的出现，那么可以在应用中对发现的死锁进行处理。<br>6) 确定更合理的事务大小，小事务更少地倾向于冲突。<br>7) 如果你正使用锁定读，（SELECT … FOR UPDATE 或 … LOCK IN SHARE MODE），<br>试着用更低的隔离级别，比如 READ COMMITTED。<br>8) 以固定的顺序访问你的表和行。则事务形成良好定义的查询并且没有死锁。</li>
 </ol>
-<p>合适的引擎<br>合适的数据类型<br>表的锁定优先级管理 优化 设置<br>索引的建立 优化 使用 查询<br>读写分离<br>是否开启事务的操作InnoDB<br>loading data/order by null/join/delete语句等优化<br>查询 定位 解决有问题的SQL语句<br>查询语句使用频率<br>insert一次插入多个值会更快<br>不要通过数据库自己实现自增长，高并发下会出现问题，最好通应用过实现自增长<br>优化mysql server</p>
+<h2 id="设置隔离级别"><a href="#设置隔离级别" class="headerlink" title="设置隔离级别"></a>设置隔离级别</h2><p>这里修改事务权限的语句是：set [ global | session ] transaction isolation level Read uncommitted | Read committed | Repeatable | Serializable;</p>
+<figure class="highlight"><table><tr><td class="code"><pre><div class="line">mysql&gt; set  global  transaction isolation level Read committed;</div></pre></td></tr></table></figure>
+<p>如果选择global，意思是此语句将应用于之后的所有session，而当前已经存在的session不受影响。</p>
+<p>如果选择session，意思是此语句将应用于当前session内之后的所有事务。</p>
+<p>如果什么都不写，意思是此语句将应用于当前session内的下一个还未开始的事务。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><div class="line">// 查询当前隔离级别</div><div class="line">mysql&gt; select @@tx_isolation;</div><div class="line"></div><div class="line">//查询全局隔离级别</div><div class="line">mysql&gt; select @@global.tx_isolation;</div></pre></td></tr></table></figure>
+<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><p>合适的引擎<br>合适的数据类型<br>表的锁定优先级管理 优化 设置<br>索引的建立 优化 使用 查询<br>读写分离<br>是否开启事务的操作InnoDB<br>loading data/order by null/join/delete语句等优化<br>查询 定位 解决有问题的SQL语句<br>查询语句使用频率<br>insert一次插入多个值会更快<br>不要通过数据库自己实现自增长，高并发下会出现问题，最好通应用过实现自增长<br>优化mysql server</p>
 
       
     </div>
@@ -545,7 +551,7 @@
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 15px;">事务管理</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 16.67px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 13.33px;">事务管理</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     			</div>
     	</section>
     
