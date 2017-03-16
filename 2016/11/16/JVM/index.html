@@ -6,13 +6,13 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>JVM | Let&#39;s do this</title>
+  <title>我们说说JVM | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
 
 JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JVM">
+<meta property="og:title" content="我们说说JVM">
 <meta property="og:url" content="http://tiltcat.com/2016/11/16/JVM/index.html">
 <meta property="og:site_name" content="Let's do this">
 <meta property="og:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
@@ -20,9 +20,9 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
 JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.jpg">
-<meta property="og:updated_time" content="2017-02-27T11:05:44.000Z">
+<meta property="og:updated_time" content="2017-03-16T10:43:24.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JVM">
+<meta name="twitter:title" content="我们说说JVM">
 <meta name="twitter:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
 
 JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
@@ -149,7 +149,7 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
         
   
     <h1 class="article-title" itemprop="name">
-      JVM
+      我们说说JVM
     </h1>
   
 
@@ -167,7 +167,7 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
 <li>方法区：存放类的信息，静态变量，常量，是各个线程共享的区域。<br>用于存储已被虚拟机加载的类信息，常量，静态变量等。虽然Java虚拟机把方法区描述为堆的一个逻辑部分，但是他却有一个别名叫做非堆(Non-Heap),目的是和Java堆去分开来。<br>可以通过-XX:PermSize 和-XX:MaxPermSize来设置方法区的大小。默认最大64M,最小16M.</li>
 </ul>
 </blockquote>
-<p>方法区中还有一部分叫做<code>运行时常量池</code>，常量池里主要存储两类信息，字面量和符号引用量。字面量是Java语言层面上的常量，比如String和被final修饰的局部变量。符号引用量是操作原理测光面的东西，包括以下三点:类和接口的全限定名，方法名称和描述符，字段民称和描述符。</p>
+<p>方法区中还有一部分叫做<code>运行时常量池</code>，常量池里主要存储两类信息，字面量和符号引用量。字面量是Java语言层面上的常量，比如String和被final修饰的局部变量。符号引用量是操作原理层面的东西，包括以下三点:类和接口的全限定名，方法名称和描述符，字段民称和描述符。</p>
 <blockquote>
 <ul>
 <li><p>虚拟机栈：描述了Java方法执行的栈，就是我们常说的栈内存。每个方法被执行的时候，都会创建一个栈帧来存储局部变量表，操作栈，方法出口等信息。线程私有。它包含了以下几个方面：<br>局部变量表：用来存储方法中的局部变量。对于基本数据类型的变量，直接存储他的值，对于引用类型的变量，则存储他的引用。他的大小在编译期就可以确定了，在程序执行过程中是不会变化的。<br>操作数栈:使用操作数栈进行表达式求值。这也是栈的一个基本应用。可能有些朋友对表达式求值是什么不太理解，我们看下面这个例子：<br>平时我们对于四则运算的表达式是比如：“（3+3）<em>4-（8/4）”这个样子的。我们可以清楚的分辨出括号和运算符的优先级，然后进行计算。可是如何用程序来实现这一功能呢？<br>我们需要借助另一种不需要括号的后缀表示法，也称为逆波兰表示法（Reverse Polish Notation，RPN）。<br>比如说“（3+3）</em>4-（8/4）”这个表达式，转换成后缀表示，就是“3 3 + 4 * 8 4 /-”，对于这种表达式，计算机程序很容易处理，只要按照这个规则：从左到右遍历表达式，遇到数字就进栈，遇到运算符就从栈中弹出两个数值进行计算，将计算结果再进栈。最后栈中只剩下一个元素的时候就是计算结果了。<br>指向当前方法所属类的运行常量池：</p>
@@ -412,7 +412,7 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="JVM" data-title="JVM" data-url="http://tiltcat.com/2016/11/16/JVM/"></div>
+	<div class="ds-thread" data-thread-key="JVM" data-title="我们说说JVM" data-url="http://tiltcat.com/2016/11/16/JVM/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

@@ -14,12 +14,12 @@
 <meta property="og:url" content="http://tiltcat.com/2017/01/09/SpringMVC/index.html">
 <meta property="og:site_name" content="Let's do this">
 <meta property="og:description" content="SpringMVC我们先看一下流程图：">
-<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/SpringMVC.png">
-<meta property="og:updated_time" content="2017-02-20T12:31:49.000Z">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/SpringMVC%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%E5%9B%BE.JPG">
+<meta property="og:updated_time" content="2017-03-16T10:43:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringMVC">
 <meta name="twitter:description" content="SpringMVC我们先看一下流程图：">
-<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/SpringMVC.png">
+<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/SpringMVC%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%E5%9B%BE.JPG">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -151,17 +151,22 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="SpringMVC"><a href="#SpringMVC" class="headerlink" title="SpringMVC"></a>SpringMVC</h2><p>我们先看一下流程图：</p>
-<p><img src="http://ogeojkg3t.bkt.clouddn.com/SpringMVC.png" alt=""></p>
+<p><img src="http://ogeojkg3t.bkt.clouddn.com/SpringMVC%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%E5%9B%BE.JPG" alt=""></p>
 <a id="more"></a>
 <p>SpringMVC运行原理<br>1.客户端请求提交到DispatcherServlet </p>
 <ol>
 <li>由DispatcherServlet控制器查询一个或多个HandlerMapping，找到处理请求的Controller<br>3.DispatcherServlet将请求提交到Controller<br>4.Controller调用业务逻辑处理后，返回ModelAndView<br>5.DispatcherServlet查询一个或多个ViewResoler视图解析器，找到ModelAndView指定的视图<br>6.视图负责将结果显示到客户端</li>
 </ol>
-<h2 id="SpringMVC接口解释"><a href="#SpringMVC接口解释" class="headerlink" title="SpringMVC接口解释"></a>SpringMVC接口解释</h2><h3 id="DispatcherServlet接口"><a href="#DispatcherServlet接口" class="headerlink" title="DispatcherServlet接口"></a>DispatcherServlet接口</h3><p>Spring提供的前端控制器，所有的请求都有经过它来统一分发。在DispatcherServlet将请求分发给Spring Controller之前，需要借助于Spring提供的HandlerMapping定位到具体的Controller.</p>
-<h3 id="HandlerMapping接口"><a href="#HandlerMapping接口" class="headerlink" title="HandlerMapping接口"></a>HandlerMapping接口</h3><p>能够完成客户请求到Controller映射.</p>
-<h3 id="Controller接口"><a href="#Controller接口" class="headerlink" title="Controller接口"></a>Controller接口</h3><p>需要为并发用户处理上述请求，因此实现Controller接口时，必须保证线程安全并且可重用。Controller将处理用户请求，这和Struts Action扮演的角色是一致的。一旦Controller处理完用户请求，则返回ModelAndView对象给DispatcherServlet前端控制器，ModelAndView中包含了模型（Model）和视图（View）。从宏观角度考虑，DispatcherServlet是整个Web应用的控制器；从微观考虑，Controller是单个Http请求处理过程中的控制器，而ModelAndView是Http请求过程中返回的模型（Model）和视图（View）。 </p>
-<h3 id="ViewResolver接口"><a href="#ViewResolver接口" class="headerlink" title="ViewResolver接口"></a>ViewResolver接口</h3><p>Spring提供的视图解析器（ViewResolver）在Web应用中查找View对象，从而将相应结果渲染给客户.</p>
-
+<!--more-->
+<h2 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h2><h3 id="DispatcherServlet"><a href="#DispatcherServlet" class="headerlink" title="DispatcherServlet"></a>DispatcherServlet</h3><p>前端控制器，用户请求到达前端的控制器，相当于mvc中的c,dispatcherServlet是整个流程控制的核心，由他调用其他组件来满足用户的请求，由于他的存在降低了组件之间的耦合性。</p>
+<h3 id="HandlerMapping"><a href="#HandlerMapping" class="headerlink" title="HandlerMapping"></a>HandlerMapping</h3><p>映射处理器，负责根据用户的请求找到相应的handler（controller）.</p>
+<h3 id="Handler"><a href="#Handler" class="headerlink" title="Handler"></a>Handler</h3><p>处理器，包含具体的业务逻辑，就是controller</p>
+<h3 id="HandlerAdapter"><a href="#HandlerAdapter" class="headerlink" title="HandlerAdapter"></a>HandlerAdapter</h3><p>适配器，负责处理Handler,返回modelandview</p>
+<h3 id="ViewResolver"><a href="#ViewResolver" class="headerlink" title="ViewResolver"></a>ViewResolver</h3><p>负责将处理结果生成View视图，ViewResolver首先根据逻辑视图名解析成物理视图名即具体的页面地址，再生成View视图对象，最后对View进行渲染将处理结果通过页面展示给用户.</p>
+<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><h3 id="静态文件的请求"><a href="#静态文件的请求" class="headerlink" title="静态文件的请求"></a>静态文件的请求</h3><pre><code>&lt;mvc:default-servlet-handler/&gt;
+&lt;mvc:annotation-driven /&gt;
+</code></pre><p>default-servlet-handler 将在 SpringMVC 上下文中定义一个 DefaultServletHttpRequestHandler， 它会对进入 DispatcherServlet 的请求进行筛选<br>如果发现是没有经过映射处理的请求，将该请求交由 WEB 应用服务器默认的Servlet处理。 如果不是静态资源的请求， 才由 DispatcherServlet 继续处理<br>一般 WEB 应用服务器默认的 Servlet 的名称都是 default。</p>
+<h3 id="ModelMap和ModelandView"><a href="#ModelMap和ModelandView" class="headerlink" title="ModelMap和ModelandView"></a>ModelMap和ModelandView</h3>
       
     </div>
     <div class="article-info article-info-index">
