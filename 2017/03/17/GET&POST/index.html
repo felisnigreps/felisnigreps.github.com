@@ -6,14 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>Archives: 2017/1 | Let&#39;s do this</title>
+  <title>GET &amp; POST | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Let's do this">
-<meta property="og:url" content="http://tiltcat.com/archives/2017/01/index.html">
+  <meta name="description" content="get和post我们再熟悉不过了，那么，关于他们真正的区别，我们真的了解么？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GET & POST">
+<meta property="og:url" content="http://tiltcat.com/2017/03/17/GET&POST/index.html">
 <meta property="og:site_name" content="Let's do this">
+<meta property="og:description" content="get和post我们再熟悉不过了，那么，关于他们真正的区别，我们真的了解么？">
+<meta property="og:updated_time" content="2017-03-20T02:21:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Let's do this">
+<meta name="twitter:title" content="GET & POST">
+<meta name="twitter:description" content="get和post我们再熟悉不过了，那么，关于他们真正的区别，我们真的了解么？">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -126,118 +130,109 @@
 </nav>
 
       <div class="body-wrap">
+        <article id="post-GET&amp;POST" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
         
   
+    <h1 class="article-title" itemprop="name">
+      GET &amp; POST
+    </h1>
   
+
+      </header>
     
-    
+    <div class="article-entry" itemprop="articleBody">
       
+        <p>get和post我们再熟悉不过了，那么，关于他们真正的区别，我们真的了解么？<br><a id="more"></a></p>
+<h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><p>POST和GET的差别其实是很大的。语义上，GET是获取指定URL上的资源，是读操作，重要的一点是不论对某个资源GET多少次，它的状态是不会改变的，在这个意义上，我们说GET是安全的（不是被密码学或者数据保护意义上的安全）。因为GET是安全的，所以GET返回的内容可以被浏览器，Cache服务器缓存起来（其中还有很多细节，但不影响这里的讨论）。</p>
+<p>而POST的语意是对指定资源“追加/添加”数据，所以是不安全的，每次提交的POST，参与的代码都会认为这个操作会修改操作对象资源的状态，于是，浏览器在你按下F5的时候会跳出确认框，缓存服务器不会缓存POST请求返回内容。</p>
+<p>安全的是指没有明显的对用户有影响的副作用(包括修改该资源的状态)。HTTP方法里的GET和HEAD都是安全的。</p>
+<p>幂等的是指一个方法不论多少次操作，结果都是一样。PUT(把内容放到指定URL)，DELETE(删除某个URL代表的资源)，虽然都修改了资源内容，但多次操作，结果是相同的，因此和HEAD，GET一样都是幂等的。</p>
+<p>所以根据HTTP协议，GET是安全的，也是幂等的，而POST既不是安全的，也不是幂等的。</p>
+
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/01/20/设计模式/" class="archive-article-date">
-  	<time datetime="2017-01-20T07:27:48.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-01-20</time>
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2017/03/17/GET&POST/" class="archive-article-date">
+  	<time datetime="2017-03-17T04:09:50.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-03-17</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/01/20/设计模式/">设计模式</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Design-Pattern/">Design Pattern</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Http/">Http</a></li></ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/01/18/Collection家族/" class="archive-article-date">
-  	<time datetime="2017-01-18T05:45:53.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-01-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/01/18/Collection家族/">Collection家族</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2017/03/01/ThreadPoolExecutor源码分析/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ThreadPoolExecutor</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/01/09/SpringMVC/" class="archive-article-date">
-  	<time datetime="2017-01-09T00:57:37.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-01-09</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/01/09/SpringMVC/">SpringMVC</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SpringMVC/">SpringMVC</a></li></ul>
-	</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
 
-    
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="GET&amp;POST" data-title="GET &amp; POST" data-url="http://tiltcat.com/2017/03/17/GET&amp;POST/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
 
 
       </div>
@@ -260,8 +255,8 @@
 		mathjax: false,
 		animate: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
