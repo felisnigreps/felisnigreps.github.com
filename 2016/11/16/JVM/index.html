@@ -20,7 +20,7 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
 JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.jpg">
-<meta property="og:updated_time" content="2017-03-16T10:43:24.000Z">
+<meta property="og:updated_time" content="2017-03-20T03:25:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我们说说JVM">
 <meta name="twitter:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 
@@ -180,6 +180,31 @@ JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于H
 </li>
 </ul>
 </blockquote>
+<h3 id="一些基本概念"><a href="#一些基本概念" class="headerlink" title="一些基本概念"></a>一些基本概念</h3><p>java采用的是共享内存模型，线程之间的通讯对程序员来说是透明的，我们需要了解几个基本概念：</p>
+<blockquote>
+<ul>
+<li>内存屏障 Memory Barrier</li>
+<li>指令重排</li>
+<li>happens-before</li>
+<li>as-if-serial</li>
+</ul>
+</blockquote>
+<h4 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障"></a>内存屏障</h4><p>一个CPU指令，他提供了两点功能：<br>1.保证特定操作的执行顺序。<br>2.影响某些数据的内存可见性。</p>
+<p>编译器和CPU会进行指令重排来尝试优化性能，插入内存屏障可以告诉CPU，不可以对其进行重排序。</p>
+<p>还有一个功能是强制刷出CPU cache,比如一个write-barrier将刷出所有在Barrier之前写入的cache数据，因此，任何CPU上的线程都能读取到这些数据的最新版本。</p>
+<p>我们熟悉的volatile就是通过内存屏障来实现的，如果一个变量是volatile修饰的，JMM会在写入这个字段前插入一个write-barrier,读取这个字段前插入一个read-barrier指令,简单来说，我要写了，把所有缓存清空，保证大家读的都是我刚写的最新的。反之有人要读，那么谁都先别更新了，读完再更新。</p>
+<h4 id="happens-before"><a href="#happens-before" class="headerlink" title="happens-before"></a>happens-before</h4><p>jdk5开始，java使用新的JSR-133内存模型，基于happens-before来描述内存的可见性（装作高大上）。</p>
+<p>在JMM中，如果一个操作的结果要对另一个操作可见，那么就要遵循happens-before原则,这两个操作可以在同一个线程中，也可以在不同的线程中。<br>1.程序顺序规则：一个线程中的每个操作，happens-before于该线程中任意后续操作。<br>2.监视器锁规则：对一个锁的解锁操作，happens-before于随后对这个锁的加锁操作。<br>3.volatile域规则：对一个volatile域的写操作，happens-before与任意线程后续对这个volatile域的读。<br>4.传递性规则：如果A happens befores B, B happens before C, 那么A happens before C.</p>
+<p>还记得第一次看JMM的时候感觉理解happens-before很困难，现在再看起来感觉非常清晰和容易理解~nice 少年~</p>
+<h4 id="指令重排"><a href="#指令重排" class="headerlink" title="指令重排"></a>指令重排</h4><p>在执行程序时，为了提高性能，编译器和处理器会对指令进行重排序，JMM确保在不同处理器平台上插入内存屏障来禁止，编译器和处理器的冲排序，为上层提供一致的内存可见性。</p>
+<p>1.编译器优化冲排序：编译器在不改变单线程程序语义的前提下，可以重新安排语句的执行顺序。<br>2.指令级并行的重排序：如果不存在数据依赖性，处理器可以改变语句对应的机器指令的执行顺序<br>3.内存系统的冲排序：处理器使用缓存和读写缓冲区，这使得假爱和存储看上去可能是乱序执行。</p>
+<blockquote>
+<p>数据依赖性：如果两个操作访问同一个变量，其中一个操作为写操作，那么这两个操作之间存在数据依赖性。编译器和处理器不会对存在数据依赖性的操作进行重排序。</p>
+</blockquote>
+<h4 id="as-if-serial"><a href="#as-if-serial" class="headerlink" title="as-if-serial"></a>as-if-serial</h4><p>值的是不管怎么冲排序，单线程下的执行结果不能被改变，编译器，runtime和处理器都必须遵守as-if-serial语义。</p>
+<h4 id="抽象结构"><a href="#抽象结构" class="headerlink" title="抽象结构"></a>抽象结构</h4><p>java线程之间的通讯由JMM来控制，他决定了一个线程对共享变量的写入何时对其他线程可见。</p>
+<p>从抽象倨傲都来看，JMM定义了线程和主内存（堆内存）之间的抽象关系：线程之间的共享变量存储在主内存中，每个线程都有自己的本地内存（抽象概念，物理上不存在）存储该线程变量的共享副本。</p>
+<p>所以线程A,B之间要进行通信的话，需要经过以下两个步骤：<br>1.线程A把本地内存中更新过的共享变量刷新到主内存中。<br>2.线程B到主内存中读取线程A之前更新过的共享变量。</p>
 <h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><p>Java按照分代的方式来回收内存空间，这组要针对的是堆区域。<br>堆区域分为新生代，老年代。</p>
 <h3 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h3><p>Young generation,又分Eden, from survivor, to survivor三块区域.他们默认的大小是8:1:1。存入的对象先放在Eden区域，在进行了GC之后，数据会存放到from survivor.就是说在任何状态都会有一个survivor区域是空闲的，就是说Young generation的利用率在90%左右。</p>
 <p>通常情况下会有大量的对象需要分配内存，而且他们的生命周期很短，所以新生代的GC吞吐量很高，大部分对象都要被回收，从而，剩下的活跃对象比较少，所以新生代适合使用复制算法来进行GC，这样保证复制的数据的量较小，效率最好。</p>
