@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://tiltcat.com">
+  <title>从PAXOS到ZOOKEEPER分布式一致性原理与实践. | Let&#39;s do this</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="要搞互联网，分布式的，zookeeper挺重要的，但是问题在于目前我几乎什么都不知道，有人推荐了这么一本书，现在还没有系统的总结，就当做学习笔记用吧！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从PAXOS到ZOOKEEPER分布式一致性原理与实践.">
+<meta property="og:url" content="http://tiltcat.com/2017/03/24/从PAXOS到ZOOKEEPER分布式一致性原理与实践/index.html">
+<meta property="og:site_name" content="Let's do this">
+<meta property="og:description" content="要搞互联网，分布式的，zookeeper挺重要的，但是问题在于目前我几乎什么都不知道，有人推荐了这么一本书，现在还没有系统的总结，就当做学习笔记用吧！">
+<meta property="og:updated_time" content="2017-03-27T12:00:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从PAXOS到ZOOKEEPER分布式一致性原理与实践.">
+<meta name="twitter:description" content="要搞互联网，分布式的，zookeeper挺重要的，但是问题在于目前我几乎什么都不知道，有人推荐了这么一本书，现在还没有系统的总结，就当做学习笔记用吧！">
+  
+  
+    <link rel="icon" href="/images/favicon.jpg">
+  
+  <link rel="stylesheet" href="/main.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/images/avatar.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">tiltcat</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">wub lab dup dup</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a class="js-smart-menu" data-idx="0" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="1" href="javascript:void(0)">标签</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="2" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/felisnigreps" title="github">github</a>
+		        
+					<a class="weibo" target="_blank" href="http://weibo.com/cool5231" title="weibo">weibo</a>
+		        
+					<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/tilt-play" title="zhihu">zhihu</a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-list"></i></div>
+  		<h1 class="header-author js-mobile-header hide">tiltcat</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img src="/images/avatar.jpg" class="js-avatar">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">tiltcat</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">wub lab dup dup</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/felisnigreps" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/cool5231" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/tilt-play" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap">
+        <article id="post-从PAXOS到ZOOKEEPER分布式一致性原理与实践" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      从PAXOS到ZOOKEEPER分布式一致性原理与实践.
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>要搞互联网，分布式的，zookeeper挺重要的，但是问题在于目前我几乎什么都不知道，有人推荐了这么一本书，现在还没有系统的总结，就当做学习笔记用吧！</p>
+<a id="more"></a>
+<h2 id="CAP"><a href="#CAP" class="headerlink" title="CAP"></a>CAP</h2><p>CAP定理（和我现在公司的名字一样…）说的是分布式的三个特点，一致性，可用性和分区容错性。</p>
+<p><code>一致性</code>：数据在多个副本之间是否能保持一致的特性。当一个系统在数据一致的状态下执行更新操作以后，应该保证系统的数据依然处于一致的状态。</p>
+<p><code>可用性</code>：它是指系统的服务必须一直处于可用的状态，对于用户的每一个操作请求总是能够在有限的时间内返回结果。其中有两点需要我们注意，有限时间和返回结果。所谓的有限时间是用户定义的一个时间，在不同的场景下会有不同的指标，就是我们所说的合理的响应时间。比如说搜索引擎是0.5s，某些大数据的检索也许在20s左右。但是如果当用户输入一个关键字，系统返回的是一个错误，比如OutOfMemory等，那么我们就可以说这个系统是不可用的。</p>
+<p><code>分区容错性</code>：所谓分区容错性指的是当分布式系统遇到任何网络分区发生故障的时候，仍然需要对外提供满足一致性和可用性的服务，除非是整个网络环境都发生了故障。</p>
+<p>CAP理论代表的是，一个分布性系统不可能同时满足以上的三个基本需求，最多只能满足其中的两项，感兴趣的同学可以自行查阅相关资料。</p>
+<p>我们刚提到三项不可同时满足，那么在进行CAP定理的应用时，我们就需要抛弃其中一项。<br>但是我们创建分布式系统的初衷就是需要满足分区容错性，因为分布式系统肯定要分布在不同的节点上，如果不能满足分区容错性，那么我们还用什么分布式呢？所以现在的问题就变成了我们要选择则A(可用性)还是C(一致性)。</p>
+<h2 id="BASE理论"><a href="#BASE理论" class="headerlink" title="BASE理论"></a>BASE理论</h2><p>BASE是指，basically avaiable,soft state和Eventually consistent三个短语的缩写，但标的就是：基本可用，软状态和最终一致性。</p>
+<h3 id="基本可用"><a href="#基本可用" class="headerlink" title="基本可用"></a>基本可用</h3><p>它指的是分布式系统在出现不可预知故障的时候，允许损失部分可用性，所谓部分可用性，可以参考以下两个例子：<br>1.响应时间的损失：正常情况下一个搜索引擎需要0.5s内给用户返回结果，但是由于出现故障（比如断电或者断网），查询结果的响应时间增加到1~2s.</p>
+<p>2.功能上的损失：正常情况下，在一个电子网站上进行购物， 消费者几乎都可以顺利完成订单，但是在促销的高峰期，访问量大大增加，为了保护系统的文明行，部分的消费者可能会被引导到一个降级界面。</p>
+<h3 id="弱状态"><a href="#弱状态" class="headerlink" title="弱状态"></a>弱状态</h3><p>也被成为软状态，和硬状态相对，是指允许系统中的数据存在中间状态，并认为该状态的存在不会影响系统的整体可用性，即允许系统在不同节点的数据副本之间进行数据同步的过程存在延时。</p>
+<h3 id="最终一致性"><a href="#最终一致性" class="headerlink" title="最终一致性"></a>最终一致性</h3><p>最终一致性强调的是系统中所有的数据副本，在经过一段时间的同步后，最终能够达到一个一致的状态。所以最终一致性的本质是需要系统保证数据最终能够达到一致，而不需要实时保证系统数据的强一致性。</p>
+<p>最终一致性是一种特殊的弱一致性：系统能够保证在没有其他新的更新操作状况下，数据最终能够达到一个一致的状态，因为所有客户端对系统的数据访问都能获取到最新的值。同时，在没有发生故障的前提下，数据达到一致状态的时间延迟取决于网络延迟，系统负载等设计因素。</p>
+<p>最终一致性在实际的应用中存在以下五个主要变种：</p>
+<p>1.因果一致性:如果进程A在更新完某个数据后通知了进程B,那么进程B之后对该数据项的访问都应该能够获取到进程A更新后的最新值。嗯…happens before.<br>2.读已之所写：总是可以读到自己的更新，嗯，还是happens before.<br>3.会话一致性：个人理解就是结合了前两点，在一个会话中客户总是可以读取到最新值。<br>4.单调读一致性：还是happens before<br>5.单调写一致性：还是happens before</p>
+<p>感觉没什么东西，就是happens before.</p>
+<p>总体来说，BASE理论面向的是大型可用可扩展的分布式系统，和传统的ACID强一致性模型是相反的，他完全不同于ACID，通过牺牲强一致性来获得可用性，允许数据在一段时间内是不一致的，但会达到最终一致状态。但同时，在实际的场景中，不同业务要求的一致性又是不一致的，因此ACID和BASE往往会结合在一起使用。</p>
+<h1 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h1><p>为了解决我们上述提到的一致性问题，出现了一些经典的协议，下面介绍二阶段提交协议，三阶段提交协议和Paxos算法。</p>
+<h2 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h2><p>二阶段协议，two phase commit的缩写，即为二阶段提交，是计算机网络尤其是数据库领域内，为了使基于分布式系统架构下的所有节点在进行事务处理过程中保持一致性的一种算法。目前绝大部分的关系型数据库都是采用二阶段提交协议来完成分布式事务处理的，利用该协议能够非常方便的完成事务的协调，同意决定事务的提交和回滚，从而高效的保证分布式数据一致性。</p>
+<h3 id="阶段一：提交事务请求"><a href="#阶段一：提交事务请求" class="headerlink" title="阶段一：提交事务请求"></a>阶段一：提交事务请求</h3><p>角色：协调者（a），参与者们(b)</p>
+<p>1.事务询问：a向b发送事务内容，并且询问是否可以进行提交，等待相应。<br>2.执行事务：b执行事务，并且将Undo和Redo信息记录与事务日志中。</p>
+<blockquote>
+<p>Undo日志记录某数据被修改前的值，可以用来在事务失败时进行rollback；Redo日志记录某数据块被修改后的值，可以用来恢复未写入data file的已成功事务更新的数据。<br>例如某一事务的事务序号为T1，其对数据X进行修改，设X的原值是5，修改后的值为15，那么Undo日志为<t1, 5="" x,="">，Redo日志为<t1, 15="" x,="">。<br>也有把undo和redo结合起来的做法，叫做Undo/Redo日志，在这个例子中Undo/Redo日志为<t1, 15="" x,="" 5,="">。</t1,></t1,></t1,></p>
+</blockquote>
+<p>3.b向a发送反馈，成功执行了事务发送Yes响应，失败发送No响应。</p>
+<p>此阶段叶恒做投票阶段，a会根据b的反馈来进行决定。</p>
+<h3 id="阶段二：执行事务提交"><a href="#阶段二：执行事务提交" class="headerlink" title="阶段二：执行事务提交"></a>阶段二：执行事务提交</h3><p>在此阶段，a会根据b的响应来决定是否可以进行提交操作，一般情况下包含以下两种可能：</p>
+<h4 id="执行事务提交"><a href="#执行事务提交" class="headerlink" title="执行事务提交"></a>执行事务提交</h4><p>如果返回的都是Yes,那么a会向b发送commit请求–&gt;b接收到了commit请求后，会进行提交擦操作，在完成后释放资源–&gt;b完成提交后向a发送Ack消息（响应）–&gt;a接收到ack消息后，完成事务。</p>
+<h4 id="中断事务"><a href="#中断事务" class="headerlink" title="中断事务"></a>中断事务</h4><p>如果任何一个b返回了No响应或者等待超时之后，那么a就会中断事务，向所有节点发出Rollback请求–&gt;参与者接收到rollback请求后，会用Undo信息来进行回滚操作。并且在回滚之后释放资源，向a发送Ack消息–&gt;a接收到所有参与者 Ack消息后完成事务中断。</p>
+<p>这个协议理解起来很简单，但是也存在以下缺点：</p>
+<p>同步阻塞：参与者在等待响应中无法进行其他操作<br>单点问题：a在整个过程中起到了很重要的作用，几乎是单一实效点，而且如果在阶段二a出现了问题，那么其他参与者会一直处于锁定资源的状态中<br>数据不一致：在阶段二中a向b发送了commit请求，在期间自身或者网络发生问题，那么只会有一部分b接收到请求，这就造成了数据不一致性。<br>太过保守：没有设置比较完善的容错机制，任意一个节点的失败都会导致整个事物的失败。</p>
+<h2 id="3PC"><a href="#3PC" class="headerlink" title="3PC"></a>3PC</h2><p>三阶段提交协议是在二阶段的基础上进行了改进，将二阶段的<code>提交事务请求</code>一分为二，形成了CanCommit,PreCommit和do Commit三个阶段组成的事务处理协议。</p>
+<h3 id="阶段一-CanCommit"><a href="#阶段一-CanCommit" class="headerlink" title="阶段一:CanCommit"></a>阶段一:CanCommit</h3><p>1.事物询问<br>a向b发送一个包含事物内容的canCommit请求，询问是否可以执行事物提交操作，并等待响应。<br>3.b向a反馈事物询问<br>b接收到canCommit请求后，如果其自身认为可以顺利执行，那么就反馈Yes响应，反之反馈No.</p>
+<h3 id="阶段二：PreCommit"><a href="#阶段二：PreCommit" class="headerlink" title="阶段二：PreCommit"></a>阶段二：PreCommit</h3><h4 id="执行事务预提交"><a href="#执行事务预提交" class="headerlink" title="执行事务预提交"></a>执行事务预提交</h4><p>假设a从b中获得的都是Yes响应，那么就会执行事务预提交。<br>a向所有b发送precommit请求，进入prepared阶段–&gt;b接收到preCommit请求后，会执行任务操作，记录undo和redo信息到日志中–&gt;如果b成功的执行了事务操作，那么就会反馈给aAck响应，同时等待最终的指令，提交或者中止</p>
+<h4 id="中断事务-1"><a href="#中断事务-1" class="headerlink" title="中断事务"></a>中断事务</h4><p>如果任何一个b反馈了No响应或者a等待超时，那么a就会像所有的b发送中断请求–&gt;无论b是接到中断请求或者等待超时，b都会中断事务</p>
+<h3 id="阶段三：doCommit"><a href="#阶段三：doCommit" class="headerlink" title="阶段三：doCommit"></a>阶段三：doCommit</h3><p>该阶段进行真正的事物提交，有以下两种情况</p>
+<h4 id="执行提交"><a href="#执行提交" class="headerlink" title="执行提交"></a>执行提交</h4><p>假设a处于正常工作状态，并且接收到了所有b的Ack响应，那么他会从预提交转变为提交状态，并且向所有b发送doCommit请求–&gt;b接收到doCommit请求后，会执行事务的提交操作，释放资源，向a发送Ack消息–&gt;a接收到Ack之后完成后事务</p>
+<h4 id="中断事务-2"><a href="#中断事务-2" class="headerlink" title="中断事务"></a>中断事务</h4><p>假设a正常工作，并且任意一个b返回了No或者等待超时，那么就会中断事务，向所有b发送abort请求–&gt;b接收到abort请求后，会利用undo日志来进行回滚，释放资源，向a发送Ack消息–&gt;a接收到Ack消息后中断事务</p>
+<p>在阶段三可能会出现下面两种故障，a出现问题或者ab之间的网络出现问题。这两种情况都会导致b无法接收到a的doCommit或者abort请求，针对这样的情况b都会在等待超时之后继续进行事务的提交。</p>
+<p>相对于2PC，3PC最大的优点就是降低了b的阻塞范围，当出现单点故障后可以继续打达成一致。不过问题还是多多，传输的过程中依旧会出现问题。</p>
+<p>简单说下，3PC将2PC的第二步分为两步，2PC是a直接给b发送提交信号，然后b就提交，然后反馈。3PC是把commit分为preCommit和doCommit,a先给b发送preCommit信号，b接到了说ok，我准备好了，然后a在发送doCommit信号。</p>
+<h2 id="Paxos算法"><a href="#Paxos算法" class="headerlink" title="Paxos算法"></a>Paxos算法</h2><p>Paxos是Leslie Lamport在1990年提出的分布式一致性协议，是目前公认的解决分布式一致性问题最有效的算法之一。</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2017/03/24/从PAXOS到ZOOKEEPER分布式一致性原理与实践/" class="archive-article-date">
+  	<time datetime="2017-03-24T07:11:37.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-03-24</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2017/03/17/GET&POST/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">GET &amp; POST</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="从PAXOS到ZOOKEEPER分布式一致性原理与实践" data-title="从PAXOS到ZOOKEEPER分布式一致性原理与实践." data-url="http://tiltcat.com/2017/03/24/从PAXOS到ZOOKEEPER分布式一致性原理与实践/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 tiltcat
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js"></script>
+
+
+    
+<div class="tools-col">
+  <ul class="btn-wrap">
+    
+      <li class="chose" data-hook="tools-section-all"><span class="text">全部</span><i class="icon-book"></i></li>
+    
+    
+      <li data-hook="tools-section-tag"><span class="text">标签</span><i class="icon-price-tags"></i></li>
+    
+    
+    
+      <li data-hook="tools-section-me"><span class="text">我</span><i class="icon-smile"></i></li>
+    
+  </ul>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all chose">
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-tag">
+    			<div class="widget tagcloud" id="js-tagcloud">
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 16.67px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 13.33px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    			</div>
+    	</section>
+    
+
+    
+
+    
+    	<section class="tools-section tools-section-me">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>

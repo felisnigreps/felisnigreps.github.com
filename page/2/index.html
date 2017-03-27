@@ -128,6 +128,59 @@
       <div class="body-wrap">
         
   
+    <article id="post-SpringIOC" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/16/SpringIOC/">Spring IOC</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近才发现一直没有IoC的笔记，那么现在在这简单写一下，就当作复习了。相关的代码在Github上应该会有，没有的就是还没来得及补充…</p>
+<h2 id="IoC是什么"><a href="#IoC是什么" class="headerlink" title="IoC是什么"></a>IoC是什么</h2><p>IoC相信大家都比较熟悉了，Inverse of control,控制反转。那么什么是控制反转呢？<br>
+        <p class="article-more-link">
+          <a class="article-more-a"  href="/2017/02/16/SpringIOC/#more">more >></a>
+        </p>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2017/02/16/SpringIOC/" class="archive-article-date">
+  	<time datetime="2017-02-16T02:09:12.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-02-16</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IoC/">IoC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-设计模式" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -367,98 +420,9 @@
       
         <p>目前对Netty是一点不懂，但是作为NIO的框架还是很有必要学的，那么我们开始吧。</p>
 <h2 id="在开始之前"><a href="#在开始之前" class="headerlink" title="在开始之前"></a>在开始之前</h2><p>我们先说说常见的概念，同步/异步，阻塞/非阻塞。</p>
-<p>弄明白这几个概念比较重要，同步和异步是针对应用程序和内核而言的。<br>同步指的是当用户触发IO操作后等待或者轮询操作是否完成，由用户自发的去查看。<br>异步指的是当用户请求之后就开始忙别的事情，当任务处理完毕后内核会给用户反馈结果。</p>
-<p>阻塞和非阻塞是针对用户访问数据而言的，说白了是根据状态不同来进行不同的操作。阻塞状态下读取或者写入会一直等待，而非阻塞方式下，读取或者写入会立即返回一个状态值。</p>
-<h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><p>Channel是Netty最核心的接口，一个Channel就是一个连接Socket的通道，通过Channel，你可以对Socket做各种操作。<br>结构图：<br><img src="http://ogeojkg3t.bkt.clouddn.com/NettyChannel.jpg" alt=""></p>
-<p>我们主要关注三个类：SocketChannel ServerSocketChannel和DatagramChannel.<br>1.SocketChannel:一个连接TCP网络套接字的通道，可以由两种方式创建：<br>    a.打开一个新的SocketChannel并连接到互联网上的某台服务器<br>    b.一个新的连接到达ServerSocketChannel时，会创建一个SocketChannel(即由ServerSocketChannel.accept()方法返回)<br>2.ServerSocketChannel:监听新进来的TCP连接的通道，与标准IO中的ServerSocket类似。<br>3.DatagramChannel:收发UDP包的通道。</p>
-<h3 id="通道提供的功能："><a href="#通道提供的功能：" class="headerlink" title="通道提供的功能："></a>通道提供的功能：</h3><blockquote>
-<ul>
-<li>当前通道的状态(是否为打开？是否被连接？)</li>
-<li>channel的配置参数（接收buffer的大小）</li>
-<li>channel支持的I/O操作</li>
-<li>和channel一起处理所有IO事件和请求的channelPipeline.(使用channelHandler来处理channel,使用channelPipeline来处理channelHandler)</li>
-</ul>
-</blockquote>
-<p>Netty中所有IO的操作都是异步的，这就意味着任何IO请求都会立即返回，但是并不保证在请求结束时，请求的操作都会结束。但是呢，会返回一个ChannelFuture实例来告知你请求的IO操作是成功，失败，还是取消。</p>
-<h3 id="Channle-是分层的"><a href="#Channle-是分层的" class="headerlink" title="Channle 是分层的"></a>Channle 是分层的</h3><p>根据Channel的创建方式，它可以是有parent的(不知道怎么翻)。比如，一个被ServerSocketChannel接收的SocketChannel，会通过parent()来返回一个ServerSocketChannel。</p>
-<p>层次结构的语意取决于传输的实现（Channel），比如，你可以写一个新的Channel实现来创建子Channel去共享一个套接字连接，比如BEEP和SSH.</p>
-<p>当你使用使用完毕Channel的时候调用close()或者close(ChannelPromise)来释放资源是十分重要的，它可以确保所有的资源都被正确的释放了。</p>
-<h2 id="大致流程"><a href="#大致流程" class="headerlink" title="大致流程"></a>大致流程</h2><p>当Netty连接到一个客户端或者绑定一个服务器的时候，他需要知道该怎么处理接收或者要发送的数据，这个功能就要被各种各样的Handlers来处理。Netty使用ChannelInitializer来处理这些handlers,他的作用是使用ChannelPipeline来添加ChannelHandler. 当你发送或者接收信息的时候，handlers会决定怎么来处理相关信息。ChannelInitializer自己同样是一个ChannelHandler,当他完成使命在ChannelPipeline中添加了其他ChannelHandler之后，就会把自己从ChannelPipeline中移除。</p>
-<p>所有的Netty应用都是基于ChannelPipeline的，ChannelPipeline和EventLoop和EventLoopgroup常常一起出现，因为他们都是和event或者event handling相关的。<br>Eventloop在应用中的作用是为Channel处理IO操作的，一个EventLoop一般来说会为多个channel来处理event,EventLoopGroup能够包含多个EventLoop,被用作得到EventLoop. Channel代表着一个socket连接或者一些能执行IO操作的组件。因此管理着他的EventLoop的工作是处理IO.</p>
-<p>Netty中所有的操作都是异步的，比如说你连接上了一个主机，这个操作默认就是异步的，当你读写数据时候同样也是异步的。这就代表着操作并不会立即返回，而是会延时返回。因为异步，你就无法得知当返回的时候操作是否成功了。所以你需要注册一个监听器，这样当操作完成的时候你就会被通知到了。<br>为了实现这个功能，Netty使用了Future和ChannelFuture.这个future能够注册监听，当操作结束的时候会通知你，无论操作是否成功。</p>
-<h2 id="ChannelHandler"><a href="#ChannelHandler" class="headerlink" title="ChannelHandler"></a>ChannelHandler</h2><p>一般情况下我们不直接使用Channel,而是通过ChannelHandler来操作Channel.</p>
-<p>来看看API:</p>
-<p>接口ChannelHandler, 处理或者拦截ChannelInboundInvoker和ChannelOutboundInvoker操作，然后把它转送到pipeline中的下一个handler.</p>
-<p>Sub-types</p>
-<p>ChannelHandler itself does not provide many methods. To handle a a ChannelInboundInvoker or ChannelOutboundInvoker operation you need to implement its sub-interfaces. There are many different sub-interfaces which handles inbound and outbound operations. But the most useful for developers<br>ChannelHandler本身没什么方法，为了去处理ChannelInboundInvoker和ChannelOutboundInvoker你需要实现他的子接口，有许多不同的子接口来处理inbound和outbound操作。</p>
-<p>需要注意的是，无论是在Channel还是ChannelPipeline中调用wirite()都是通过整个pipline来传递event的，但是ChannelHandler是通过ChannelHandlerContext从一个handler走到下一个handler的。</p>
-<h3 id="种类"><a href="#种类" class="headerlink" title="种类"></a>种类</h3><p>可以看一下Channel的子接口，分为两种：ChannelInboundHandler和ChannelOutBoundHandler.</p>
-<h2 id="ChannelPipeline"><a href="#ChannelPipeline" class="headerlink" title="ChannelPipeline"></a>ChannelPipeline</h2><h3 id="基本介绍"><a href="#基本介绍" class="headerlink" title="基本介绍"></a>基本介绍</h3><p>ChannelPipeline实际上应该叫做ChannelHandlerPipeline. 他是多个ChannelHandler的集合，负责处理或者拦截到达的事件，Channel发出的操作。ChannelPipeline实现了一个高等的拦截器，这个拦截器会给用户以全面的控制，包括一个事件是怎么被处理的，和其他的ChannelHandler是怎样互动的。 每一个Channel都有一个和他对应的ChannelPipeline. 通过channel.pipeline()获得pipeline，反之使用pipline.channel()获得Channel.</p>
-<h3 id="生成："><a href="#生成：" class="headerlink" title="生成："></a>生成：</h3><p>每一个Channel里都有ChannelPipeline,他在Channel生成的时候自动生成。要用直接调用就可以了。</p>
-<h3 id="ChannelPipeline的事件流"><a href="#ChannelPipeline的事件流" class="headerlink" title="ChannelPipeline的事件流"></a>ChannelPipeline的事件流</h3><figure class="highlight java"><table><tr><td class="code"><pre><div class="line">                  I/O Request via Channel or ChannelHandlerContext</div><div class="line">                                                    |</div><div class="line">+---------------------------------------------------+---------------+</div><div class="line">|                           ChannelPipeline         |               |</div><div class="line">|                                                  \|/              |</div><div class="line">|    +---------------------+            +-----------+----------+    |</div><div class="line">|    | Inbound Handler  N  |            | Outbound Handler  <span class="number">1</span>  |    |</div><div class="line">|    +----------+----------+            +-----------+----------+    |</div><div class="line">|              /|\                                  |               |</div><div class="line">|               |                                  \|/              |</div><div class="line">|    +----------+----------+            +-----------+----------+    |</div><div class="line">|    | Inbound Handler N-<span class="number">1</span> |            | Outbound Handler  <span class="number">2</span>  |    |</div><div class="line">|    +----------+----------+            +-----------+----------+    |</div><div class="line">|              /|\                                  .               |</div><div class="line">|               .                                   .               |</div><div class="line">| ChannelHandlerContext.fireIN_EVT() ChannelHandlerContext.OUT_EVT()|</div><div class="line">|        [ method call]                       [method call]         |</div><div class="line">|               .                                   .               |</div><div class="line">|               .                                  \|/              |</div><div class="line">|    +----------+----------+            +-----------+----------+    |</div><div class="line">|    | Inbound Handler  <span class="number">2</span>  |            | Outbound Handler M-<span class="number">1</span> |    |</div><div class="line">|    +----------+----------+            +-----------+----------+    |</div><div class="line">|              /|\                                  |               |</div><div class="line">|               |                                  \|/              |</div><div class="line">|    +----------+----------+            +-----------+----------+    |</div><div class="line">|    | Inbound Handler  <span class="number">1</span>  |            | Outbound Handler  M  |    |</div><div class="line">|    +----------+----------+            +-----------+----------+    |</div><div class="line">|              /|\                                  |               |</div><div class="line">+---------------+-----------------------------------+---------------+</div><div class="line">                |                                  \|/</div><div class="line">+---------------+-----------------------------------+---------------+</div><div class="line">|               |                                   |               |</div><div class="line">|       [ Socket.read() ]                    [ Socket.write() ]     |</div><div class="line">|                                                                   |</div><div class="line">|  Netty Internal I/<span class="function">O <span class="title">Threads</span> <span class="params">(Transport Implementation)</span>            |</span></div><div class="line">+-------------------------------------------------------------------+</div></pre></td></tr></table></figure>
-<p>channelEvent分为两种，upstream event和downstream event. 如果在管道中从第一个处理器游向最后一个处理器，我们管它叫上游事件（upstream），反之叫下游事件。</p>
-<p>具体说，服务器接收了一个事件，那么叫上游事件，发送了一个事件，叫做下游事件。<br>同理适用于client，接收事件为上游事件，发送事件为下游事件。</p>
-<p>一个inbound event是被图标左侧从下到上的inbound handler处理的。Inbound handeler一般用来处理图表下方的I/O thread生成的inboud data。Inbound data一般是从一个远程端读入的数据。远程端的属于往往是一个真实的写入数据的操作，比如说：SocketChannel.read(ByteBuffer).如果一个inbound event超出了最上方的一个inbound handler，那么他就会被丢弃。你也可以加入日志来统计他们的状态。</p>
-<p>同理，一个outbound event是被outbound handler来处理的。对应的是图表中右侧从上到下的flow.一个outbound handler通常生成或者转化outbound traffic,比如说是’写’请求。如果一个outbound event越过了最下面的outbound handler, 他就会被I/O thread和Channel一起处理。 I/O therad一般会执行一个输出动作，比如说SocketChannel.erite(ByteBuffer)</p>
-<p>比如，假设我们创建了如下的pipeline：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line">ChannelPipeline p = ...;</div><div class="line">p.addLast(<span class="string">"1"</span>, <span class="keyword">new</span> InboundHandlerA());</div><div class="line">p.addLast(<span class="string">"2"</span>, <span class="keyword">new</span> InboundHandlerB());</div><div class="line">p.addLast(<span class="string">"3"</span>, <span class="keyword">new</span> OutboundHandlerA());</div><div class="line">p.addLast(<span class="string">"4"</span>, <span class="keyword">new</span> OutboundHandlerB());</div><div class="line">p.addLast(<span class="string">"5"</span>, <span class="keyword">new</span> InboundOutboundHandlerX());</div></pre></td></tr></table></figure></p>
-<p>在上面的例子中，以Inbound开头的代表inbound handler,反之Outbound.5实现了两种。<br>根据我们所写的，当进行inbound 操作的时候（我们的addFirst和addLast都是针对inbound来说的），handler的处理的顺序是1,2,3,4,5. 如果是outbound,那么久反过来。还有一个规则的优先级是高于这个的，那就是跳过某些handler来缩短这个流程.3，4没有实现InbountHandler,因为inblund event实际上走的是1，2，5.反之outbound event走的是5,4,3.</p>
-<h2 id="ChannelHandlerContext"><a href="#ChannelHandlerContext" class="headerlink" title="ChannelHandlerContext"></a>ChannelHandlerContext</h2><p>ChannelPipeline并不是直接来管理ChannelHandler,他通过ChannelHandlerContext来进行管理。<br>ChannelHandlerContext在ChannelPipeline中负责把event从一个handler传送到pipeline的其他handler中。它代表了ChannelHandler和ChannelPipeline之间的关系，在一个ChannelHandler被添加到Channelpipeline时被创建。主要功能就是管理他所对应的ChannelHandler和其他在同一个ChannelPipeline中的ChannelHandler之间的交互。<br>这里简单说一下，ChannelPipeline是一个接口，他的默认实现是DefaultChannelPipeline,我们简单看下代码：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultChannelPipeline</span> <span class="keyword">implements</span> <span class="title">ChannelPipeline</span> </span>&#123;</div><div class="line">    ......</div><div class="line">    <span class="keyword">final</span> AbstractChannelHandlerContext head;</div><div class="line">    <span class="keyword">final</span> AbstractChannelHandlerContext tail;</div><div class="line">    ......</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
-<p>我们这里可以注意到他包含了head和tail两个AbstractChannelHandlerContext,有兴趣的同学可以阅读下源码，DefaultChannelPipeline里的很多方法都使用了AbstractChannelHandlerContext:</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><div class="line">......</div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">addLast0</span><span class="params">(AbstractChannelHandlerContext newCtx)</span> </span>&#123;</div><div class="line">    AbstractChannelHandlerContext prev = <span class="keyword">this</span>.tail.prev;</div><div class="line">    newCtx.prev = prev;</div><div class="line">    newCtx.next = <span class="keyword">this</span>.tail;</div><div class="line">    prev.next = newCtx;</div><div class="line">    <span class="keyword">this</span>.tail.prev = newCtx;</div><div class="line">&#125;</div><div class="line">......</div></pre></td></tr></table></figure>
-<p><img src="http://ogeojkg3t.bkt.clouddn.com/AbstractChannelHandlerContext.png" alt=""></p>
-<p>而AbstractChannelHandlerContext正是ChannelHandlerContext的默认实现。我们简单看下AbstractChannelHandlerContext,会发现他的内部有这么两个变量：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">volatile</span> AbstractChannelHandlerContext next;</div><div class="line"><span class="keyword">volatile</span> AbstractChannelHandlerContext prev;</div></pre></td></tr></table></figure></p>
-<p>这样他在自己内部就形成了一个双向链表，我们再往上面看，会发现DefaultChannelPipeline里有两个AbstractChannelHandlerContext对象，叫做tail和head.</p>
-<blockquote>
-<p>梳理一下:Channel是Netty中的关键类，管理Socket之间的通讯，而AbstractBootstrap是Channel的帮助类。我们很少直接对Channel进行操作，取而代之的是用ChannelHandler来对Channel进行操作。而为了管理这些ChannelHandler呢，我们又使用了ChannelPipeline,某种程度上算是ChannelHandler的集合。我们又发现ChannelPipeline并不是直接来管理ChannelHandler,而是通过ChannelHandlerContext来管理，并且ChannelHandlerContext在ChannelHandler中形成了双向链表。并且定义了第一个和最后一个ChannelHandlerContext为head和tail.</p>
-</blockquote>
-<h2 id="ChannelFuture"><a href="#ChannelFuture" class="headerlink" title="ChannelFuture"></a>ChannelFuture</h2><p>刚才看例子，里面server.bind(port).sync()的返回值是ChannelFuture.那么这个ChannelFut是什么呢？</p>
-<p>异步通道IO操作的结果。 Netty的所有IO操作都是异步的，这代表着任何的IO请求都会立即返回结果，无论请求是否正确返回。这个返回的结果就是ChannelFuture的实例，这个实例里包含IO操作的结果信息。</p>
-<p>ChannelFturn要么是完成的，要么是未完成的。当一个IO请求开始的时候，一个全新的future对象就被创造出来的。新的future在初始化的时候是未完成的，并不是成功，失败或取消中的任何一种状态。如果IO操作结束了，无论他是成功，失败，或者取消，future的状态都是完成的，而且附加了很多用户需要的信息，比如说为什么失败。请注意的是，无论是失败还是取消，他们都属于完成的状态。</p>
-<p>下面这个图写的挺明白了。（API真是好啊~~突然一种幸福感涌上心头）</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><div class="line">                                    +---------------------------+</div><div class="line">                                     | Completed successfully    |</div><div class="line">                                     +---------------------------+</div><div class="line">                                +----&gt;      isDone() = <span class="keyword">true</span>      |</div><div class="line">+--------------------------+    |    |   isSuccess() = <span class="keyword">true</span>      |</div><div class="line">|        Uncompleted       |    |    +===========================+</div><div class="line">+--------------------------+    |    | Completed with failure    |</div><div class="line">|      isDone() = <span class="keyword">false</span>    |    |    +---------------------------+</div><div class="line">|   isSuccess() = <span class="keyword">false</span>    |----+----&gt;      isDone() = <span class="keyword">true</span>      |</div><div class="line">| isCancelled() = <span class="keyword">false</span>    |    |    |       cause() = non-<span class="keyword">null</span>  |</div><div class="line">|       cause() = <span class="keyword">null</span>     |    |    +===========================+</div><div class="line">+--------------------------+    |    | Completed by cancellation |</div><div class="line">                                |    +---------------------------+</div><div class="line">                                +----&gt;      isDone() = <span class="keyword">true</span>      |</div><div class="line">                                     | isCancelled() = <span class="keyword">true</span>      |</div><div class="line">                                     +---------------------------+</div></pre></td></tr></table></figure>
-<p>有各种各样的方法来让你去确认IO操作是否完成/等待完成/接收结果。他同样可以让你去添加ChannelFutureListeners，这样你就可以在IO完成时第一时间得到通知。</p>
-<h2 id="Netty中的几个概念"><a href="#Netty中的几个概念" class="headerlink" title="Netty中的几个概念"></a>Netty中的几个概念</h2><p>Bootstrap or ServerBootstrap</p>
-<blockquote>
-<ul>
-<li>EventLoop: 和channel一起处理event</li>
-<li>EventLoopGroup:EventLopp线程池</li>
-<li>ChannelPipeline:ChannelHandler的集合</li>
-<li>Channel：套接字的通道</li>
-<li>Future or ChannelFuture：Netty是异步的，用户请求返回的结果</li>
-<li>ChannelInitializer：ChannelHandler的初始化接口，添加ChannelHandler,添加之后把自己从pipeline中移除。</li>
-<li>ChannelHandler and its sub-types :处理event的各种类。</li>
-</ul>
-</blockquote>
-<p>Netty中的Channel是线程安全的</p>
-<h2 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h2><p>Buffer对象时固定大小数据的一个容器，buffer和channel的联系很紧密。Channel是I/O传输时的入口，buffer就是数据源。我们关注的一般是<strong>ByteBuffer</strong>，因为字节是操纵系统或者应用程序传输之间的基本类型，并且Java NIO的Channel只接受ByteBuffer作为参数。</p>
-<p>Netty使用引用计数法来确定一个Buf是否还在被引用.</p>
-<p>Nettys buffer API 有以下优点：</p>
-<blockquote>
-<ul>
-<li>如果需要你可以定义你自己的buffer类型。</li>
-<li>透明的零拷贝已经被内置的复合缓冲类型实现。<br>零拷贝”是指计算机操作的过程中，CPU不需要为数据在内存之间的拷贝消耗资源。而它通常是指计算机在网络上发送文件时，不需要将文件内容拷贝到用户空间（User Space）而直接在内核空间（Kernel Space）中传输到网络的方式。</li>
-<li>容量是按需变化的，就像StringBuffer.</li>
-<li>不需要调用flip()在读写之间转换。</li>
-<li>他有两种不同的index:readerIndex &amp; writerIndex.</li>
-<li>Method chaining.</li>
-<li>引用计数法。</li>
-<li>Pooling. </li>
-</ul>
-</blockquote>
-<h3 id="ByteBuf"><a href="#ByteBuf" class="headerlink" title="ByteBuf"></a>ByteBuf</h3><p>ByteBuf是Netty中byte的容器。</p>
-<p>我们常用的ByteBuf有三种，我们简单的介绍一下。</p>
-<p>Head buffer</p>
-<p>最常用的种类是把ByteBuf存储在JVM的堆中，通过把数据存储到backing array中来实现。这种方式可以很快的分配和取消分配，你也可以直接访问backing array.</p>
-<figure class="highlight"><table><tr><td class="code"><pre><div class="line">ByteBuf heapBuf = ...;</div><div class="line">if (heapBuf.hasArray()) &#123; #1</div><div class="line"> byte[] array = heapBuf.array(); #2</div><div class="line"> int offset = heapBuf.arrayOffset() + heapBuf.position(); #3</div><div class="line"> int length = heapBuf.readableBytes(); #4</div><div class="line"> YourImpl.method(array, offset, length); #5</div><div class="line">&#125;</div><div class="line"></div><div class="line">#1 Check if ByteBuf is backed by array</div><div class="line">#2 Get reference to array</div><div class="line">#3 Calculate offset of first byte in it</div><div class="line">#4 Get amount of readable bytes</div><div class="line">#5 Call method using array, offset, length as parameter</div></pre></td></tr></table></figure>
-<blockquote>
-<p>什么是backing array?<br>we will study implementations of the  $ \mathtt{List}$ and  $ \mathtt{Queue}$ interfaces where the underlying data is stored in an array, called the backing array.</p>
-</blockquote>
-<p>Direct buffer</p>
-<p>直接分配在内存中，实现零拷贝。他的大小不会在你的JVM堆中显示出来。如果是non-derectbuffer, JMV会首先拷贝到用户空间在进行处理。 缺点显而易见，内存很贵。</p>
-<figure class="highlight"><table><tr><td class="code"><pre><div class="line">ByteBuf directBuf = ...;</div><div class="line">if (!directBuf.hasArray()) &#123; #1</div><div class="line"> int length = directBuf.readableBytes(); #2</div><div class="line"> byte[] array = new byte[length]; #3</div><div class="line"> directBuf.getBytes(array); #4</div><div class="line"> YourImpl.method(array, 0, array.length); #5</div><div class="line">&#125;</div><div class="line"></div><div class="line">#1 Check if ByteBuf not backed by array which will be false for direct buffer</div><div class="line">#2 Get number of readable bytes</div><div class="line">#3 Allocate new array with length of readable bytes</div><div class="line">#4 Read bytes into array</div><div class="line">#5 Call method that takes array, offset, length as parameter</div></pre></td></tr></table></figure>
-<p>Composite buffer</p>
-<p>混合型buffer,顾名思义。</p>
-<h3 id="ByteBufHolder"><a href="#ByteBufHolder" class="headerlink" title="ByteBufHolder"></a>ByteBufHolder</h3><h3 id="ByteBufAllocator"><a href="#ByteBufAllocator" class="headerlink" title="ByteBufAllocator"></a>ByteBufAllocator</h3>
+        <p class="article-more-link">
+          <a class="article-more-a"  href="/2016/12/08/Netty/#more">more >></a>
+        </p>
       
     </div>
     <div class="article-info article-info-index">
@@ -703,69 +667,6 @@
 
 
   
-    <article id="post-SpringAOP" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/27/SpringAOP/">Spring AOP</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文的内容来自网络/书籍/API, 涉及被容比较初级, 主要讨论AspectJ的使用，基于Schema的后期会补充。<br>具体讨论以下几点：</p>
-<blockquote>
-<ul>
-<li>AOP基础</li>
-<li>AOP种类：静态AOP(AspectJ)和动态AOP(Spring AOP)</li>
-<li>AOP in Spring</li>
-<li>Spring AOP的通知和切入点</li>
-<li>AOP的使用（AspectJ）</li>
-<li>切入点语法</li>
-<li>通知参数</li>
-</ul>
-</blockquote>
-        <p class="article-more-link">
-          <a class="article-more-a"  href="/2016/10/27/SpringAOP/#more">more >></a>
-        </p>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/10/27/SpringAOP/" class="archive-article-date">
-  	<time datetime="2016-10-26T16:02:30.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-27</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AOP/">AOP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -829,7 +730,7 @@
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 16.67px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 13.33px;">事务管理</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 16.67px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 13.33px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     			</div>
     	</section>
     

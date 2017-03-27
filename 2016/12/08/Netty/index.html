@@ -9,26 +9,20 @@
   <title>Netty | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="目前对Netty是一点不懂，但是作为NIO的框架还是很有必要学的，那么我们开始吧。
-在开始之前我们先说说常见的概念，同步/异步，阻塞/非阻塞。
-弄明白这几个概念比较重要，同步和异步是针对应用程序和内核而言的。同步指的是当用户触发IO操作后等待或者轮询操作是否完成，由用户自发的去查看。异步指的是当用户请求之后就开始忙别的事情，当任务处理完毕后内核会给用户反馈结果。
-阻塞和非阻塞是针对用户访问数据而言">
+在开始之前我们先说说常见的概念，同步/异步，阻塞/非阻塞。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Netty">
 <meta property="og:url" content="http://tiltcat.com/2016/12/08/Netty/index.html">
 <meta property="og:site_name" content="Let's do this">
 <meta property="og:description" content="目前对Netty是一点不懂，但是作为NIO的框架还是很有必要学的，那么我们开始吧。
-在开始之前我们先说说常见的概念，同步/异步，阻塞/非阻塞。
-弄明白这几个概念比较重要，同步和异步是针对应用程序和内核而言的。同步指的是当用户触发IO操作后等待或者轮询操作是否完成，由用户自发的去查看。异步指的是当用户请求之后就开始忙别的事情，当任务处理完毕后内核会给用户反馈结果。
-阻塞和非阻塞是针对用户访问数据而言">
+在开始之前我们先说说常见的概念，同步/异步，阻塞/非阻塞。">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/NettyChannel.jpg">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/AbstractChannelHandlerContext.png">
-<meta property="og:updated_time" content="2017-03-02T11:56:46.000Z">
+<meta property="og:updated_time" content="2017-03-27T09:15:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Netty">
 <meta name="twitter:description" content="目前对Netty是一点不懂，但是作为NIO的框架还是很有必要学的，那么我们开始吧。
-在开始之前我们先说说常见的概念，同步/异步，阻塞/非阻塞。
-弄明白这几个概念比较重要，同步和异步是针对应用程序和内核而言的。同步指的是当用户触发IO操作后等待或者轮询操作是否完成，由用户自发的去查看。异步指的是当用户请求之后就开始忙别的事情，当任务处理完毕后内核会给用户反馈结果。
-阻塞和非阻塞是针对用户访问数据而言">
+在开始之前我们先说说常见的概念，同步/异步，阻塞/非阻塞。">
 <meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/NettyChannel.jpg">
   
   
@@ -162,6 +156,7 @@
       
         <p>目前对Netty是一点不懂，但是作为NIO的框架还是很有必要学的，那么我们开始吧。</p>
 <h2 id="在开始之前"><a href="#在开始之前" class="headerlink" title="在开始之前"></a>在开始之前</h2><p>我们先说说常见的概念，同步/异步，阻塞/非阻塞。</p>
+<a id="more"></a>
 <p>弄明白这几个概念比较重要，同步和异步是针对应用程序和内核而言的。<br>同步指的是当用户触发IO操作后等待或者轮询操作是否完成，由用户自发的去查看。<br>异步指的是当用户请求之后就开始忙别的事情，当任务处理完毕后内核会给用户反馈结果。</p>
 <p>阻塞和非阻塞是针对用户访问数据而言的，说白了是根据状态不同来进行不同的操作。阻塞状态下读取或者写入会一直等待，而非阻塞方式下，读取或者写入会立即返回一个状态值。</p>
 <h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><p>Channel是Netty最核心的接口，一个Channel就是一个连接Socket的通道，通过Channel，你可以对Socket做各种操作。<br>结构图：<br><img src="http://ogeojkg3t.bkt.clouddn.com/NettyChannel.jpg" alt=""></p>
@@ -399,7 +394,7 @@
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 16.67px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 13.33px;">事务管理</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 16.67px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 13.33px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     			</div>
     	</section>
     
