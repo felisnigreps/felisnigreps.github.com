@@ -14,10 +14,12 @@
 <meta property="og:url" content="http://tiltcat.com/2017/03/24/从PAXOS到ZOOKEEPER分布式一致性原理与实践/index.html">
 <meta property="og:site_name" content="Let's do this">
 <meta property="og:description" content="要搞互联网，分布式的，zookeeper挺重要的，但是问题在于目前我几乎什么都不知道，有人推荐了这么一本书，现在还没有系统的总结，就当做学习笔记用吧！">
-<meta property="og:updated_time" content="2017-03-27T12:00:28.000Z">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/zookeeper.png">
+<meta property="og:updated_time" content="2017-03-30T13:45:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从PAXOS到ZOOKEEPER分布式一致性原理与实践.">
 <meta name="twitter:description" content="要搞互联网，分布式的，zookeeper挺重要的，但是问题在于目前我几乎什么都不知道，有人推荐了这么一本书，现在还没有系统的总结，就当做学习笔记用吧！">
+<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/zookeeper.png">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -191,6 +193,83 @@
 <p>相对于2PC，3PC最大的优点就是降低了b的阻塞范围，当出现单点故障后可以继续打达成一致。不过问题还是多多，传输的过程中依旧会出现问题。</p>
 <p>简单说下，3PC将2PC的第二步分为两步，2PC是a直接给b发送提交信号，然后b就提交，然后反馈。3PC是把commit分为preCommit和doCommit,a先给b发送preCommit信号，b接到了说ok，我准备好了，然后a在发送doCommit信号。</p>
 <h2 id="Paxos算法"><a href="#Paxos算法" class="headerlink" title="Paxos算法"></a>Paxos算法</h2><p>Paxos是Leslie Lamport在1990年提出的分布式一致性协议，是目前公认的解决分布式一致性问题最有效的算法之一。</p>
+<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>假设有一组可以提出提案的进程集合，那么对于一个一致性算法需要保证以下几点：<br>（这里的提案可以被理解为请求，比如说proposer申请一个数据的提交）</p>
+<blockquote>
+<ul>
+<li>这些提案中，只会有一个被选定</li>
+<li>如果没有提案被提出，那么就不会有被选定提案</li>
+<li>当一个提案被选定后，进程应该可以获取被选定的提案信息</li>
+</ul>
+</blockquote>
+<p>对于一致性来说，安全性需求如下：</p>
+<blockquote>
+<ul>
+<li>只有被提出提案才能被选定</li>
+<li>只有一个值被选定</li>
+<li>如果某个进程认为某个提案被选定了，那么这个提案必须是真的被选定的那个</li>
+</ul>
+</blockquote>
+<p>Paxos算法的目标就是要保证最终有一个提案被选定，当提案被选定后，进程最终也能获取到被选定的提案。<br><code>P,A,L代表三个角色的缩写</code><br>在该一致性算法中，Paxos中存在三种角色Proposer（提议者）、Acceptor（决策者）、Learner（议案学习者）。在具体的实现中，一个进程可能充当不止一个角色，在这里我们并不关心进程如何映射到各种角色，假设各个参与者之间可以通过首发消息来进行通讯，那么：</p>
+<blockquote>
+<ul>
+<li>每个参与者在执行的过程中都可能出错而停止，也可能会重启。同时，及时一个提案被选定后，所有参与作者也都有可能失败或者重启，因此那些失败或者重启的参与者必须可以记录某些信息，不然没有办法确定最终的值</li>
+<li>消息在传输过程中可能出现不可预知的延迟，也可能会重复或者丢失，但是消息内容不会被篡改。</li>
+</ul>
+</blockquote>
+<h3 id="推导过程"><a href="#推导过程" class="headerlink" title="推导过程"></a>推导过程</h3><h4 id="最简单的方案-只有一个acceptor"><a href="#最简单的方案-只有一个acceptor" class="headerlink" title="最简单的方案-只有一个acceptor"></a>最简单的方案-只有一个acceptor</h4><p>假设只有一个acceptor，那么它只要接受第一个提案，把它当做value,那么就可以保证上述条件。但是，但是，单点失效，所以，并不行。</p>
+<h4 id="多个acceptor"><a href="#多个acceptor" class="headerlink" title="多个acceptor"></a>多个acceptor</h4><p>首先，我们希望即使只有一个P提出了value,那么该value也会被选定，就得出了我们的第一个约束P1：<code>一个A必须接受他收到的第一个提案</code>(一个A可以接受多个提案)<br>但是如果每个proposer提出不同的value给不同的A，那就出现了不一致的value,这当然是不行的，所以我们新加了一个规定：<code>一个提案被选定需要被半数以上的A接受</code><br>这就表明，一个A要接收多个value,不然会出现没办法选定value的情况（三个P给三个A提交不同的Value）<br>那么怎么区分value呢？那么提案就不能是简简单单的value了，我们的提案=id+value.这里的id是uid,根据顺序自增长,实现过程先不讨论。<br>有了id之后，那么又有了以下的约束P2：<code>如果某个value=v的提案被选定了，那么每个id更高的被选定的提案的value必须也是v</code><br>一个提案只有被A接受才会被选定，所以调换一下主语，得到了P2a:<code>如果某个value=v的提案被选定了，那么每个编号更高的被A接受的提案的value必须也是v</code>，满足了P2a,就满足了P2.</p>
+<p>但是考虑一下这种情况，有5个P,5个A,P2提出了[m1,v1]的提案，半数以上的A接受了该提案，那么v1就被选定了。这时候A1从宕机中恢复过来，恰巧P1又向A1发送了[m2,p2]提案，这是A1接收到的第一个提案，那么他会接受这个提案，好了，不一致就出现了。同时也违背了P2a约束。</p>
+<p>所以我们需要对P2a进行进一步的修改，这就是我们的P2b:<code>如果某个value=v的提案被选定了，那么之后任何P提出的编号更高的提案的value也必须是v</code>。</p>
+<p>那么如何确保在某个value=v的提案被选定后，P提出的编号更高的提案的value都是v呢？（上面的例子就不是）让我们看看P2c:<code>对于任意的n和v，如果[n,v]被提出，那么存在一个半数以上的A组成的集合S,满足以下两个条件的任意一个：</code></p>
+<blockquote>
+<ul>
+<li>S中每个A都没有接受过编号小鱼N的提案</li>
+<li>S中A接受过的最大编号的提案value=v</li>
+</ul>
+</blockquote>
+<p>这只是另外一个约束，那么那么那么问题来了，就还说上面的那个情况，怎么避免呢？</p>
+<h4 id="Proposer生成提案"><a href="#Proposer生成提案" class="headerlink" title="Proposer生成提案"></a>Proposer生成提案</h4><p>为了满足P2b，这里有个比较重要的思想：P生成提案之前，应该先去学习已经被选定或者可能被选定的value,然后以该value作为自己提出提案的value。如果没有value被选定，P才可以决定自己的value值。这样才能达成一致，这个学校的阶段是通过一个<code>prepare请求</code>实现的。</p>
+<p>p首先发送给a编号m，a确认了编号有效（大于现存编号），那么反馈给p accept,然后p发送提案[m,n]</p>
+<p>于是我们得到了<code>提案生成算法</code>:</p>
+<p>1.P选择一个新的提案编号N,然后向某个A集合（半数以上）发送请求，要求集合中每个A作出以下响应。<br>a.向P承诺不再接受任何编号小于N的提案<br>b.如果A已经接受过提案，那么就像P响应已经接受过的编号小于N的最大编号提案，我们将该请求称为编号为N的prepare请求。<br>2.如果P收到了半数以上的A响应，那么它就可以生产编号N,value=v的提案[n,v].这里的v是所有响应中编号最大的提案value.如果所有A的响应中都没有批准过任何提案，那么此时v的值就由p任意选择。</p>
+<p>在确定提案之后，p就会将该提案再次发送给某个a集合，并期望获得他们的批准，我们称次请求为accept请求。此时接受Accept请求的a集合并不一定是之前响应的a集合。</p>
+<h4 id="Acceptor批准提案"><a href="#Acceptor批准提案" class="headerlink" title="Acceptor批准提案"></a>Acceptor批准提案</h4><p>上面出现了两种请求：<br>prepare:a to p,告诉p曾经接受过的最大编号的提案。<br>accpet: p to a,在编号被认可之后，p向a发送的提案信息</p>
+<p>因此我们出现了以下约束，P1a:<code>一个a只要尚未响应过任何编号大于m的prepare请求，那么他就可以接受这个编号为m的提案</code>（这里的接受指的是接受编号）</p>
+<h3 id="算法优化"><a href="#算法优化" class="headerlink" title="算法优化"></a>算法优化</h3><p>假设一个a接收到了一个编号为m的prepare请求，但此时该a已经对编号大于m的请求做出了响应，因此他肯定不会再批准m，所以他没必要对此作出拒绝的响应，可以直接忽略。</p>
+<p>这样每个a只需要记住他已经批准的提案的最大编号以及他已经作出prepare请求响应的提案的最大编号，以便在出现故障或者节点重启的情况下满足P2c的不变性。对于p，只要他保证不会产生具有相同编号的提案，那么就可以丢弃任意的提案以及他所有的运行时状态信息。</p>
+<h3 id="算法陈述"><a href="#算法陈述" class="headerlink" title="算法陈述"></a>算法陈述</h3><p>阶段一：</p>
+<p>1.p选择一个提案编号m,然后向a的某个超半数自己成员发送编号为m的prepare请求。<br>2.如果一个a收到一个编号为m的prepare请求，且编号m大于该a已经响应的所有prepare编号，那么他就会将他已经批准过的最大编号的<code>提案</code>(包含id和value)最为响应反馈给p，同时a承诺不会再批准任何编号小于m的提案。</p>
+<p>阶段二：</p>
+<p>1.如果p收到了来自半数以上a对于其发出的编号为m的prepare请求的响应，那么他就会发送一个针对[m,v]的提案的accept请求给a.注意，v的值就是收到的响应中编号最大的提案的值（有可能和自己提交的值不一致，是阶段一中a反馈给p的accept请求中的v值），如果响应中不包含任何提案，那么他可以是任意值。</p>
+<p>2.如果a收到了这个[m,n]的请求，只要改a尚未对编号大于m的prepare请求作出响应，他就可以通过这个提案。</p>
+<h4 id="提案获取"><a href="#提案获取" class="headerlink" title="提案获取"></a>提案获取</h4><p>前面说到了Learner,我们该怎么让learner获取提案呢？</p>
+<p>1.l获取被选定提案的前提是，该提案已经被半数以上航的a批准，那么简单又直观的方法就是当一个a批准了一个提案，那么就发送给l,这种情况的缺点是通信次数多，为两者的乘积。<br>2.我们建立一个主l怎么样？所有a告诉主l,然后主l告诉其他l？看起来很不错，但是有单点失效问题。<br>3.再2的基础上，我们把主l变为主l群，这样不错，但是缺点在于网络通讯的复杂度较高。</p>
+<h3 id="选取主proposer保证算法活性"><a href="#选取主proposer保证算法活性" class="headerlink" title="选取主proposer保证算法活性"></a>选取主proposer保证算法活性</h3><p>所谓活性，目前理解为有效性。假设有两个p依次提出一些列编号递增的议案，但是最终都没办法被选定：</p>
+<p>p1提出了一个编号为1的提案，并完成了上述阶段1的流程。但是与此同时，p2又提出了一个编号为2的提案，同样也完成了1的流程，于是a承诺不再接受小于2的提案，当p1进入了阶段二，发送accept请求的时候，a就会忽略这个请求，于是p1发送编号为3的提案，这又导致p2在阶段二的请求被忽略，所以陷入死循环，称之为活锁。</p>
+<p>为了保证算法的有效性，需要选择一个主p，并规定只有主p才能提出议案。这样一来，只要主p和过半的a可以正常通信，那么只要主p提出一个编号更高的提案，那么该提案最终会被批准。（这块是怎么做的？会和上述的约束矛盾么？”承诺不再接受编号小于m的提案”，这个原则会在主p身上变化么？）当然，如果p发现当前算法流程中有一个编号更大的提案被提出或正在接受批准，那么他会丢弃当前这个编号较小的提案。（a会忽略编号较小的提案的请求，那么p怎么发现？通过learner么？）</p>
+<p>关于paxos补充：</p>
+<p>上述paxos是basic paxos,会使用multi paxos来解决活锁问题。</p>
+<p>“FLP已经指出异步模型下，任何一致性算法，哪怕只是容忍一个进程崩溃，都存在永不终止的可能性。因此Paxos不存在活锁是不可能的。”</p>
+<p>“去掉了prepare啊。基本的paxos算法简直不能用，这是经过实际证明比较好的解决方案了。即使是用leader的方案，再选leader时还会出现活锁。<br>解决活锁用得方法一般是随机定时器啊。当发现冲突后，不同的提交者随机休眠一段时间，然后再次申请。”</p>
+<h4 id="multi-paxos"><a href="#multi-paxos" class="headerlink" title="multi paxos"></a>multi paxos</h4><p>在理解了basic paxos之后，我们要对其进行优化，解决上述的问题，并且提高效率。<br>朴素paxos算法通过多伦的Preare/Accept过程来确定一个值，我们称这个过程为一个Instance. Multi paxos是通过paxos来确定很多歌值，而且这些值的顺序在各个节点完全一致。概括来讲就是确定一个全局顺序。</p>
+<p>多个Instance怎么运作？我们先构建最简单的模式，各个Instance独立运作。P&amp;A:prepre and accept<br>|Instance|1|2|3|4|5|6|<br>|–<br>|paxos|P&amp;A|P&amp;A|P&amp;A|P&amp;A|P&amp;A|P&amp;A|</p>
+<p>每个instance独立运作一个朴素paxos算法，我们保证仅当instance i的值被确定后，放可进行下一个paxos算法，这样我们就保证了Instance的有序性。</p>
+<p>但是这样的效率是比较差的，朴素paxos算法的latency很高，multi-paxos算法希望找到多个Instance的paxos算法之间的联系，从而尝试在某些情况去掉prepare步骤。</p>
+<hr>
+<h2 id="目前对于paxos的理解只限于纸面层面，而multi-paxos则是几乎不理解，这块还需要深入的理解和补充，目前先往下进行zookeeper"><a href="#目前对于paxos的理解只限于纸面层面，而multi-paxos则是几乎不理解，这块还需要深入的理解和补充，目前先往下进行zookeeper" class="headerlink" title="目前对于paxos的理解只限于纸面层面，而multi paxos则是几乎不理解，这块还需要深入的理解和补充，目前先往下进行zookeeper"></a>目前对于paxos的理解只限于纸面层面，而multi paxos则是几乎不理解，这块还需要深入的理解和补充，目前先往下进行zookeeper</h2><h2 id="zookeeper-和-paxos"><a href="#zookeeper-和-paxos" class="headerlink" title="zookeeper 和 paxos"></a>zookeeper 和 paxos</h2><p>Apache ZooLeeper是Apache Hadoop的子项目发展而来，他为分布式应用提供了高效并且可靠的分布式协调服务，提供了诸如统一命名服务，配置管理和分布式锁等分布式基础服务。在解决分布式数据一致性方面，zk斌没有直接采用paxos算法，而是采用了ZAB(zookeeper atomic broadcast)的一致性协议。</p>
+<p>zk是一个典型的分布式数据一致性的解决方案，分布式应用程序可以基于他实现诸如数据发布/订阅，负载均衡，命名服务，分布式协调/通知，集群管理，Master选举，分布式锁和分布式队列等功能。zk可以保证如下分布式一致性：</p>
+<p><code>顺序一致性</code>：从一个客户端发起的事务请求，最终将会严格的按照其发起顺序被应用到zookeepr中去。<br><code>原子性</code>:<br>所有的事务请求结果在整个集群中所有机器山的应用情况是一致的，也就是说，要么整个集群所有机器都成功的应用了某一个事务，要么都没有应用。一定不会出现集群中的部分机器用了该事务，而另外一部分并没有应用的情况。<br><code>单一视图</code>:无论客户端连接的是哪个zk服务器，其看到的服务端的数据模型都是一致的。<br><code>可靠性</code>:一旦服务端成功的应用了一个事务，并完成了对客户端的响应，那么该事物所引起的服务端状态会一致巴博留下来，除非与另一个事务又对其进行了变更。<br><code>实时性</code>：一般的实时性指的是一个事务被成功应用，那么客户端应该理解从服务端上个读取这个事务变更后的状态，这里需要注意的是，zk仅仅保证在一定时间内，客户端最终能够从服务器上读取到最新的数据状态。</p>
+<h3 id="zk的设计目标"><a href="#zk的设计目标" class="headerlink" title="zk的设计目标"></a>zk的设计目标</h3><p>zk致力于提供一个高性能，高可用，并且具有严格的顺序访问空感知能力的分布式协调服务。</p>
+<h4 id="简单的数据模型"><a href="#简单的数据模型" class="headerlink" title="简单的数据模型"></a>简单的数据模型</h4><p>zk使得分布式程序能够通过一个共享的，树形结构的名字空间来进行相互协调。这里说的树形结构的名字空间，是指zk服务器内的一个数据模型，其由一些列被称为ZNode的数据节点组成，总的来说，其数据模型类似于一个文件系统，而ZNode之间的层级关系，就像文件系统的目录结构一样。不过和传统的磁盘文件系统不同的是，zk将全量数据存储在内存中，以此来实现提高服务器吞吐，减少延迟的目的。关于zk的数据模型我们会在下方做详细的阐述。</p>
+<h4 id="可以构建集群"><a href="#可以构建集群" class="headerlink" title="可以构建集群"></a>可以构建集群</h4><p>一个zk通常由一组机器组成，通常3-5台机器就可以组长一个可用的zk集群了。<br><img src="http://ogeojkg3t.bkt.clouddn.com/zookeeper.png" alt=""><br>组成zk集群的每台机器都会在内存中维护当前的服务器状态。并且每台机器之间都会保持着通信（每个都和leader通讯，如果leader宕机，那么重新选举leader,这是我目前的理解，不知道是否准确）。只要金群众存在超过一般的机器能够正常工作，那么整个集群就能够正常对外服务。</p>
+<p>zk的客户端会选择则和集群中任意一台机器来共同传建一个TCP连接，而一旦客户端和某台zk服务器之间的连接断开后，客户端会自动连接到集群中的其他机器。</p>
+<h4 id="顺序访问"><a href="#顺序访问" class="headerlink" title="顺序访问"></a>顺序访问</h4><p>对于每个来自客户端的跟新请求，zk都会分配一个全局唯一的递增编号，这个编号反映了所有事务操作的先后顺序，应用程序可以使用zk这个特性来实现更好层次的同步原语。</p>
+<h4 id="高性能"><a href="#高性能" class="headerlink" title="高性能"></a>高性能</h4><p>由于zk将全量数据存储在内存中，并直接服务于客户端的所有非事务请求，因为他尤其适用以读操作为主应用场景。</p>
+<h3 id="zk的基本概念"><a href="#zk的基本概念" class="headerlink" title="zk的基本概念"></a>zk的基本概念</h3><h4 id="集群角色"><a href="#集群角色" class="headerlink" title="集群角色"></a>集群角色</h4><p>通常在分布式系统中，购车呢过一个集群的每一台机器都有自己的角色，最典型的就是Master/Slave模式（主备模式），在这种模式中，我们把能够处理所有写操作的机器称为master机器，把所有通过异步复制的方式获取最新数据，并提供读服务的机器称为Slave机器。</p>
+<p>但是在zk中，这些概念被颠覆了。他没有沿用传统的Master/Slave概念，而是引入了Leader,Follower，Observer三种角色。zk集群中所有机器通过一个Leader选举过程来选定一台被称为Leader的机器，Leader服务器为客户端提供读写服务，其他机器包括follower和observer都可以听读写服务，不过区别在于Observer不参与Leader的选举过程，也不参与写操作的”过半即成功”策略，因此Observer可以在不影响写性能的情况下提升集群的读性能。</p>
+<h4 id="会话"><a href="#会话" class="headerlink" title="会话"></a>会话</h4><p>Session是指客户端会话，在了解会话之前，我们先了解一下客户端连接。在zk中，一个客户端连接是指客户端和服务器之间的一个TCP长连接。zk对外的服务端口是2181，客户端启动的时候，首先会与服务器建立一个TCP连接，从第一次建立连接开始，客户端会话的生命周期也开始了，通过这个连接，客户端能够通过心跳检测与服务器保持有效的会话，也能够向zk服务器发送请求并接受响应，同时还能够通过该连接接收来自服务器的Watch时间通知。Session的sessionTimeout值用来设定一个会话的超时时间。当由于服务器压力太大，网络故障或是客户端主动断开连接等各种原因导致客户端断开连接时，只要在sessionTimeout规定时间内能够重新连接上集群中任意一台服务器，那么之前创建的<code>会话</code>依然有效。</p>
+<h4 id="数据节点"><a href="#数据节点" class="headerlink" title="数据节点"></a>数据节点</h4><p>在谈到分布式的时候，我们常说的节点是指集群的每一台机器，然而在zk中，节点分为两类，第一类同样是指构成集群的机器，我们称之为机器节点。第二类则是指数据模型中的数据单元，我们称之为数据节点——ZNode.zk将所有的数据存储在内存中，数据模型是一棵树，由斜杠(/)来进行分割的路径，就是一个ZNode,比如：/foo/path1.每个ZNode上都会保存自己的数据内容，同时还会保存一系列属性信息。</p>
+<p>在zk中，ZNode可以分为持久节点和临时节点两类， 所谓持久及诶单是指一旦这个ZNode被创建了，除非主动进行ZNode的一处操作，否则这个ZNode将一直保存在zk上。而临时节点就不一样了，他的生命周期和客户端会话绑定。一旦client的会话失效，那么这个节点就会被移除。另外zk还允许用户为每一个节点添加一个特殊的属性：SEQUENTIAL,一旦节点被标记上这个属性，那么在这个节点被创建的时候，zk会自动在其节点后面追加一个整形数字，这个数字是一个由父节点维护的自增数字8777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777</p>
 
       
     </div>
