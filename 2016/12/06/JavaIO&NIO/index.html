@@ -16,7 +16,7 @@
 <meta property="og:description" content="刚开始看IO的时候还没有这个blog,昨天用到感觉没有以前那么熟练了。在公司想找以前联系时候的源码还没找到，不过问题不大，今天过一遍复习一下。">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/JavaIO.png">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/channel&buffer.png">
-<meta property="og:updated_time" content="2017-02-27T11:10:20.000Z">
+<meta property="og:updated_time" content="2017-05-22T05:30:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java IO & NIO">
 <meta name="twitter:description" content="刚开始看IO的时候还没有这个blog,昨天用到感觉没有以前那么熟练了。在公司想找以前联系时候的源码还没找到，不过问题不大，今天过一遍复习一下。">
@@ -201,7 +201,7 @@
 </ul>
 <p>Selector<br>Selector可以在单线程下管理多个channel，要使用selector,你需要向Selector注册Channel,然后调用他的seek()，这个方法会一直阻塞到他注册的通道有事件就绪，然后返回，这样线程就会处理这个事件。</p>
 </blockquote>
-<h3 id="more-about-Channel"><a href="#more-about-Channel" class="headerlink" title="more about Channel"></a>more about Channel</h3><p>既可以从Channel读数据，又可以谢数据到Channel.Channel可以进行异步的读写。Channel中的数据总是要写入一个buffer中，或者从一个buffer中读，就像上面图示的那样。</p>
+<h3 id="more-about-Channel"><a href="#more-about-Channel" class="headerlink" title="more about Channel"></a>more about Channel</h3><p>既可以从Channel读数据，又可以写数据到Channel.Channel可以进行异步的读写。Channel中的数据总是要写入一个buffer中，或者从一个buffer中读，就像上面图示的那样。</p>
 <p>我们刚说了有四种channel</p>
 <p>FileChanner: 主要负责从文件中读取数据,是阻塞IO。<br>DataGramChannel: 通过UDP读写数据<br>SocketChannel: 通过TCP读写数据<br>ServerSocketChannel: 监听新的TCP连接，每有一个连接就注册一个SocketChannel</p>
 <p>刚看buffer的代码有一点蒙，缓了那么一下，才想起来他的工作机制，buffer有几个属性，我们需要了解一下：</p>
