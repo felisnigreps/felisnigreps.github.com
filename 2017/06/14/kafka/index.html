@@ -8,7 +8,7 @@
   <link rel="dns-prefetch" href="http://tiltcat.com">
   <title>Kafka | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="什么是kafkakafka是一个分布式 发布-订阅 系统和一个强大的队列,可以处理大量的数据,并且能够将消息从一个端点传递到另一个端点.Kafka适合离线和在线消息消费.Kafka消息保留在磁盘上,并在集群内复制防止数据流失.够贱在zk同步服务之上.
+  <meta name="description" content="什么是kafkakafka是一个分布式 发布-订阅 系统和一个强大的队列,可以处理大量的数据,并且能够将消息从一个端点传递到另一个端点.Kafka适合离线和在线消息消费.Kafka消息保留在磁盘上,并在集群内复制防止数据流失.构建在zk同步服务之上.
 
 
 可靠性 - 分布式,分区,复制,容错
@@ -19,7 +19,7 @@
 <meta property="og:title" content="Kafka">
 <meta property="og:url" content="http://tiltcat.com/2017/06/14/kafka/index.html">
 <meta property="og:site_name" content="Let's do this">
-<meta property="og:description" content="什么是kafkakafka是一个分布式 发布-订阅 系统和一个强大的队列,可以处理大量的数据,并且能够将消息从一个端点传递到另一个端点.Kafka适合离线和在线消息消费.Kafka消息保留在磁盘上,并在集群内复制防止数据流失.够贱在zk同步服务之上.
+<meta property="og:description" content="什么是kafkakafka是一个分布式 发布-订阅 系统和一个强大的队列,可以处理大量的数据,并且能够将消息从一个端点传递到另一个端点.Kafka适合离线和在线消息消费.Kafka消息保留在磁盘上,并在集群内复制防止数据流失.构建在zk同步服务之上.
 
 
 可靠性 - 分布式,分区,复制,容错
@@ -28,10 +28,10 @@
 性">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/kafka.png">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/kafka-1.jpg">
-<meta property="og:updated_time" content="2017-06-14T07:50:03.000Z">
+<meta property="og:updated_time" content="2017-06-14T08:31:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka">
-<meta name="twitter:description" content="什么是kafkakafka是一个分布式 发布-订阅 系统和一个强大的队列,可以处理大量的数据,并且能够将消息从一个端点传递到另一个端点.Kafka适合离线和在线消息消费.Kafka消息保留在磁盘上,并在集群内复制防止数据流失.够贱在zk同步服务之上.
+<meta name="twitter:description" content="什么是kafkakafka是一个分布式 发布-订阅 系统和一个强大的队列,可以处理大量的数据,并且能够将消息从一个端点传递到另一个端点.Kafka适合离线和在线消息消费.Kafka消息保留在磁盘上,并在集群内复制防止数据流失.构建在zk同步服务之上.
 
 
 可靠性 - 分布式,分区,复制,容错
@@ -169,16 +169,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="什么是kafka"><a href="#什么是kafka" class="headerlink" title="什么是kafka"></a>什么是kafka</h2><p>kafka是一个分布式 发布-订阅 系统和一个强大的队列,可以处理大量的数据,并且能够将消息从一个端点传递到另一个端点.Kafka适合离线和在线消息消费.Kafka消息保留在磁盘上,并在集群内复制防止数据流失.够贱在zk同步服务之上.</p>
+        <h2 id="什么是kafka"><a href="#什么是kafka" class="headerlink" title="什么是kafka"></a>什么是kafka</h2><p>kafka是一个分布式 发布-订阅 系统和一个强大的队列,可以处理大量的数据,并且能够将消息从一个端点传递到另一个端点.Kafka适合离线和在线消息消费.Kafka消息保留在磁盘上,并在集群内复制防止数据流失.构建在zk同步服务之上.</p>
 <blockquote>
 <ul>
 <li>可靠性 - 分布式,分区,复制,容错</li>
 <li>可扩展性 - 轻松缩放,无需停机</li>
 <li>耐用性 - kafka使用分布式提交日志,消息会尽可能的保留在磁盘上</li>
-<li>性能 - 高吞吐量</li>
+<li>性能 - 高吞吐量<a id="more"></a>
+<img src="http://ogeojkg3t.bkt.clouddn.com/kafka.png" alt=""><br><img src="http://ogeojkg3t.bkt.clouddn.com/kafka-1.jpg" alt=""></li>
 </ul>
 </blockquote>
-<p><img src="http://ogeojkg3t.bkt.clouddn.com/kafka.png" alt=""><br><img src="http://ogeojkg3t.bkt.clouddn.com/kafka-1.jpg" alt=""></p>
 <p>如上图所示，一个典型的Kafka体系架构包括若干Producer（可以是服务器日志，业务数据，页面前端产生的page view等等），若干broker（Kafka支持水平扩展，一般broker数量越多，集群吞吐率越高），若干Consumer (Group)，以及一个Zookeeper集群。Kafka通过Zookeeper管理集群配置，选举leader，以及在consumer group发生变化时进行rebalance。Producer使用push(推)模式将消息发布到broker，Consumer使用pull(拉)模式从broker订阅并消费消息。</p>
 <blockquote>
 <ul>
@@ -190,7 +190,7 @@
 <h3 id="topic-and-partition"><a href="#topic-and-partition" class="headerlink" title="topic and partition"></a>topic and partition</h3><p>每一条消息被发送到topic中，会根据partition规则选择被存储到哪一个partition。如果partition规则设置的合理，所有消息可以均匀分布到不同的partition里，这样就实现了水平扩展。（如果一个topic对应一个文件，那这个文件所在的机器I/O将会成为这个topic的性能瓶颈，而partition解决了这个问题）。在创建topic时可以在$KAFKA_HOME/config/server.properties中指定这个partition的数量（如下所示），当然可以在topic创建之后去修改partition的数量。<br>在发送一条消息时，可以指定这个消息的key，producer根据这个key和partition机制来判断这个消息发送到哪个partition。partition机制可以通过指定producer的partition.class这一参数来指定，该class必须实现kafka.producer.Partitioner接口。</p>
 <p>一个物理机对应这一个broker.<br>Kafka从0.8开始提供partition级别的replication，replication的数量可在$KAFKA_HOME/config/server.properties中配置。<br>default.replication.factor = 1</p>
 <p>我们先配置zk的cfg文件,然后启动zk,再启动zkcli,再启动kafka. 再创建topic创建四个patition.</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">bin]<span class="comment"># ./kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 4 --topic topic</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">./kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 4 --topic topic</div></pre></td></tr></table></figure>
 <p>然后我们去check log.dirs目录下的文档,发现有四个文件夹:</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">drwxr-xr-x  5 xugenli  admin  170 Jun 14 15:31 topic_vms_test-0</div><div class="line">drwxr-xr-x  5 xugenli  admin  170 Jun 14 15:31 topic_vms_test-1</div><div class="line">drwxr-xr-x  5 xugenli  admin  170 Jun 14 15:31 topic_vms_test-2</div><div class="line">drwxr-xr-x  5 xugenli  admin  170 Jun 14 15:31 topic_vms_test-3</div></pre></td></tr></table></figure>
 <p>再进去看下:</p>
