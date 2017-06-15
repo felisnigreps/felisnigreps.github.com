@@ -8,22 +8,17 @@
   <link rel="dns-prefetch" href="http://tiltcat.com">
   <title>DBMS的事务隔离级别 | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="作用事务保证了一个操作序列全部执行或者全部不执行(原子性)，从一个状态转变为另一个状态。事务是满足持久性的，所以可以被保存下来。当多个事务操作数据的时候，如果控制不好隔离级别，那么就会出现脏读，重复读，幻读等问题。
-刚开始主要是对幻读的理解不到位，现在讨论一下：
-事务的四种性质ACID,很基础，我们常常所讨论的是一致性和隔离性，解决办法往往是加锁，不过数据库又是一个高并发的应用，锁加多了会造成很大">
+  <meta name="description" content="作用事务保证了一个操作序列全部执行或者全部不执行(原子性)，从一个状态转变为另一个状态。事务是满足持久性的，所以可以被保存下来。当多个事务操作数据的时候，如果控制不好隔离级别，那么就会出现脏读，重复读，幻读等问题。 刚开始主要是对幻读的理解不到位，现在讨论一下： 事务的四种性质ACID,很基础，我们常常所讨论的是一致性和隔离性，解决办法往往是加锁，不过数据库又是一个高并发的应用，锁加多了会造成很大">
+<meta name="keywords" content="事务管理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DBMS的事务隔离级别">
 <meta property="og:url" content="http://tiltcat.com/2017/02/23/DBMS事务隔离级别/index.html">
-<meta property="og:site_name" content="Let's do this">
-<meta property="og:description" content="作用事务保证了一个操作序列全部执行或者全部不执行(原子性)，从一个状态转变为另一个状态。事务是满足持久性的，所以可以被保存下来。当多个事务操作数据的时候，如果控制不好隔离级别，那么就会出现脏读，重复读，幻读等问题。
-刚开始主要是对幻读的理解不到位，现在讨论一下：
-事务的四种性质ACID,很基础，我们常常所讨论的是一致性和隔离性，解决办法往往是加锁，不过数据库又是一个高并发的应用，锁加多了会造成很大">
+<meta property="og:site_name" content="Let&#39;s do this">
+<meta property="og:description" content="作用事务保证了一个操作序列全部执行或者全部不执行(原子性)，从一个状态转变为另一个状态。事务是满足持久性的，所以可以被保存下来。当多个事务操作数据的时候，如果控制不好隔离级别，那么就会出现脏读，重复读，幻读等问题。 刚开始主要是对幻读的理解不到位，现在讨论一下： 事务的四种性质ACID,很基础，我们常常所讨论的是一致性和隔离性，解决办法往往是加锁，不过数据库又是一个高并发的应用，锁加多了会造成很大">
 <meta property="og:updated_time" content="2017-03-01T10:19:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DBMS的事务隔离级别">
-<meta name="twitter:description" content="作用事务保证了一个操作序列全部执行或者全部不执行(原子性)，从一个状态转变为另一个状态。事务是满足持久性的，所以可以被保存下来。当多个事务操作数据的时候，如果控制不好隔离级别，那么就会出现脏读，重复读，幻读等问题。
-刚开始主要是对幻读的理解不到位，现在讨论一下：
-事务的四种性质ACID,很基础，我们常常所讨论的是一致性和隔离性，解决办法往往是加锁，不过数据库又是一个高并发的应用，锁加多了会造成很大">
+<meta name="twitter:description" content="作用事务保证了一个操作序列全部执行或者全部不执行(原子性)，从一个状态转变为另一个状态。事务是满足持久性的，所以可以被保存下来。当多个事务操作数据的时候，如果控制不好隔离级别，那么就会出现脏读，重复读，幻读等问题。 刚开始主要是对幻读的理解不到位，现在讨论一下： 事务的四种性质ACID,很基础，我们常常所讨论的是一致性和隔离性，解决办法往往是加锁，不过数据库又是一个高并发的应用，锁加多了会造成很大">
   
   
     <link rel="icon" href="/images/favicon.jpg">
