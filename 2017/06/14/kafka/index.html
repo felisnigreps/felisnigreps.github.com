@@ -9,15 +9,16 @@
   <title>Kafka | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="什么是kafkakafka是一个分布式 发布-订阅 系统和一个强大的队列,可以处理大量的数据,并且能够将消息从一个端点传递到另一个端点.Kafka适合离线和在线消息消费.Kafka消息保留在磁盘上,并在集群内复制防止数据流失.构建在zk同步服务之上.   可靠性 - 分布式,分区,复制,容错 可扩展性 - 轻松缩放,无需停机 耐用性 - kafka使用分布式提交日志,消息会尽可能的保留在磁盘上 性">
-<meta name="keywords" content="发布-订阅">
+<meta name="keywords" content="发布-订阅 系统">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka">
 <meta property="og:url" content="http://tiltcat.com/2017/06/14/kafka/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
 <meta property="og:description" content="什么是kafkakafka是一个分布式 发布-订阅 系统和一个强大的队列,可以处理大量的数据,并且能够将消息从一个端点传递到另一个端点.Kafka适合离线和在线消息消费.Kafka消息保留在磁盘上,并在集群内复制防止数据流失.构建在zk同步服务之上.   可靠性 - 分布式,分区,复制,容错 可扩展性 - 轻松缩放,无需停机 耐用性 - kafka使用分布式提交日志,消息会尽可能的保留在磁盘上 性">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/kafka.png">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/kafka-HW-LEO.png">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/kafka+zk.jpeg">
-<meta property="og:updated_time" content="2017-06-15T06:23:19.000Z">
+<meta property="og:updated_time" content="2017-06-20T06:10:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka">
 <meta name="twitter:description" content="什么是kafkakafka是一个分布式 发布-订阅 系统和一个强大的队列,可以处理大量的数据,并且能够将消息从一个端点传递到另一个端点.Kafka适合离线和在线消息消费.Kafka消息保留在磁盘上,并在集群内复制防止数据流失.构建在zk同步服务之上.   可靠性 - 分布式,分区,复制,容错 可扩展性 - 轻松缩放,无需停机 耐用性 - kafka使用分布式提交日志,消息会尽可能的保留在磁盘上 性">
@@ -168,10 +169,19 @@
 <li>broker: 存放topic的server.一个broker可以有一个或者多个topic.</li>
 <li>topic: 每条发布到Kafka集群的消息都有一个类别，这个类别被称为Topic，Kafka中Topic可以理解为一个存储消息的队列。物理上不同Topic的消息分开存储，逻辑上一个Topic的消息虽然保存在一个或多个broker上但用户只需指定消息的Topic即可生产或消费数据而不必关心数据存于何处。</li>
 <li>partition: 物理上的概念，Kafka物理上把Topic分成一个或多个Partition，每个Partition在物理上对应一个文件夹，该文件夹下存储这个Partition的所有消息和索引文件。如创建topic1和topic2两个topic，且分别有13个和19个Partition分区，则整个集群上相应会生成32个文件夹。为了实现扩展性，一个非常大的topic可以分布到多个broker上，但Kafka只保证按一个partition中的顺序将消息发给consumer，不保证一个topic的整体（多个partition间）的顺序。</li>
-<li>consumer group:这是Kafka用来实现一个topic消息的广播（发给所有的consumer）和单播（发给任意一个consumer）的手段。一个 topic可以属于多个CG。topic的消息会复制（不是真的复制，是概念上的）到所有的CG，但每个CG只会把消息发给该CG中的一个consumer。如果需要实现广播，只要每个consumer有一个独立的CG就可以了。要实现单播只要所有的consumer在同一个CG。用CG还可以将consumer进行自由的分组而不需要多次发送消息到不同的topic。每个consumer属于一个特定的Consumer Group, Kafka允许为每个consumer指定group name，若不指定group name则属于默认的group。<br>这里的单播刚开始不好理解,现在的理解是这样的:比如一个群体里面有十个人,这十个人都是consumer,他们的producer是某家电视台.假设现在频道到期了,想要延期需要交钱,这时候只需要通知一个人就可以了,那个人从公共的库里面拿钱去缴费,并不需要广播.我们可以简单的理解producer往那个consumer group里打一个电话,我不知道谁接的电话,只要是有一个人接电话,那么我们的目的就达到了,效果要明显好于给每一个人打电话通知交钱.</li>
+<li>consumer group:什么是consumer group? 一言以蔽之，consumer group是kafka提供的可扩展且具有容错性的消费者机制。既然是一个组，那么组内必然可以有多个消费者或消费者实例(consumer instance)，它们共享一个公共的ID，即group ID。组内的所有消费者协调在一起来消费订阅主题(subscribed topics)的所有分区(partition)。当然，每个分区只能由同一个消费组内的一个consumer来消费。个人认为，理解consumer group记住下面这三个特性就好了：<br>1.consumer group下可以有一个或多个consumer instance，consumer instance可以是一个进程，也可以是一个线程<br>2.group.id是一个字符串，唯一标识一个consumer group<br>3.consumer group下订阅的topic下的每个分区只能分配给某个group下的一个consumer(当然该分区还可以被分配给其他group)</li>
 </ul>
 </blockquote>
-<h3 id="topic-and-partition"><a href="#topic-and-partition" class="headerlink" title="topic and partition"></a>topic and partition</h3><p>每一条消息被发送到topic中，会根据partition规则选择被存储到哪一个partition。如果partition规则设置的合理，所有消息可以均匀分布到不同的partition里，这样就实现了水平扩展。（如果一个topic对应一个文件，那这个文件所在的机器I/O将会成为这个topic的性能瓶颈，而partition解决了这个问题）。在创建topic时可以在$KAFKA_HOME/config/server.properties中指定这个partition的数量（如下所示），当然可以在topic创建之后去修改partition的数量。<br>在发送一条消息时，可以指定这个消息的key，producer根据这个key和partition机制来判断这个消息发送到哪个partition。partition机制可以通过指定producer的partition.class这一参数来指定，该class必须实现kafka.producer.Partitioner接口。</p>
+<h3 id="消费者位置-consumer-position"><a href="#消费者位置-consumer-position" class="headerlink" title="消费者位置(consumer position)"></a>消费者位置(consumer position)</h3><p>消费者在消费的过程中需要记录自己消费了多少数据，即消费位置信息。在Kafka中这个位置信息有个专门的术语：位移(offset)。很多消息引擎都把这部分信息保存在服务器端(broker端)。这样做的好处当然是实现简单，但会有三个主要的问题：1. broker从此变成有状态的，会影响伸缩性；2. 需要引入应答机制(acknowledgement)来确认消费成功。3. 由于要保存很多consumer的offset信息，必然引入复杂的数据结构，造成资源浪费。而Kafka选择了不同的方式：每个consumer group保存自己的位移信息，那么只需要简单的一个整数表示位置就够了；同时可以引入checkpoint机制定期持久化，简化了应答机制的实现。</p>
+<p>我们在这继续来说几个名词:</p>
+<p>ISR:(In-Sync Replicas)<code>副本同步队列</code>.副本数对Kafka吞吐率有一定的影响,但是极大的增强了可用性.默认情况下kafka的replica数量为1,即每个partition都有一个唯一的leader,为了确保消息的可靠性,通常将其大小设置为大于1,比如3.</p>
+<p>AR: Assigned Replicas,<code>所有副本的统称</code>,ISR是AR的一个子集,由leader维护ISR列表.follower从leader同步数据有一些延迟,新版本支持延迟时间维度.任何超过阈值都会把follower剔除ISR加入OSR(outof-sync replicas)列表, AR = ISR + OSR, ISR包括follower和leader.</p>
+<p>LEO: LogEndOffset的缩写，表示每个partition的log最后一条Message的位置.</p>
+<p>HW: HW俗称高水位，HighWatermark的缩写，取一个partition对应的ISR中最小的LEO作为HW，consumer最多只能消费到HW所在的位置。另外每个replica都有HW,leader和follower各自负责更新自己的HW的状态。对于leader新写入的消息，consumer不能立刻消费，leader会等待该消息被所有ISR中的replicas同步后更新HW，此时消息才能被consumer消费。这样就保证了如果leader所在的broker失效，该消息仍然可以从新选举的leader中获取。对于来自内部broKer的读取请求，没有HW的限制。</p>
+<p><img src="http://ogeojkg3t.bkt.clouddn.com/kafka-HW-LEO.png" alt=""></p>
+<p>Kafka的ISR的管理最终都会反馈到Zookeeper节点上。具体位置为：/brokers/topics/[topic]/partitions/[partition]/state。目前有两个地方会对这个Zookeeper的节点进行维护：</p>
+<p>1.Controller来维护：Kafka集群中的其中一个Broker会被选举为Controller，主要负责Partition管理和副本状态管理，也会执行类似于重分配partition之类的管理任务。在符合某些特定条件下，Controller下的LeaderSelector会选举新的leader，ISR和新的leader_epoch及controller_epoch写入Zookeeper的相关节点中。同时发起LeaderAndIsrRequest通知所有的replicas。<br>2.leader来维护：leader有单独的线程定期检测ISR中follower是否脱离ISR, 如果发现ISR变化，则会将新的ISR的信息返回到Zookeeper的相关节点中。</p>
+<h3 id="数据可靠性和持久保持性"><a href="#数据可靠性和持久保持性" class="headerlink" title="数据可靠性和持久保持性"></a>数据可靠性和持久保持性</h3><h3 id="topic-and-partition"><a href="#topic-and-partition" class="headerlink" title="topic and partition"></a>topic and partition</h3><p>每一条消息被发送到topic中，会根据partition规则选择被存储到哪一个partition。如果partition规则设置的合理，所有消息可以均匀分布到不同的partition里，这样就实现了水平扩展。（如果一个topic对应一个文件，那这个文件所在的机器I/O将会成为这个topic的性能瓶颈，而partition解决了这个问题）。在创建topic时可以在$KAFKA_HOME/config/server.properties中指定这个partition的数量（如下所示），当然可以在topic创建之后去修改partition的数量。<br>在发送一条消息时，可以指定这个消息的key，producer根据这个key和partition机制来判断这个消息发送到哪个partition。partition机制可以通过指定producer的partition.class这一参数来指定，该class必须实现kafka.producer.Partitioner接口。</p>
 <p>一个机器上可以部署一个或者多个broker</p>
 <p>1、复制一份server.properties为server1.properties<br>[root@baozi kafka_2.10-0.8.2.1]# cp config/server.properties config/server1.properties</p>
 <p>2、修改配置文件server1.properties：<br>broker.id=1<br>port=9040<br>log.dirs=/mykafka1/kafka-logs</p>
@@ -214,7 +224,7 @@
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/发布-订阅/">发布-订阅</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/发布-订阅-系统/">发布-订阅 系统</a></li></ul>
 	</div>
 
       
@@ -340,7 +350,7 @@
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 16.67px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 13.33px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/发布-订阅/" style="font-size: 10px;">发布-订阅</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 16.67px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 13.33px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/发布-订阅-系统/" style="font-size: 10px;">发布-订阅 系统</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     			</div>
     	</section>
     
