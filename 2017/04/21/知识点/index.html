@@ -15,7 +15,7 @@
 <meta property="og:url" content="http://tiltcat.com/2017/04/21/知识点/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
 <meta property="og:description" content="这边对细小的知识做一个简单的总结">
-<meta property="og:updated_time" content="2017-04-24T08:42:48.000Z">
+<meta property="og:updated_time" content="2017-07-04T08:51:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="知识点">
 <meta name="twitter:description" content="这边对细小的知识做一个简单的总结">
@@ -160,7 +160,7 @@
 <li>Class.forName();</li>
 </ul>
 </blockquote>
-<h2 id="ThreadLocak"><a href="#ThreadLocak" class="headerlink" title="ThreadLocak"></a>ThreadLocak</h2><p>一般实现进程会有两种方式，Synchronize类别和ThreadLocal.<br>Synchronize我们已经我们已经很熟悉了,每次只能有一个线程访问，缺点是效率低下。</p>
+<h2 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h2><p>一般实现进程会有两种方式，Synchronize类别和ThreadLocal.<br>Synchronize我们已经我们已经很熟悉了,每次只能有一个线程访问，缺点是效率低下。</p>
 <p>而ThreadLocal正好相反，使用的是空间换时间。<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;SimpleDateFormat&gt; formatter = <span class="keyword">new</span> ThreadLocal&lt;SimpleDateFormat&gt;()&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> SimpleDateFormat <span class="title">initialValue</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> String <span class="title">formatIt</span><span class="params">(Date date)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> formatter.get().format(date);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>使用synchronized的话，表示当前只有1个线程才能访问方法，其他线程都会被阻塞。当访问的线程也阻塞的时候，其他所有访问该方法的线程全部都会阻塞，这个方法相当地 “耗时”。<br>使用ThreadLocal的话，表示每个线程的本地变量中都有SimpleDateFormat这个实例的引用，也就是各个线程之间完全没有关系，也就不存在同步问题了。</p>
 
