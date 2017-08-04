@@ -15,7 +15,7 @@
 <meta property="og:url" content="http://tiltcat.com/2016/10/18/Java.util.concurrent/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
 <meta property="og:description" content="concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~  部分细节文中没有提到，请查询 API   Executors      ThreadPoolExecutor Semaphore                 ReentrantLock             Bl">
-<meta property="og:updated_time" content="2017-04-05T08:43:18.000Z">
+<meta property="og:updated_time" content="2017-08-04T06:20:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java.util.concurrent">
 <meta name="twitter:description" content="concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~  部分细节文中没有提到，请查询 API   Executors      ThreadPoolExecutor Semaphore                 ReentrantLock             Bl">
@@ -166,6 +166,7 @@
 <li>Future           </li>
 <li>ScheduledExecutorService</li>
 <li>ConcurrentHashMap</li>
+<li>AbstractQueuedSynchronizer</li>
 </ul>
 </blockquote>
 <a id="more"></a>
@@ -214,6 +215,8 @@
 <h3 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h3><p>再说ConcurrentHashMap前，我们先看看HashMap和HashTable.</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HashMapDemo</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">       <span class="keyword">final</span> HashMap&lt;String, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;String, Integer&gt;(<span class="number">3</span>);</div><div class="line">        ExecutorService service = Executors.newCachedThreadPool();</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10000</span>;i++)&#123;</div><div class="line">            service.execute(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    map.put(UUID.randomUUID().toString(),<span class="number">1</span>);</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">        service.shutdown();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>HashMap不是线程安全的，put方法会导致死循环，你一跑，会发现CPU利用率达到100%。HashTable是线程安全的，但是效率太低。HashTable效率低下的原因是多个线程会争抢一把锁。那如果一个容器可以拥有多把锁，每个锁只锁一部分数据呢？这就是ConcurrentHashMap.</p>
+<h3 id="AbstractQueuedSynchronizer"><a href="#AbstractQueuedSynchronizer" class="headerlink" title="AbstractQueuedSynchronizer"></a>AbstractQueuedSynchronizer</h3><p>这一部分是我后加上去的,这个是concurrent的基石,内容相对也会多一些.</p>
+<p>AQS在功能上有独占控制锁和共享控制锁两种.</p>
 <p>写了半天终于写了个大概了，实际开发中遇到相关的问题就会有更深的理解，本篇写的东西就是对API的一个大概梳理，具体方法记不清到时候查一下就好了。</p>
 <p>Happy coding!</p>
 <p>标签： Java基础 concurrent</p>
