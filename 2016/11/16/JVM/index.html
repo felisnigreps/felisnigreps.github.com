@@ -17,7 +17,7 @@
 <meta property="og:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。   JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.jpg">
-<meta property="og:updated_time" content="2017-08-04T06:19:43.000Z">
+<meta property="og:updated_time" content="2017-08-07T09:06:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM">
 <meta name="twitter:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。   JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
@@ -245,11 +245,14 @@
 <p>defineClass 此方法负责将二进制字节流转换为Class对象，这个方法对于自定义类加载器而言非常重要。如果二进制的字节码的格式不符合jvmclass文件格式规范，则抛出ClassFormatError异常；如果生成的类名和二进制字节码不同，则抛出NoClassDefFoundError；如果加载的class是受保护的、采用不同签名的，或者类名是以java.开头的，则抛出SecurityException异常。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">protected</span> <span class="keyword">final</span> Class&lt;?&gt; defineClass(String name, <span class="keyword">byte</span>[] b, <span class="keyword">int</span> off, <span class="keyword">int</span> len,  </div><div class="line">                     ProtectionDomain protectionDomain)  </div><div class="line">    <span class="keyword">throws</span> ClassFormatError  </div><div class="line">    &#123;  </div><div class="line">         <span class="keyword">return</span> defineClassCond(name, b, off, len, protectionDomain, <span class="keyword">true</span>);  </div><div class="line">    &#125;  </div><div class="line"> </div><div class="line">    <span class="comment">// Private method w/ an extra argument for skipping class verification  </span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Class&lt;?&gt; defineClassCond(String name,  </div><div class="line">                                           <span class="keyword">byte</span>[] b, <span class="keyword">int</span> off, <span class="keyword">int</span> len,  </div><div class="line">                                           ProtectionDomain protectionDomain,  </div><div class="line">                                           <span class="keyword">boolean</span> verify)  </div><div class="line">        <span class="keyword">throws</span> ClassFormatError  </div><div class="line">    &#123;  </div><div class="line">    protectionDomain = preDefineClass(name, protectionDomain);  </div><div class="line"> </div><div class="line">    Class c = <span class="keyword">null</span>;  </div><div class="line">        String source = defineClassSourceLocation(protectionDomain);  </div><div class="line"> </div><div class="line">    <span class="keyword">try</span> &#123;  </div><div class="line">        c = defineClass1(name, b, off, len, protectionDomain, source,  </div><div class="line">                             verify);  </div><div class="line">    &#125; <span class="keyword">catch</span> (ClassFormatError cfe) &#123;  </div><div class="line">        c = defineTransformedClass(name, b, off, len, protectionDomain, cfe,  </div><div class="line">                                       source, verify);  </div><div class="line">    &#125;  </div><div class="line"> </div><div class="line">    postDefineClass(c, protectionDomain);  </div><div class="line">    <span class="keyword">return</span> c;  </div><div class="line">    &#125;</div><div class="line"><span class="comment">//resolveClass 此方法负责完成Class对象的链接，如果链接过，则直接返回</span></div></pre></td></tr></table></figure>
 <h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><p>Java按照分代的方式来回收内存空间，这组要针对的是堆区域。<br>堆区域分为新生代，老年代。</p>
+<h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><p>我们怎么判断一个对象是不是需要被回收呢？有一个很常用的算法就是引用计数算法，存在一个引用计数器，如果一个对象被引用一次就会加1，失去了引用就减1，当这个值为0的时候就会被回收。比如Python, FlashPlayer等使用的都是此种算法。<br>但是在主流的JVM中并没有使用此种算法，因为会出现对象之间循环引用的问题。<br>a.instance = b; b.instance = a;<br>即使在其他地方没有任何引用，这两个计数器都为1，不能被回收。</p>
+<h3 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h3><p>主流的程序语言中我们使用可达性分析算法来判断对象是否存活，通过一些列的GC Roots来进行搜索，如果某些对象是不可到达的，那么他们就会被回收。<br>GC Roots的分布：<br>1.虚拟机栈（就是我们常说的栈）<br>2.方法区中静态属性引用的对象（static引用导致内存泄漏/溢出）<br>3.方法区中常量引用的对象（final）<br>4.本地方法栈JNI(Native方法)</p>
+<p>即使在可达性分析算法中不可达的对象，也并不是一定会被回收的。这时候他们处于缓刑阶段，要宣布一个对象的死亡要经历至少两次标记过程：如果对象在进行可达性分析后发现没有与GC roots相连接的引用链，那么他会被标记并进行第一次筛选，筛选的条件是此对象是否有必要执行finalize方法。当对象没有覆盖finalize或者finalize方法已经被虚拟机调用过，这两种情况都被视作没必要执行。</p>
 <h3 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h3><p>Young generation,又分Eden, from survivor, to survivor三块区域.他们默认的大小是8:1:1。存入的对象先放在Eden区域，在进行了GC之后，数据会存放到from survivor.就是说在任何状态都会有一个survivor区域是空闲的，就是说Young generation的利用率在90%左右。</p>
 <p>通常情况下会有大量的对象需要分配内存，而且他们的生命周期很短，所以新生代的GC吞吐量很高，大部分对象都要被回收，从而，剩下的活跃对象比较少，所以<code>新生代适合使用复制算法来进行GC</code>，这样保证复制的数据的量较小，效率最好。</p>
 <h3 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h3><p>在一个对象经过多次GC之后都没有被回收，或者新生代的额空间满了的时候，会直接分配到老年代。</p>
 <p>很多对象经过多次GC以后，经过Eden Space，多次经过From Survivor和To Survivor之后才会进入年老代，而且对象在年老代的存活时间比较长，如果进行使用复制算法来进行GC，需要移动大量的对象，导致效率很低。所以，<code>老年代适合使用标记-清除算法（或者标记-清除-整理）</code>，需要被GC的对象很少，那么标记的对象就很少，在对标记的对象进行回收，效率就会很高。</p>
-<h3 id="永久代"><a href="#永久代" class="headerlink" title="永久代"></a>永久代</h3><p>永久代其实对应着JVM中的方法区，里面存放着常量，类信息，静态变量等数据。一般不需要GC直到JVM退出。</p>
+<h3 id="永久代"><a href="#永久代" class="headerlink" title="永久代"></a>永久代</h3><p>永久代其实对应着JVM中的方法区，里面存放着常量，类信息，静态变量等数据。一般不需要GC直到JVM退出。JDK8中已经替换为元数据区 metaSpace.</p>
 <h2 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h2><h3 id="Serial收集器"><a href="#Serial收集器" class="headerlink" title="Serial收集器"></a>Serial收集器</h3><p>串行收集器是最古老，最稳定以及效率高的收集器，可能会产生较长的停顿，只是用一个线程去回收。新生代，老年代使用串行回收；新生代复制算法，老年代标记-压缩；垃圾收集的过程中会Stop the world(服务暂停).</p>
 <p>参数控制：-XX：+UseSerialGC</p>
 <h3 id="ParNew收集器"><a href="#ParNew收集器" class="headerlink" title="ParNew收集器"></a>ParNew收集器</h3><p>ParNew收集器其实就是Serial收集器的多线程版本。新生代并行，老年代串行；新生代复制算法，老年代标记-压缩。</p>
@@ -369,11 +372,6 @@
 <p>参见另一篇<a href="http://blog.csdn.net/java2000_wl/article/details/8030172" target="_blank" rel="external">垃圾收集器</a></p>
 <p>2.查看JVM参数</p>
 <p><a href="http://blog.csdn.net/java2000_wl/article/details/8042010" target="_blank" rel="external">命令行工具</a>   <a href="http://www.importnew.com/?p=22235" target="_blank" rel="external">可视化工具</a></p>
-<p>3.GC日志参数</p>
-<p>-XX:+PrintGC(-verbose:gc)</p>
-<p>-XX:+PrintGCDetails</p>
-<p>-XX:+PrintGCTimeStamps</p>
-<p>-Xloggc:c:\Java\gc.log</p>
 <h2 id="对象访问"><a href="#对象访问" class="headerlink" title="对象访问"></a>对象访问</h2><h2 id="对象引用"><a href="#对象引用" class="headerlink" title="对象引用"></a>对象引用</h2><p>对象引用分四种：</p>
 <blockquote>
 <ul>
