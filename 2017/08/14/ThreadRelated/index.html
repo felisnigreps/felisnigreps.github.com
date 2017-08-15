@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>数据类型 | Let&#39;s do this</title>
+  <title>线程基础 | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在学习的时候越来越多的会接触基本的数据类型和他们之间的运算，原码反码什么的，以前了解过一些，但是不常用都忘光了，现在在这边记录一下，省的以后又忘光了。">
-<meta name="keywords" content="数据类型">
+  <meta name="description" content="优先级每个线程都有一个优先级，分布在Thread.MIN_PRIORITY和Thread.MAX_PRIORITY之间（分别为1和10）默认情况下，新创建的线程都拥有和创建它的线程相同的优先级。main方法所关联的初始化线程拥有一个默认的优先级，这个优先级是Thread.NORM_PRIORITY (5).线程的当前优先级可以通过getPriority方法获得。线程的优先级可以通过setPrior">
+<meta name="keywords" content="Thread">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据类型">
-<meta property="og:url" content="http://tiltcat.com/2017/02/28/数据类型/index.html">
+<meta property="og:title" content="线程基础">
+<meta property="og:url" content="http://tiltcat.com/2017/08/14/ThreadRelated/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
-<meta property="og:description" content="在学习的时候越来越多的会接触基本的数据类型和他们之间的运算，原码反码什么的，以前了解过一些，但是不常用都忘光了，现在在这边记录一下，省的以后又忘光了。">
-<meta property="og:updated_time" content="2017-08-15T05:38:56.000Z">
+<meta property="og:description" content="优先级每个线程都有一个优先级，分布在Thread.MIN_PRIORITY和Thread.MAX_PRIORITY之间（分别为1和10）默认情况下，新创建的线程都拥有和创建它的线程相同的优先级。main方法所关联的初始化线程拥有一个默认的优先级，这个优先级是Thread.NORM_PRIORITY (5).线程的当前优先级可以通过getPriority方法获得。线程的优先级可以通过setPrior">
+<meta property="og:updated_time" content="2017-08-14T09:14:19.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="数据类型">
-<meta name="twitter:description" content="在学习的时候越来越多的会接触基本的数据类型和他们之间的运算，原码反码什么的，以前了解过一些，但是不常用都忘光了，现在在这边记录一下，省的以后又忘光了。">
+<meta name="twitter:title" content="线程基础">
+<meta name="twitter:description" content="优先级每个线程都有一个优先级，分布在Thread.MIN_PRIORITY和Thread.MAX_PRIORITY之间（分别为1和10）默认情况下，新创建的线程都拥有和创建它的线程相同的优先级。main方法所关联的初始化线程拥有一个默认的优先级，这个优先级是Thread.NORM_PRIORITY (5).线程的当前优先级可以通过getPriority方法获得。线程的优先级可以通过setPrior">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -131,7 +131,7 @@
 </nav>
 
       <div class="body-wrap">
-        <article id="post-数据类型" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-ThreadRelated" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -141,7 +141,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      数据类型
+      线程基础
     </h1>
   
 
@@ -149,31 +149,28 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在学习的时候越来越多的会接触基本的数据类型和他们之间的运算，原码反码什么的，以前了解过一些，但是不常用都忘光了，现在在这边记录一下，省的以后又忘光了。</p>
-<a id="more"></a>
-<h2 id="little-things"><a href="#little-things" class="headerlink" title="little things"></a>little things</h2><h3 id="一个字符占用多少字节？"><a href="#一个字符占用多少字节？" class="headerlink" title="一个字符占用多少字节？"></a>一个字符占用多少字节？</h3><p>具体地讲，脱离具体的编码谈某个字符占几个字节是没有意义的。<br>就好比有一个抽象的整数“42”，你说它占几个字节？这得具体看你是用byte，short，int，还是long来存它。<br>字符是同样的道理，如果你想谈“占几个字节”，就要先把编码说清楚。<br>同一个字符在不同的编码下可能占不同的字节。<br>就以你举的“字”字为例，“字”在GBK编码下占2字节，在UTF-16编码下也占2字节，在UTF-8编码下占3字节，在UTF-32编码下占4字节。<br>不同的字符在同一个编码下也可能占不同的字节。<br>“字”在UTF-8编码下占3字节，而“A”在UTF-8编码下占1字节。（因为UTF-8是变长编码）</p>
-<h3 id="Java基本数据类型占几个字节？"><a href="#Java基本数据类型占几个字节？" class="headerlink" title="Java基本数据类型占几个字节？"></a>Java基本数据类型占几个字节？</h3><p>一个字节代表八位。<br>int占4个字节，即表示int类型的存储大小为4个字节。<br>如果转成十进制来说就是“-2147483648 ~2147483647”<br>即：int只能存放这么大的数字。。。超出范围则溢出。。。<br>再来说byte<br>byte最大能够存放 -128～127 的数值。<br>那为什么是 -128～127<br>这个跟字节编码有关<br>首先知道byte是一个字节保存的，有8个位，也就是8个0、1。<br>8个位的第一个位是符号位，<br>也就是说0000 0001代表的是数字1<br>1000 0000代表的就是-1<br>所以正数最大位0111 1111，也就是数字127<br>负数最大为1111 1111，也就是数字-128</p>
-<h3 id="源码-补码-反码"><a href="#源码-补码-反码" class="headerlink" title="源码/补码/反码"></a>源码/补码/反码</h3><p><a href="https://www.cnblogs.com/zhangziqiu/archive/2011/03/30/ComputerCode.html" target="_blank" rel="external">这篇文章</a>写的好哇，我转一下吧，有机会在自己理解手敲一遍：</p>
-<p>计算机表示负数为补码</p>
-<p>取反过程是在补码的基础上进行的（int a =2, sout(~a)为3）</p>
-<h2 id="异或操作"><a href="#异或操作" class="headerlink" title="异或操作"></a>异或操作</h2><p>异或，英文为exclusive OR，或缩写成xor<br>异或（xor）是一个数学运算符。它应用于逻辑运算。异或的数学符号为“⊕”，计算机符号为“xor”。其运算法则为：<br>a⊕b = (¬a ∧ b) ∨ (a ∧¬b)<br>如果a、b两个值不相同，则异或结果为1。如果a、b两个值相同，异或结果为0。<br>x ^ y 这样.</p>
-<h2 id="Java基本数据类型的小知识"><a href="#Java基本数据类型的小知识" class="headerlink" title="Java基本数据类型的小知识"></a>Java基本数据类型的小知识</h2><p>整数型的默认是 int 类型，带小数的默认是 double 类型</p>
-<h2 id="Integer-highestOneBit-int-i-的作用"><a href="#Integer-highestOneBit-int-i-的作用" class="headerlink" title="Integer.highestOneBit(int i)的作用"></a>Integer.highestOneBit(int i)的作用</h2><p>简单的说法</p>
-<p>如果一个数是0, 则返回0；<br>如果是负数, 则返回 -2147483648：【1000,0000,0000,0000,0000,0000,0000,0000】(二进制表示的数)；<br>如果是正数, 返回的则是跟它最靠近的比它小的2的N次方<br>比如 17：<br>二进制是【0000,0000,0000,0000,0000,0000,0001,0001】</p>
-<p>highestOneBit(17)返回的是最高位的1个1, 其它全是0 的二进制数：【0000,0000,0000,0000,0000,0000,0001,0000】，其实就是16。</p>
-<h2 id="快速判断一个数是否为2的指数"><a href="#快速判断一个数是否为2的指数" class="headerlink" title="快速判断一个数是否为2的指数"></a>快速判断一个数是否为2的指数</h2><p>i&amp;(i - 1), 比如8，二进制位1000, 那么8&amp;(8-1)为0，只要为0就是2的指数.</p>
+        <h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><p>每个线程都有一个优先级，分布在Thread.MIN_PRIORITY和Thread.MAX_PRIORITY之间（分别为1和10）<br>默认情况下，新创建的线程都拥有和创建它的线程相同的优先级。main方法所关联的初始化线程拥有一个默认的优先级，这个优先级是Thread.NORM_PRIORITY (5).<br>线程的当前优先级可以通过getPriority方法获得。<br>线程的优先级可以通过setPriority方法来动态的修改，一个线程的最高优先级由其所在的线程组限定。</p>
+<p>当可运行的线程数超过了可用的CPU数目的时候，线程调度器更偏向于去执行那些拥有更高优先级的线程。具体的策略因平台而异。比如有些Java虚拟机实现总是选择当前优先级最高的线程执行。有些虚拟机实现将Java中的十个优先级映射到系统所支持的更小范围的优先级上，因此，拥有不同优先级的线程可能最终被同等对待。还有些虚拟机会使用老化策略（随着时间的增长，线程的优先级逐渐升高）动态调整线程优先级，另一些虚拟机实现的调度策略会确保低优先级的线程最终还是能够有机会运行。设置线程优先级可以影响在同一台机器上运行的程序之间的调度结果，但是这不是必须的。每个线程都有一个优先级</p>
+<h3 id="线程组"><a href="#线程组" class="headerlink" title="线程组"></a>线程组</h3><p>Java中每一个线程都归属于某个线程组管理的一员，如果在main函数里产生了一个线程，那么这个线程就属于main这个管理组的议员，是类java.lang.ThreadGroup类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line">ThreadGroup group = <span class="keyword">new</span> ThreadGroup(<span class="string">"group"</span>);</div><div class="line">Thread thread = <span class="keyword">new</span> Thread(group,<span class="string">"the first thread of group"</span>)</div></pre></td></tr></table></figure>
+<h3 id="同步方法和同步块"><a href="#同步方法和同步块" class="headerlink" title="同步方法和同步块"></a>同步方法和同步块</h3><p>使用synchronized关键字，有两种语法结构：同步代码块和同步方法。同步代码块需要提供一个作为锁的对象参数。这就允许了任意方法可以去锁任一一个对象。但在同步代码块中使用的最普通的参数却是this。</p>
+<p>同步代码块被认为比同步方法更加的基础。如下两种声明方式是等同的：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="comment">/* body */</span> &#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123; <span class="comment">/* body */</span> &#125; &#125;</div></pre></td></tr></table></figure>
+<p>synchronized关键字并不是方法签名的一部分。所以当子类覆写父类中的同步方法或是接口中声明的同步方法的时候，synchronized修饰符是不会被自动继承的，另外，构造方法不可能是真正同步的（尽管可以在构造方法中使用同步块）。</p>
+<p>同步实例方法在其子类和父类中使用同样的锁。但是内部类方法的同步却独立于其外部类， 然而一个非静态的内部类方法可以通过下面这种方式锁住其外部类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">synchronized</span>(OuterClass.<span class="keyword">this</span>) &#123; <span class="comment">/* body */</span> &#125;</div></pre></td></tr></table></figure>
 
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2017/02/28/数据类型/" class="archive-article-date">
-  	<time datetime="2017-02-28T08:16:38.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-02-28</time>
+      <a href="/2017/08/14/ThreadRelated/" class="archive-article-date">
+  	<time datetime="2017-08-14T02:12:05.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-08-14</time>
 </a>
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据类型/">数据类型</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Thread/">Thread</a></li></ul>
 	</div>
 
       
@@ -186,18 +183,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/03/01/ThreadPoolExecutor源码分析/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/08/14/线程基础/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          ThreadPoolExecutor
+          线程基础
         
       </div>
     </a>
   
   
-    <a href="/2017/02/27/Spring事务管理/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Spring事务管理</div>
+    <a href="/2017/06/14/kafka/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Kafka</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -231,7 +228,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="数据类型" data-title="数据类型" data-url="http://tiltcat.com/2017/02/28/数据类型/"></div>
+	<div class="ds-thread" data-thread-key="ThreadRelated" data-title="线程基础" data-url="http://tiltcat.com/2017/08/14/ThreadRelated/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

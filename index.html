@@ -187,6 +187,65 @@
 
 
   
+    <article id="post-ThreadRelated" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/08/14/ThreadRelated/">线程基础</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><p>每个线程都有一个优先级，分布在Thread.MIN_PRIORITY和Thread.MAX_PRIORITY之间（分别为1和10）<br>默认情况下，新创建的线程都拥有和创建它的线程相同的优先级。main方法所关联的初始化线程拥有一个默认的优先级，这个优先级是Thread.NORM_PRIORITY (5).<br>线程的当前优先级可以通过getPriority方法获得。<br>线程的优先级可以通过setPriority方法来动态的修改，一个线程的最高优先级由其所在的线程组限定。</p>
+<p>当可运行的线程数超过了可用的CPU数目的时候，线程调度器更偏向于去执行那些拥有更高优先级的线程。具体的策略因平台而异。比如有些Java虚拟机实现总是选择当前优先级最高的线程执行。有些虚拟机实现将Java中的十个优先级映射到系统所支持的更小范围的优先级上，因此，拥有不同优先级的线程可能最终被同等对待。还有些虚拟机会使用老化策略（随着时间的增长，线程的优先级逐渐升高）动态调整线程优先级，另一些虚拟机实现的调度策略会确保低优先级的线程最终还是能够有机会运行。设置线程优先级可以影响在同一台机器上运行的程序之间的调度结果，但是这不是必须的。每个线程都有一个优先级</p>
+<h3 id="线程组"><a href="#线程组" class="headerlink" title="线程组"></a>线程组</h3><p>Java中每一个线程都归属于某个线程组管理的一员，如果在main函数里产生了一个线程，那么这个线程就属于main这个管理组的议员，是类java.lang.ThreadGroup类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line">ThreadGroup group = <span class="keyword">new</span> ThreadGroup(<span class="string">"group"</span>);</div><div class="line">Thread thread = <span class="keyword">new</span> Thread(group,<span class="string">"the first thread of group"</span>)</div></pre></td></tr></table></figure>
+<h3 id="同步方法和同步块"><a href="#同步方法和同步块" class="headerlink" title="同步方法和同步块"></a>同步方法和同步块</h3><p>使用synchronized关键字，有两种语法结构：同步代码块和同步方法。同步代码块需要提供一个作为锁的对象参数。这就允许了任意方法可以去锁任一一个对象。但在同步代码块中使用的最普通的参数却是this。</p>
+<p>同步代码块被认为比同步方法更加的基础。如下两种声明方式是等同的：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="comment">/* body */</span> &#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123; <span class="comment">/* body */</span> &#125; &#125;</div></pre></td></tr></table></figure>
+<p>synchronized关键字并不是方法签名的一部分。所以当子类覆写父类中的同步方法或是接口中声明的同步方法的时候，synchronized修饰符是不会被自动继承的，另外，构造方法不可能是真正同步的（尽管可以在构造方法中使用同步块）。</p>
+<p>同步实例方法在其子类和父类中使用同样的锁。但是内部类方法的同步却独立于其外部类， 然而一个非静态的内部类方法可以通过下面这种方式锁住其外部类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">synchronized</span>(OuterClass.<span class="keyword">this</span>) &#123; <span class="comment">/* body */</span> &#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2017/08/14/ThreadRelated/" class="archive-article-date">
+  	<time datetime="2017-08-14T02:12:05.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-08-14</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Thread/">Thread</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-kafka" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -609,60 +668,6 @@
 
 
   
-    <article id="post-DBMS事务隔离级别" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/23/DBMS事务隔离级别/">DBMS的事务隔离级别</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>事务保证了一个操作序列全部执行或者全部不执行(原子性)，从一个状态转变为另一个状态。事务是满足持久性的，所以可以被保存下来。当多个事务操作数据的时候，如果控制不好隔离级别，那么就会出现脏读，重复读，幻读等问题。</p>
-<p>刚开始主要是对幻读的理解不到位，现在讨论一下：</p>
-<p>事务的四种性质ACID,很基础，我们常常所讨论的是一致性和隔离性，解决办法往往是加锁，不过数据库又是一个高并发的应用，锁加多了会造成很大的性能问题，这边通过分析MySQL的InnoDB引擎来分析下事务的级别是什么，数据库在其中又到底做了什么。</p>
-        <p class="article-more-link">
-          <a class="article-more-a"  href="/2017/02/23/DBMS事务隔离级别/#more">more >></a>
-        </p>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2017/02/23/DBMS事务隔离级别/" class="archive-article-date">
-  	<time datetime="2017-02-23T00:56:10.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-02-23</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务管理/">事务管理</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -726,7 +731,7 @@
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 16.67px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/Thread/" style="font-size: 10px;">Thread</a> <a href="/tags/事务管理/" style="font-size: 13.33px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/发布-订阅-系统/" style="font-size: 10px;">发布-订阅 系统</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 16.67px;">Concurrent</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 13.33px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/Thread/" style="font-size: 13.33px;">Thread</a> <a href="/tags/事务管理/" style="font-size: 13.33px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/发布-订阅-系统/" style="font-size: 10px;">发布-订阅 系统</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     			</div>
     	</section>
     
