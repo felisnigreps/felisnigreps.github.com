@@ -8,21 +8,21 @@
   <link rel="dns-prefetch" href="http://tiltcat.com">
   <title>ConcurrentHashMap &amp; HashMap | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。
-本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。图片都是google的，出处不详。">
+  <meta name="description" content="ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。 本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。图片都是google的，出处不详。">
+<meta name="keywords" content="Concurrent HashMap">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ConcurrentHashMap & HashMap">
+<meta property="og:title" content="ConcurrentHashMap &amp; HashMap">
 <meta property="og:url" content="http://tiltcat.com/2016/10/18/ConcurrentHashMap & HashMap/index.html">
-<meta property="og:site_name" content="Let's do this">
-<meta property="og:description" content="ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。
-本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。图片都是google的，出处不详。">
+<meta property="og:site_name" content="Let&#39;s do this">
+<meta property="og:description" content="ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。 本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。图片都是google的，出处不详。">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/HashMap.png">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/HashMapResize1.jpg">
-<meta property="og:updated_time" content="2016-11-23T14:00:57.000Z">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/concurrentHashMap1.7.png">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/ConcurrentHashMap1.8.png">
+<meta property="og:updated_time" content="2017-08-15T06:56:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ConcurrentHashMap & HashMap">
-<meta name="twitter:description" content="ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。
-本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。图片都是google的，出处不详。">
+<meta name="twitter:title" content="ConcurrentHashMap &amp; HashMap">
+<meta name="twitter:description" content="ConcurrentHashMap(简称CHM)是在并发情况下很常用的一种数据结构,在这也会连带着说一下HashMap的数据结构。 本文对数据结构和原理进行了简单介绍，想深入了解的话请参考源码。图片都是google的，出处不详。">
 <meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/HashMap.png">
   
   
@@ -160,12 +160,20 @@
 <p><img src="http://ogeojkg3t.bkt.clouddn.com/HashMap.png" alt="HashMap"></p>
 <p>当我们要put一个数据的时候，首先会算出这个值得Hash值，然后根据算法来确定Key的值（先简单理解成取模，不过源码中的代码可以减少碰撞），如果多个数据放在了同一个entry中，那么就会形成链表，当sum(数据)&gt;=lengh(table) * 加载因子，那么就会扩容。JDK1.8中的区别是在entry的长度大于8的时候会把链表转换成红黑树。</p>
 <p>我们知道HashMap是使用链表来处理哈希碰撞的，如果多个进程找到了一个bucket(table(i))上，那么根据Entry的特性，他的next只能指向一个Entry,这必然会造成线程不安全。</p>
-<p>除此之外，多个线程的扩容（rehash）也会导致线程不安全。简单来说，当put的时候发现内部元素多余threshold，那么就会进行扩容，怎么扩容呢？先把buckets扩容一倍，从每一个bucket的每一个entry开始遍历，把他的指向根据算法放到新的bucket里。如果两个线程同时扩容，那么总会有一个线程的操作会被废弃，数据也会丢失。</p>
+<p>除此之外，多个线程的扩容（rehash）也会导致线程不安全。简单来说，threshhold，那么就会进行扩容，怎么扩容呢？先把buckets扩容一倍，从每一个bucket的每一个entry开始遍历，把他的指向根据算法放到新的bucket里。如果两个线程同时扩容，那么总会有一个线程的操作会被废弃，数据也会丢失。</p>
 <p>先来个单线程扩容，我们假设就直接key mod length:</p>
 <p><img src="http://ogeojkg3t.bkt.clouddn.com/HashMapResize1.jpg" alt="resize"></p>
 <p>3,5,7在length为2的bucket里发生了碰撞，都跑到1里去了，现在rezise,从每一个bucket的每一个entry开始遍历，e指向3，next子项7. 第一步先处理3，3%4=3，放到3上。然后是7，一样，但是这块要注意要插在3前面而不是后面，这是为什么呢？因为我们更喜欢O(1)而不是）O(n). 行了，单线程的rehash没啥问题。</p>
-<p>图是网上抄的。</p>
-<h4 id="CHM的数据结构"><a href="#CHM的数据结构" class="headerlink" title="CHM的数据结构"></a>CHM的数据结构</h4><p>CHM在JDK 1.7之后发生了很大的变化，在1.7之前，是通过分段锁技术来实现同步的，建构图应该如下所示：</p>
+<h4 id="CHM的数据结构"><a href="#CHM的数据结构" class="headerlink" title="CHM的数据结构"></a>CHM的数据结构</h4><p>CHM在JDK 1.8之后发生了很大的变化，在1.8之前，是通过分段锁技术来实现同步的，建构图应该如下所示：<br><img src="http://ogeojkg3t.bkt.clouddn.com/concurrentHashMap1.7.png" alt=""></p>
+<p>简单的就是加了一层segment,一个segment里面有多个hashBucket。采用ReentrantLock 分段锁的方式，使多个线程在不同的segment上进行写操作不会阻塞</p>
+<p>CHM默认分为16个桶，在桶越多的情况下就会有更细颗粒的锁控制。</p>
+<p>ConcurrentHashMap中主要实体类就是三个：<br>1、ConcurrentHashMap（整个Hash表）；<br>2、Segment（桶）；<br>3、HashEntry（节点）<br>对应上面的图可以看出之间的关系。</p>
+<p>ConcurrentHashMap允许多个修改操作并发进行，其关键在于使用了锁分离技术。它使用了多个锁来控制对hash表的不同部分进行的修改。ConcurrentHashMap内部使用段(Segment)来表示这些不同的部分，每个段其实就是一个小的hash table，它们有自己的锁。只要多个修改操作发生在不同的段上，它们就可以并发进行。</p>
+<p>有些方法需要跨段，比如size()和containsValue()，它们可能需要锁定整个表而而不仅仅是某个段，这需要按顺序锁定所有段，操作完毕后，又按顺序释放所有段的锁。这里“按顺序”是很重要的，否则极有可能出现死锁，在ConcurrentHashMap内部，段数组是final的，并且其成员变量实际上也是final的，但是，仅仅是将数组声明为final的并不保证数组成员也是final的，这需要实现上的保证。</p>
+<p>1.8的实现已经抛弃了Segment分段锁机制，利用CAS+Synchronized来保证并发更新的安全。</p>
+<p>改进一：取消segments字段，直接采用transient volatile HashEntry &lt; K,V &gt; [] table保存数据，采用table数组元素作为锁，从而实现了对每一行数据进行加锁，进一步减少并发冲突的概率。</p>
+<p>改进二：将原先table数组＋单向链表的数据结构，变更为table数组＋单向链表＋红黑树的结构。对于hash表来说，最核心的能力在于将key hash之后能均匀的分布在数组中。如果hash之后散列的很均匀，那么table数组中的每个队列长度主要为0或者1。但实际情况并非总是如此理想，虽然ConcurrentHashMap类默认的加载因子为0.75，但是在数据量过大或者运气不佳的情况下，还是会存在一些队列长度过长的情况，如果还是采用单向列表方式，那么查询某个节点的时间复杂度为O(n)；因此，对于个数超过8(默认值)的列表，jdk1.8中采用了红黑树的结构，那么查询的时间复杂度可以降低到O(logN)，可以改进性能。</p>
+<p><img src="http://ogeojkg3t.bkt.clouddn.com/ConcurrentHashMap1.8.png" alt=""></p>
 
       
     </div>
@@ -177,7 +185,7 @@
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Concurrent/">Concurrent</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HashMap/">HashMap</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Concurrent-HashMap/">Concurrent HashMap</a></li></ul>
 	</div>
 
       
@@ -199,6 +207,11 @@
       </div>
     </a>
   
+  
+    <a href="/2016/10/18/Java.util.concurrent/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java.util.concurrent</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -256,7 +269,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2016 tiltcat
+    		&copy; 2017 tiltcat
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -307,7 +320,7 @@
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/Concurrent/" style="font-size: 10px;">Concurrent</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/HashMap/" style="font-size: 10px;">HashMap</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Concurrent-HashMap/" style="font-size: 10px;">Concurrent HashMap</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/Thread/" style="font-size: 15px;">Thread</a> <a href="/tags/事务管理/" style="font-size: 15px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/发布-订阅-系统/" style="font-size: 10px;">发布-订阅 系统</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     			</div>
     	</section>
     
@@ -317,7 +330,7 @@
     
     	<section class="tools-section tools-section-me">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">&lt;br&gt;大家好，我叫周克，独生子女&lt;br&gt;名字是我出生的时候二大爷起的 &lt;br&gt;没有固定职业，偶尔打零工&lt;br&gt;爱好篮球和火锅&lt;br&gt;没什么理想，平时也不爱想，嫌累&lt;br&gt;总体上来说就是：胸无大志，混吃等死&lt;br&gt;以上都是我瞎编的 &lt;br&gt;谢谢大家</div>
   	  	
     	</section>
     
