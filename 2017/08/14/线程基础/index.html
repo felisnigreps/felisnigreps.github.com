@@ -15,7 +15,7 @@
 <meta property="og:url" content="http://tiltcat.com/2017/08/14/线程基础/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
 <meta property="og:description" content="优先级每个线程都有一个优先级，分布在Thread.MIN_PRIORITY和Thread.MAX_PRIORITY之间（分别为1和10）默认情况下，新创建的线程都拥有和创建它的线程相同的优先级。main方法所关联的初始化线程拥有一个默认的优先级，这个优先级是Thread.NORM_PRIORITY (5).线程的当前优先级可以通过getPriority方法获得。线程的优先级可以通过setPrior">
-<meta property="og:updated_time" content="2017-08-14T09:01:06.000Z">
+<meta property="og:updated_time" content="2017-08-15T06:59:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线程基础">
 <meta name="twitter:description" content="优先级每个线程都有一个优先级，分布在Thread.MIN_PRIORITY和Thread.MAX_PRIORITY之间（分别为1和10）默认情况下，新创建的线程都拥有和创建它的线程相同的优先级。main方法所关联的初始化线程拥有一个默认的优先级，这个优先级是Thread.NORM_PRIORITY (5).线程的当前优先级可以通过getPriority方法获得。线程的优先级可以通过setPrior">
@@ -150,6 +150,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><p>每个线程都有一个优先级，分布在Thread.MIN_PRIORITY和Thread.MAX_PRIORITY之间（分别为1和10）<br>默认情况下，新创建的线程都拥有和创建它的线程相同的优先级。main方法所关联的初始化线程拥有一个默认的优先级，这个优先级是Thread.NORM_PRIORITY (5).<br>线程的当前优先级可以通过getPriority方法获得。<br>线程的优先级可以通过setPriority方法来动态的修改，一个线程的最高优先级由其所在的线程组限定。</p>
+<a id="more"></a>
 <p>当可运行的线程数超过了可用的CPU数目的时候，线程调度器更偏向于去执行那些拥有更高优先级的线程。具体的策略因平台而异。比如有些Java虚拟机实现总是选择当前优先级最高的线程执行。有些虚拟机实现将Java中的十个优先级映射到系统所支持的更小范围的优先级上，因此，拥有不同优先级的线程可能最终被同等对待。还有些虚拟机会使用老化策略（随着时间的增长，线程的优先级逐渐升高）动态调整线程优先级，另一些虚拟机实现的调度策略会确保低优先级的线程最终还是能够有机会运行。设置线程优先级可以影响在同一台机器上运行的程序之间的调度结果，但是这不是必须的。每个线程都有一个优先级</p>
 <h3 id="线程组"><a href="#线程组" class="headerlink" title="线程组"></a>线程组</h3><p>Java中每一个线程都归属于某个线程组管理的一员，如果在main函数里产生了一个线程，那么这个线程就属于main这个管理组的议员，是类java.lang.ThreadGroup类</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line">ThreadGroup group = <span class="keyword">new</span> ThreadGroup(<span class="string">"group"</span>);</div><div class="line">Thread thread = <span class="keyword">new</span> Thread(group,<span class="string">"the first thread of group"</span>)</div></pre></td></tr></table></figure>
