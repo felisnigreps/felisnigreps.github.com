@@ -17,7 +17,7 @@
 <meta property="og:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。   JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.jpg">
-<meta property="og:updated_time" content="2017-08-07T09:06:10.000Z">
+<meta property="og:updated_time" content="2017-08-16T01:27:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM">
 <meta name="twitter:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。   JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
@@ -245,9 +245,6 @@
 <p>defineClass 此方法负责将二进制字节流转换为Class对象，这个方法对于自定义类加载器而言非常重要。如果二进制的字节码的格式不符合jvmclass文件格式规范，则抛出ClassFormatError异常；如果生成的类名和二进制字节码不同，则抛出NoClassDefFoundError；如果加载的class是受保护的、采用不同签名的，或者类名是以java.开头的，则抛出SecurityException异常。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">protected</span> <span class="keyword">final</span> Class&lt;?&gt; defineClass(String name, <span class="keyword">byte</span>[] b, <span class="keyword">int</span> off, <span class="keyword">int</span> len,  </div><div class="line">                     ProtectionDomain protectionDomain)  </div><div class="line">    <span class="keyword">throws</span> ClassFormatError  </div><div class="line">    &#123;  </div><div class="line">         <span class="keyword">return</span> defineClassCond(name, b, off, len, protectionDomain, <span class="keyword">true</span>);  </div><div class="line">    &#125;  </div><div class="line"> </div><div class="line">    <span class="comment">// Private method w/ an extra argument for skipping class verification  </span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Class&lt;?&gt; defineClassCond(String name,  </div><div class="line">                                           <span class="keyword">byte</span>[] b, <span class="keyword">int</span> off, <span class="keyword">int</span> len,  </div><div class="line">                                           ProtectionDomain protectionDomain,  </div><div class="line">                                           <span class="keyword">boolean</span> verify)  </div><div class="line">        <span class="keyword">throws</span> ClassFormatError  </div><div class="line">    &#123;  </div><div class="line">    protectionDomain = preDefineClass(name, protectionDomain);  </div><div class="line"> </div><div class="line">    Class c = <span class="keyword">null</span>;  </div><div class="line">        String source = defineClassSourceLocation(protectionDomain);  </div><div class="line"> </div><div class="line">    <span class="keyword">try</span> &#123;  </div><div class="line">        c = defineClass1(name, b, off, len, protectionDomain, source,  </div><div class="line">                             verify);  </div><div class="line">    &#125; <span class="keyword">catch</span> (ClassFormatError cfe) &#123;  </div><div class="line">        c = defineTransformedClass(name, b, off, len, protectionDomain, cfe,  </div><div class="line">                                       source, verify);  </div><div class="line">    &#125;  </div><div class="line"> </div><div class="line">    postDefineClass(c, protectionDomain);  </div><div class="line">    <span class="keyword">return</span> c;  </div><div class="line">    &#125;</div><div class="line"><span class="comment">//resolveClass 此方法负责完成Class对象的链接，如果链接过，则直接返回</span></div></pre></td></tr></table></figure>
 <h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><p>Java按照分代的方式来回收内存空间，这组要针对的是堆区域。<br>堆区域分为新生代，老年代。</p>
-<h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><p>我们怎么判断一个对象是不是需要被回收呢？有一个很常用的算法就是引用计数算法，存在一个引用计数器，如果一个对象被引用一次就会加1，失去了引用就减1，当这个值为0的时候就会被回收。比如Python, FlashPlayer等使用的都是此种算法。<br>但是在主流的JVM中并没有使用此种算法，因为会出现对象之间循环引用的问题。<br>a.instance = b; b.instance = a;<br>即使在其他地方没有任何引用，这两个计数器都为1，不能被回收。</p>
-<h3 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h3><p>主流的程序语言中我们使用可达性分析算法来判断对象是否存活，通过一些列的GC Roots来进行搜索，如果某些对象是不可到达的，那么他们就会被回收。<br>GC Roots的分布：<br>1.虚拟机栈（就是我们常说的栈）<br>2.方法区中静态属性引用的对象（static引用导致内存泄漏/溢出）<br>3.方法区中常量引用的对象（final）<br>4.本地方法栈JNI(Native方法)</p>
-<p>即使在可达性分析算法中不可达的对象，也并不是一定会被回收的。这时候他们处于缓刑阶段，要宣布一个对象的死亡要经历至少两次标记过程：如果对象在进行可达性分析后发现没有与GC roots相连接的引用链，那么他会被标记并进行第一次筛选，筛选的条件是此对象是否有必要执行finalize方法。当对象没有覆盖finalize或者finalize方法已经被虚拟机调用过，这两种情况都被视作没必要执行。</p>
 <h3 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h3><p>Young generation,又分Eden, from survivor, to survivor三块区域.他们默认的大小是8:1:1。存入的对象先放在Eden区域，在进行了GC之后，数据会存放到from survivor.就是说在任何状态都会有一个survivor区域是空闲的，就是说Young generation的利用率在90%左右。</p>
 <p>通常情况下会有大量的对象需要分配内存，而且他们的生命周期很短，所以新生代的GC吞吐量很高，大部分对象都要被回收，从而，剩下的活跃对象比较少，所以<code>新生代适合使用复制算法来进行GC</code>，这样保证复制的数据的量较小，效率最好。</p>
 <h3 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h3><p>在一个对象经过多次GC之后都没有被回收，或者新生代的额空间满了的时候，会直接分配到老年代。</p>
@@ -329,16 +326,8 @@
 </tr>
 </tbody>
 </table>
-<h2 id="跟踪收集器"><a href="#跟踪收集器" class="headerlink" title="跟踪收集器"></a>跟踪收集器</h2><p>刚才我们说有些新生代会转移到老年区，不过怎么判断哪些新生代要留呢？</p>
-<p>跟踪收集器会记录全局中所有的引用状态，从GC root开始一直向下搜索。当一个对象在GC root链上没有任何引用时，它就会被回收。那么问题来了，什么是GC root昵？</p>
-<blockquote>
-<ul>
-<li>虚拟机栈中引用的对象。</li>
-<li>方法区中静态变量引用的对象。</li>
-<li>方法区中常量引用的对象。</li>
-<li>本地栈中JNI引用的对象。</li>
-</ul>
-</blockquote>
+<h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><p>我们怎么判断一个对象是不是需要被回收呢？有一个很常用的算法就是引用计数算法，存在一个引用计数器，如果一个对象被引用一次就会加1，失去了引用就减1，当这个值为0的时候就会被回收。比如Python, FlashPlayer等使用的都是此种算法。<br>但是在主流的JVM中并没有使用此种算法，因为会出现对象之间循环引用的问题。<br>a.instance = b; b.instance = a;<br>即使在其他地方没有任何引用，这两个计数器都为1，不能被回收。</p>
+<h3 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h3><p>主流的程序语言中我们使用可达性分析算法来判断对象是否存活，通过一些列的GC Roots来进行搜索，如果某些对象是不可到达的，那么他们就会被回收。<br>GC Roots的分布：<br>1.虚拟机栈（就是我们常说的栈）<br>2.方法区中静态属性引用的对象（static引用导致内存泄漏/溢出）<br>3.方法区中常量引用的对象（final）<br>4.本地方法栈JNI(Native方法)</p>
 <p>这种根据GC来判断对象是否还在被引用的算法叫可达性分析算法。</p>
 <p>找到了GC root之后，我们就会往下根据关系寻找，那些和GC root没有关系的，我们就可以清除了。那么，要怎么清除呢？一般会采用以下3种办法：</p>
 <blockquote>
@@ -348,10 +337,10 @@
 <li>复制算法：他将可用的内存容量划分为相等的两块，每次只使用其中的一块，当这一块的内存用完了，就将还存活着的对象复制到另一块上面，然后再把已经使用过的内存空间一次清理掉。</li>
 </ul>
 </blockquote>
+<p>即使在可达性分析算法中不可达的对象，也并不是一定会被回收的。这时候他们处于缓刑阶段，要宣布一个对象的死亡要经历至少两次标记过程：如果对象在进行可达性分析后发现没有与GC roots相连接的引用链，那么他会被标记并进行第一次筛选，筛选的条件是此对象是否有必要执行finalize方法。当对象没有覆盖finalize或者finalize方法已经被虚拟机调用过，这两种情况都被视作没必要执行。</p>
 <p>GC日志查看</p>
 <p>-XX:+PrintGC 输出GC日志<br>-XX:+PrintGCDetails 输出GC的详细日志<br>-XX:+PrintGCTimeStamps 输出GC的时间戳（以基准时间的形式）<br>-XX:+PrintGCDateStamps 输出GC的时间戳（以日期的形式，如 2013-05-04T21:53:59.234+0800）<br>-XX:+PrintHeapAtGC 在进行GC的前后打印出堆的信息<br>-Xloggc:../logs/gc.log 日志文件的输出路径  </p>
-<p>##常见异常：</p>
-<p>ClassNotFoundException  这是最常见的异常，产生这个异常的原因为在当前的ClassLoader 中加载类时，未找到类文件，</p>
+<h2 id="常见异常："><a href="#常见异常：" class="headerlink" title="常见异常："></a>常见异常：</h2><p>ClassNotFoundException  这是最常见的异常，产生这个异常的原因为在当前的ClassLoader 中加载类时，未找到类文件，</p>
 <p>NoClassDefFoundError  这个异常是因为  加载到的类中引用到的另外类不存在，例如要加载A，而A中盗用了B，B不存在或当前的ClassLoader无法加载B，就会抛出这个异常。</p>
 <p>LinkageError 该异常在自定义ClassLoader的情况下更容易出现，主要原因是此类已经在ClassLoader加载过了，重复的加载会造成该异常。</p>
 <h2 id="内存调优"><a href="#内存调优" class="headerlink" title="内存调优"></a>内存调优</h2><p>JVM调优主要是针对内存管理方面的调优，包括控制各个代的大小，GC策略。由于GC开始垃圾回收时会挂起应用线程，严重影响了性能，调优的目是为了尽量降低GC所导致的应用线程暂停时间、 减少Full GC次数。</p>
