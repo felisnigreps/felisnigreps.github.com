@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Let&#39;s do this">
 <meta property="og:description" content="concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~  部分细节文中没有提到，请查询 API   Executors      ThreadPoolExecutor Semaphore                 ReentrantLock             Bl">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/aqs.png">
-<meta property="og:updated_time" content="2017-08-04T07:25:25.000Z">
+<meta property="og:updated_time" content="2017-08-22T08:11:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java.util.concurrent">
 <meta name="twitter:description" content="concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~  部分细节文中没有提到，请查询 API   Executors      ThreadPoolExecutor Semaphore                 ReentrantLock             Bl">
@@ -231,7 +231,7 @@
 <p>不同的自定义同步器征用资源的方式也不同，<code>自定义同步器在实现的时候只需要实现共享资源state的获取和释放即可</code>，至于队列的维护（比如获取资源失败入队，唤醒出队等，AQS已经实现好了），自定义同步器在实现时主要实现以下几种方法：</p>
 <blockquote>
 <ul>
-<li>isHeldExclusively() :该线程是否在独占资源，只有用到condition才需要实现它<br>condition是什么？</li>
+<li>isHeldExclusively() :该线程是否在独占资源，只有用到condition才需要实现它<br>condition控制了一个信号量,使用signal和await方法来开始和释放.</li>
 <li>tryAcquire(int): 独占方式获取资源，成功返回TRUE，反之</li>
 <li>tryRelease(int): 独占方式释放资源，成功返回TRUE，反之</li>
 <li>tryAcquireShared(int): 共享方式获取资源，负数表示失败；0表示成功，但是没有剩余可用资源；整数表示成功，且有剩余资源。<br>什么是成功但是没有剩余资源？</li>
@@ -267,15 +267,20 @@
   
 <nav id="article-nav">
   
-    <a href="/2016/10/18/ConcurrentHashMap & HashMap/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/10/27/SpringAOP/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          ConcurrentHashMap &amp; HashMap
+          Spring AOP
         
       </div>
     </a>
   
+  
+    <a href="/2016/10/18/ConcurrentHashMap & HashMap/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ConcurrentHashMap &amp; HashMap</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
