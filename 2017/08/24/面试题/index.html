@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://tiltcat.com">
+  <title>面试题 | Let&#39;s do this</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Java面试题面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
+<meta name="keywords" content="面试题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试题">
+<meta property="og:url" content="http://tiltcat.com/2017/08/24/面试题/index.html">
+<meta property="og:site_name" content="Let&#39;s do this">
+<meta property="og:description" content="Java面试题面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
+<meta property="og:updated_time" content="2017-08-24T09:14:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="面试题">
+<meta name="twitter:description" content="Java面试题面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
+  
+  
+    <link rel="icon" href="/images/favicon.jpg">
+  
+  <link rel="stylesheet" href="/main.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img src="/images/avatar.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">tiltcat</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">wub lab dup dup</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a class="js-smart-menu" data-idx="0" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="1" href="javascript:void(0)">标签</a>
+    			
+    			
+            
+    			
+    			<a class="js-smart-menu" data-idx="2" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/felisnigreps" title="github">github</a>
+		        
+					<a class="weibo" target="_blank" href="http://weibo.com/cool5231" title="weibo">weibo</a>
+		        
+					<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/tilt-play" title="zhihu">zhihu</a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-list"></i></div>
+  		<h1 class="header-author js-mobile-header hide">tiltcat</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img src="/images/avatar.jpg" class="js-avatar">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">tiltcat</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">wub lab dup dup</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/felisnigreps" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/cool5231" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="http://www.zhihu.com/people/tilt-play" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap">
+        <article id="post-面试题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      面试题
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Java面试题"><a href="#Java面试题" class="headerlink" title="Java面试题"></a>Java面试题</h2><p>面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~</p>
+<a id="more"></a>
+<h4 id="重载和覆盖"><a href="#重载和覆盖" class="headerlink" title="重载和覆盖"></a>重载和覆盖</h4><p>重载用于构造方法等,同样的方法有不同的形式,覆盖一般用于父类子类. 重载的方法明必须相同,参数类型和个数或者顺序必须要有一个不同,返回值不在考虑之内.覆盖的方法名参数等必须相同,异常&lt;=父类,访问修饰符&gt;=父类</p>
+<h4 id="值传递-引用传递"><a href="#值传递-引用传递" class="headerlink" title="值传递/引用传递:"></a>值传递/引用传递:</h4><p>首先要明确Java中是没有引用传递的,全部都是值传递.<br>如果参数是基本变量,那么传递的是参数的值的拷贝.<br>如果参数是非基本变量,那么传递的是参数在堆中的内存地址.<br><code>对象实例化了，栈内存中存放的是对象的引用，也就是对象在堆内存中的地址</code></p>
+<h4 id="线程进程的区别"><a href="#线程进程的区别" class="headerlink" title="线程进程的区别"></a>线程进程的区别</h4><p>线程是JVM操作的最小单位,进程是CPU操纵的最小单位,一个进程可以包括多个线程.</p>
+<h4 id="什么是继承"><a href="#什么是继承" class="headerlink" title="什么是继承"></a>什么是继承</h4><p>Java中是单继承,代表子类可以拥有父类的一些属性或者方法,父类更抽象,子类更具体,所有累计成Object.</p>
+<h4 id="避免内存泄漏"><a href="#避免内存泄漏" class="headerlink" title="避免内存泄漏"></a>避免内存泄漏</h4><p>GC Roots的使用不当会导致内存泄露,包括final,static. String就是final calss.<br>Map,list等引用不清空也会导致内存泄露</p>
+<h4 id="Linux下的-proc是什么"><a href="#Linux下的-proc是什么" class="headerlink" title="Linux下的/proc是什么"></a>Linux下的/proc是什么</h4><p>是linux提供的一个伪文件系统,里面包含了系统的运行状态信息,存储内核运行状态的一系列文件,用户可以查看这些文件来找到硬件和进程信息.</p>
+<h4 id="semaphore与lock的区别"><a href="#semaphore与lock的区别" class="headerlink" title="semaphore与lock的区别"></a>semaphore与lock的区别</h4><p>semaphore维护一组信号量,是非独占锁(none-exclusive lock). Lock是juc下的一个接口,提供了lock,unlock,trylock等方法.ReetrantLock等实现了Lock接口</p>
+<h4 id="避免死锁"><a href="#避免死锁" class="headerlink" title="避免死锁"></a>避免死锁</h4><p>死锁是多个线程同事尝试获取一个锁,引起了等待而完成的.我们可以通过明确获取顺序来避免死锁,可以使用同步,队列等.</p>
+<h4 id="list-vector区别"><a href="#list-vector区别" class="headerlink" title="list/vector区别"></a>list/vector区别</h4><p>vector线程同步,其余一样</p>
+<h4 id="红黑树的-复杂度？"><a href="#红黑树的-复杂度？" class="headerlink" title="红黑树的**复杂度？"></a>红黑树的**复杂度？</h4><p>红黑树的操作时间跟二叉查找树的时间复杂度是一样的，执行查找、插入、删除等操作的时间复杂度为O（logn）</p>
+<h4 id="dopost和doget区别"><a href="#dopost和doget区别" class="headerlink" title="dopost和doget区别"></a>dopost和doget区别</h4><p>POST和GET的差别其实是很大的。语义上，GET是获取指定URL上的资源，是读操作，重要的一点是不论对某个资源GET多少次，它的状态是不会改变的，在这个意义上，我们说GET是安全的（不是被密码学或者数据保护意义上的安全）。因为GET是安全的，所以GET返回的内容可以被浏览器，Cache服务器缓存起来（其中还有很多细节，但不影响这里的讨论）。<br>而POST的语意是对指定资源“追加/添加”数据，所以是不安全的，每次提交的POST，参与的代码都会认为这个操作会修改操作对象资源的状态，于是，浏览器在你按下F5的时候会跳出确认框，缓存服务器不会缓存POST请求返回内容。<br>安全的是指没有明显的对用户有影响的副作用(包括修改该资源的状态)。HTTP方法里的GET和HEAD都是安全的。<br>幂等的是指一个方法不论多少次操作，结果都是一样。PUT(把内容放到指定URL)，DELETE(删除某个URL代表的资源)，虽然都修改了资源内容，但多次操作，结果是相同的，因此和HEAD，GET一样都是幂等的。<br>所以根据HTTP协议，GET是安全的，也是幂等的，而POST既不是安全的，也不是幂等的。</p>
+<h4 id="hashtable详解"><a href="#hashtable详解" class="headerlink" title="hashtable详解"></a>hashtable详解</h4><p>Hashtable 继承于Dictionary，实现了Map、Cloneable、java.io.Serializable接口。<br>Hashtable 的函数都是同步的，这意味着它是线程安全的。它的key、value都不可以为null。此外，Hashtable中的映射不是有序的。</p>
+<h4 id="Java-final关键字"><a href="#Java-final关键字" class="headerlink" title="Java final关键字"></a>Java final关键字</h4><p>1.final关键字可以用于成员变量、本地变量、方法以及类。<br>2.final成员变量必须在声明的时候初始化或者在构造器中初始化，否则就会报编译错误。<br>3.你不能够对final变量再次赋值。<br>4.final方法不能被重写。<br>5.final类不能被继承。<br>6.final关键字容易与finalize()方法搞混，后者是在Object类中定义的方法，是在垃圾回收之前被JVM调用的方法。<br>7.接口中声明的所有变量本身是final的。</p>
+<h4 id="在N个无序的数中找出第K大的数字"><a href="#在N个无序的数中找出第K大的数字" class="headerlink" title="在N个无序的数中找出第K大的数字"></a>在N个无序的数中找出第K大的数字</h4><p>这种类型的题有很多种解法，最简单的做法无非是先整体排完序之后直接找第M个数，这种的效率明显是很低的。我这里使用快速排序的思想来解这道题，首先在无序数中随便找一个数作为中间值（我这里用的是第一个数），然后将比中间值大的数移动到中间值左边，比中间值大的数移动到中间值右边，分完之后会出现这样的情况：<br>1.当左边区间的个数大于等于M时（第M大），则递归该区间<br>2.当左边的区间小于M且与M相差1时，则输出中间值<br>3.以上两种情况都不符合时，递归右边区间，找到右边区间第 {M-1-（左边区间个数）}大的数</p>
+<h4 id="一个列表如何去掉重复的元素"><a href="#一个列表如何去掉重复的元素" class="headerlink" title="一个列表如何去掉重复的元素"></a>一个列表如何去掉重复的元素</h4><p>存到set里</p>
+<h4 id="还有数据库的join"><a href="#还有数据库的join" class="headerlink" title="还有数据库的join"></a>还有数据库的join</h4><p>left join 以left join前面的表为主表，把left join后面的表符合on条件的内容加到主表中，如果没有符合on条件的内容，则显示为NULL<br>right join 以right join后面的表为主表，把right join前面的表符合on条件的内容加到主表中，如果没有符合on条件的内容，则显示为NULL<br>inner join 就是返回两个表中符合on条件的记录，若不满足条件则不返回</p>
+<h4 id="检查一段字符串中左右括号是否全部匹配"><a href="#检查一段字符串中左右括号是否全部匹配" class="headerlink" title="检查一段字符串中左右括号是否全部匹配"></a>检查一段字符串中左右括号是否全部匹配</h4><p>使用栈,扫描到左括号就压栈,右括号就和栈顶元素比较.</p>
+<h4 id="如何防止SQL注入攻击"><a href="#如何防止SQL注入攻击" class="headerlink" title="如何防止SQL注入攻击"></a>如何防止SQL注入攻击</h4><p>PreparedStatement,正则表达式过滤,前台过滤等.</p>
+<h4 id="快速排序的复杂度"><a href="#快速排序的复杂度" class="headerlink" title="快速排序的复杂度"></a>快速排序的复杂度</h4><p>O(logN)</p>
+<h4 id="问什么是跨域攻击XSS"><a href="#问什么是跨域攻击XSS" class="headerlink" title="问什么是跨域攻击XSS"></a>问什么是跨域攻击XSS</h4><p>xss表示Cross Site Scripting(跨站脚本攻击)，通过插入恶意脚本，实现对用户游览器的控制.<br>假如用户提交的数据含有js代码，不做任何处理就保存到了数据库，读出来的时候这段js代码就变成了可执行的代码，将会产生意向不到的效果。一般用户提交的数据永远被认为是不安全的，在保存之前要做对应的处理。<br>我提交的内容<script>alert(1111)</script>,或者<a href="www.baidu.com">百度</a>,读出来的时候，将直接弹出1111，或者百度是有效的超链接，这个显然是不行的。<br>就是要注意过滤html里面的javascript标签就可以了，否则后果很严重，还是给一段代码吧 </p>
+<h4 id="stackoverflow"><a href="#stackoverflow" class="headerlink" title="stackoverflow"></a>stackoverflow</h4><p>JVM里会有两种StackOverflowError, 一种是对应JVM stack, 一种是对应Native Method stack. 我们一般说的都是JVM stack.<br>每一个JVM线程维护自己的JVM stack. JVM stack里面存放 JVM栈帧. 栈帧中存放 数据和中间结果(本地变量数组, 操作符栈, 和对runtime 常量池的引用). 这些数据都比较小(对象都在堆中, 栈帧仅存放对象引用), 所以想单纯通过 在栈帧中存放大数据的方法 去引入StackOverflowError, 基本是不现实的.一般都是因为方法调用嵌套层数过大.</p>
+<p>JVM stack的大小是可以调节的, -Xss1024k来调节.</p>
+<h4 id="Foreigh-key-和-Primary-Key"><a href="#Foreigh-key-和-Primary-Key" class="headerlink" title="Foreigh key 和 Primary Key"></a>Foreigh key 和 Primary Key</h4><p>主键是能确定一条记录的唯一标识，比如，一条记录包括身份正号，姓名，年龄。<br>外键用于与另一张表的关联。是能确定另一张表记录的字段，用于保持数据的一致性。</p>
+<h4 id="什么是B树，和二叉树的区别。"><a href="#什么是B树，和二叉树的区别。" class="headerlink" title="什么是B树，和二叉树的区别。"></a>什么是B树，和二叉树的区别。</h4><p>二叉好理解，就两个分支的那种，只有两个分支<br>B树，B+树都是平衡树(多叉) ，B+树会把非还子节点的值写到孩子节点中去.</p>
+<h4 id="什么是linkedlist"><a href="#什么是linkedlist" class="headerlink" title="什么是linkedlist"></a>什么是linkedlist</h4><p>Doubly-linked list implementation of the List and Deque interfaces. Implements all optional list operations, and permits all elements (including null).<br>双向链表,插入时间复杂度O(1)</p>
+<h4 id="快排序"><a href="#快排序" class="headerlink" title="快排序"></a>快排序</h4><p>重写下代码,TBD</p>
+<h4 id="判断一个数是否为素数"><a href="#判断一个数是否为素数" class="headerlink" title="判断一个数是否为素数"></a>判断一个数是否为素数</h4><p>TBD</p>
+<h4 id="分布式系统中怎么保持数据的一致性"><a href="#分布式系统中怎么保持数据的一致性" class="headerlink" title="分布式系统中怎么保持数据的一致性"></a>分布式系统中怎么保持数据的一致性</h4><p>参见paxos博文,CAP原理.保持弱一致性.</p>
+<h4 id="stack-heap区别"><a href="#stack-heap区别" class="headerlink" title="stack/heap区别"></a>stack/heap区别</h4><p>堆和栈,栈分为本地方法栈和虚拟机栈,参见JVM log.</p>
+<p>####设计模式<br>参见设计模式blog</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2017/08/24/面试题/" class="archive-article-date">
+  	<time datetime="2017-08-24T06:08:26.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-08-24</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试题/">面试题</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2017/08/22/锁/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java中的锁</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="面试题" data-title="面试题" data-url="http://tiltcat.com/2017/08/24/面试题/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 tiltcat
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: false,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js"></script>
+
+
+    
+<div class="tools-col">
+  <ul class="btn-wrap">
+    
+      <li class="chose" data-hook="tools-section-all"><span class="text">全部</span><i class="icon-book"></i></li>
+    
+    
+      <li data-hook="tools-section-tag"><span class="text">标签</span><i class="icon-price-tags"></i></li>
+    
+    
+    
+      <li data-hook="tools-section-me"><span class="text">我</span><i class="icon-smile"></i></li>
+    
+  </ul>
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all chose">
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-tag">
+    			<div class="widget tagcloud" id="js-tagcloud">
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Concurrent-HashMap/" style="font-size: 10px;">Concurrent HashMap</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Lock/" style="font-size: 10px;">Lock</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 15px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/发布-订阅系统/" style="font-size: 10px;">发布-订阅系统</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a> <a href="/tags/面试题/" style="font-size: 10px;">面试题</a>
+    			</div>
+    	</section>
+    
+
+    
+
+    
+    	<section class="tools-section tools-section-me">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">&lt;br&gt;大家好，我叫周克，独生子女&lt;br&gt;名字是我出生的时候二大爷起的 &lt;br&gt;没有固定职业，偶尔打零工&lt;br&gt;爱好篮球和火锅&lt;br&gt;没什么理想，平时也不爱想，嫌累&lt;br&gt;总体上来说就是：胸无大志，混吃等死&lt;br&gt;以上都是我瞎编的 &lt;br&gt;谢谢大家</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+</body>
+</html>
