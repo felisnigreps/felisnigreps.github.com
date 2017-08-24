@@ -128,114 +128,6 @@
       <div class="body-wrap">
         
   
-    <article id="post-JVM" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/16/JVM/">JVM</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 </p>
-</blockquote>
-<p>JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。<br>
-        <p class="article-more-link">
-          <a class="article-more-a"  href="/2016/11/16/JVM/#more">more >></a>
-        </p>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/11/16/JVM/" class="archive-article-date">
-  	<time datetime="2016-11-16T12:21:08.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-11-16</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Junit" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/16/Junit/">Junit</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文简单的说下Junit的基本使用，通篇非常简单，如果有新的知识点会持续补充。</p>
-<h2 id="创建测试"><a href="#创建测试" class="headerlink" title="创建测试"></a>创建测试</h2><p>本文的开的IDE是IntelliJ, 首先先创建一个Maven项目，然后导入相关的dependency:<br><figure class="highlight xml"><table><tr><td class="code"><pre><div class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/junit/junit --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div></pre></td></tr></table></figure></p>
-        <p class="article-more-link">
-          <a class="article-more-a"  href="/2016/11/16/Junit/#more">more >></a>
-        </p>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/11/16/Junit/" class="archive-article-date">
-  	<time datetime="2016-11-16T12:19:15.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-11-16</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/单元测试/">单元测试</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
     <article id="post-Git" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -334,6 +226,84 @@
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AOP/">AOP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
 	</div>
 
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-线程基础" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="线程基础"><a href="#线程基础" class="headerlink" title="线程基础"></a>线程基础</h1><hr>
+<p>title: 线程基础<br>date: 2017-8-14 10:12:05</p>
+<h2 id="tags-Thread"><a href="#tags-Thread" class="headerlink" title="tags: Thread"></a>tags: Thread</h2><h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><p>每个线程都有一个优先级，分布在Thread.MIN_PRIORITY和Thread.MAX_PRIORITY之间（分别为1和10）<br>默认情况下，新创建的线程都拥有和创建它的线程相同的优先级。main方法所关联的初始化线程拥有一个默认的优先级，这个优先级是Thread.NORM_PRIORITY (5).<br>线程的当前优先级可以通过getPriority方法获得。<br>线程的优先级可以通过setPriority方法来动态的修改，一个线程的最高优先级由其所在的线程组限定。<br>
+        <p class="article-more-link">
+          <a class="article-more-a"  href="/2016/10/27/线程基础/#more">more >></a>
+        </p>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2016/10/27/线程基础/" class="archive-article-date">
+  	<time datetime="2016-10-26T16:01:01.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-27</time>
+</a>
+      
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-面试题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h1><hr>
+<p>title: 面试题<br>date: 2017-08-24 14:08:26<br>tags:</p>
+<h2 id="面试题-1"><a href="#面试题-1" class="headerlink" title="- 面试题"></a>- 面试题</h2><h2 id="Java面试题"><a href="#Java面试题" class="headerlink" title="Java面试题"></a>Java面试题</h2><p>面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~</p>
+        <p class="article-more-link">
+          <a class="article-more-a"  href="/2016/10/27/面试题/#more">more >></a>
+        </p>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2016/10/27/面试题/" class="archive-article-date">
+  	<time datetime="2016-10-26T16:01:01.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-27</time>
+</a>
+      
       
 
       <div class="clearfix"></div>
@@ -538,7 +508,7 @@
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Concurrent-HashMap/" style="font-size: 10px;">Concurrent HashMap</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Http/" style="font-size: 10px;">Http</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Lock/" style="font-size: 10px;">Lock</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/Thread/" style="font-size: 10px;">Thread</a> <a href="/tags/事务管理/" style="font-size: 15px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/发布-订阅-系统/" style="font-size: 10px;">发布-订阅 系统</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Concurrent-HashMap/" style="font-size: 10px;">Concurrent HashMap</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Lock/" style="font-size: 10px;">Lock</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/事务管理/" style="font-size: 15px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/发布-订阅系统/" style="font-size: 10px;">发布-订阅系统</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     			</div>
     	</section>
     

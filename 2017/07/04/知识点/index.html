@@ -6,21 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>SpringMVC | Let&#39;s do this</title>
+  <title>Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="我们先看一下流程图：">
-<meta name="keywords" content="SpringMVC">
+  <meta name="description" content="知识点 title: 知识点date: 2017-04-21 09:26:49tags: - Java这边对细小的知识做一个简单的总结">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SpringMVC">
-<meta property="og:url" content="http://tiltcat.com/2017/01/09/SpringMVC/index.html">
+<meta property="og:title" content="Let&#39;s do this">
+<meta property="og:url" content="http://tiltcat.com/2017/07/04/知识点/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
-<meta property="og:description" content="我们先看一下流程图：">
-<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/SpringMVC%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%E5%9B%BE.JPG">
-<meta property="og:updated_time" content="2017-03-27T12:02:39.000Z">
+<meta property="og:description" content="知识点 title: 知识点date: 2017-04-21 09:26:49tags: - Java这边对细小的知识做一个简单的总结">
+<meta property="og:updated_time" content="2017-08-24T03:01:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SpringMVC">
-<meta name="twitter:description" content="我们先看一下流程图：">
-<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/SpringMVC%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%E5%9B%BE.JPG">
+<meta name="twitter:title" content="Let&#39;s do this">
+<meta name="twitter:description" content="知识点 title: 知识点date: 2017-04-21 09:26:49tags: - Java这边对细小的知识做一个简单的总结">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -133,54 +130,42 @@
 </nav>
 
       <div class="body-wrap">
-        <article id="post-SpringMVC" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-知识点" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
     
     
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      SpringMVC
-    </h1>
-  
-
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <p>我们先看一下流程图：</p>
-<p><img src="http://ogeojkg3t.bkt.clouddn.com/SpringMVC%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%E5%9B%BE.JPG" alt=""></p>
-<a id="more"></a>
-<p>SpringMVC运行原理<br>1.客户端请求提交到DispatcherServlet </p>
-<ol>
-<li>由DispatcherServlet控制器查询一个或多个HandlerMapping，找到处理请求的Controller<br>3.DispatcherServlet将请求提交到Controller<br>4.Controller调用业务逻辑处理后，返回ModelAndView<br>5.DispatcherServlet查询一个或多个ViewResoler视图解析器，找到ModelAndView指定的视图<br>6.视图负责将结果显示到客户端</li>
-</ol>
-<!--more-->
-<h2 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h2><h3 id="DispatcherServlet"><a href="#DispatcherServlet" class="headerlink" title="DispatcherServlet"></a>DispatcherServlet</h3><p>前端控制器，用户请求到达前端的控制器，相当于mvc中的c,dispatcherServlet是整个流程控制的核心，由他调用其他组件来满足用户的请求，由于他的存在降低了组件之间的耦合性。</p>
-<h3 id="HandlerMapping"><a href="#HandlerMapping" class="headerlink" title="HandlerMapping"></a>HandlerMapping</h3><p>映射处理器，负责根据用户的请求找到相应的handler（controller）.</p>
-<h3 id="Handler"><a href="#Handler" class="headerlink" title="Handler"></a>Handler</h3><p>处理器，包含具体的业务逻辑，就是controller</p>
-<h3 id="HandlerAdapter"><a href="#HandlerAdapter" class="headerlink" title="HandlerAdapter"></a>HandlerAdapter</h3><p>适配器，负责处理Handler,返回modelandview</p>
-<h3 id="ViewResolver"><a href="#ViewResolver" class="headerlink" title="ViewResolver"></a>ViewResolver</h3><p>负责将处理结果生成View视图，ViewResolver首先根据逻辑视图名解析成物理视图名即具体的页面地址，再生成View视图对象，最后对View进行渲染将处理结果通过页面展示给用户.</p>
-<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><h3 id="静态文件的请求"><a href="#静态文件的请求" class="headerlink" title="静态文件的请求"></a>静态文件的请求</h3><pre><code>&lt;mvc:default-servlet-handler/&gt;
-&lt;mvc:annotation-driven /&gt;
-</code></pre><p>default-servlet-handler 将在 SpringMVC 上下文中定义一个 DefaultServletHttpRequestHandler， 它会对进入 DispatcherServlet 的请求进行筛选<br>如果发现是没有经过映射处理的请求，将该请求交由 WEB 应用服务器默认的Servlet处理。 如果不是静态资源的请求， 才由 DispatcherServlet 继续处理<br>一般 WEB 应用服务器默认的 Servlet 的名称都是 default。</p>
-<h3 id="ModelMap和ModelandView"><a href="#ModelMap和ModelandView" class="headerlink" title="ModelMap和ModelandView"></a>ModelMap和ModelandView</h3>
+        <h1 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h1><hr>
+<p>title: 知识点<br>date: 2017-04-21 09:26:49<br>tags:</p>
+<h2 id="Java"><a href="#Java" class="headerlink" title="- Java"></a>- Java</h2><p>这边对细小的知识做一个<code>简单</code>的总结<br><a id="more"></a></p>
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>简单来说反射就是可以让你调用你没有实例化的东西。记得你使用IDE的时候，对象.会有提示是吧？</p>
+<p>几种方式实现：</p>
+<blockquote>
+<ul>
+<li>classLoader</li>
+<li>类名.class</li>
+<li>对象名.getClass()</li>
+<li>Class.forName();</li>
+</ul>
+</blockquote>
+<h2 id="Comparable和Comparator"><a href="#Comparable和Comparator" class="headerlink" title="Comparable和Comparator"></a>Comparable和Comparator</h2><p>有一个面试问问到的,以前就是简单看了下,结果真的说起来发现自己不太懂,问题不大,现在来说一下.</p>
+<p>首先这俩单词读起来要准~(笑),百度就好了,虽然看起来很像,读起来差别还是蛮大的.</p>
+<p>先说Comparable,这主要给是对象的内部定义的顺序,有些排序方法比如Array.sort()和Collection.sort()的参数需要实现了Comparator,看代码:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ComparableDemo</span> </span>&#123;</div><div class="line">    <span class="comment">//内部的比较排序</span></div><div class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Person</span>&gt; </span>&#123;</div><div class="line">        <span class="keyword">int</span> age;</div><div class="line">        String name;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(<span class="keyword">int</span> age, String name)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>.age = age;</div><div class="line">            <span class="keyword">this</span>.name = name;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Person o)</span> </span>&#123;</div><div class="line">            <span class="comment">//  return this.age - o.age;</span></div><div class="line">            <span class="keyword">return</span> o.age - <span class="keyword">this</span>.age;</div><div class="line"></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">            <span class="keyword">return</span> name + <span class="string">":"</span> + age;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//比较明了</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        Person a = <span class="keyword">new</span> Person(<span class="number">12</span>, <span class="string">"Jim"</span>);</div><div class="line">        Person b = <span class="keyword">new</span> Person(<span class="number">22</span>, <span class="string">"Bob"</span>);</div><div class="line">        Person c = <span class="keyword">new</span> Person(<span class="number">17</span>, <span class="string">"Lisa"</span>);</div><div class="line">        List&lt;Person&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">        list.add(a);</div><div class="line">        list.add(b);</div><div class="line">        list.add(c);</div><div class="line">        System.out.println(list);</div><div class="line">        Collections.sort(list);</div><div class="line">        System.out.println(list);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再说comparator,这是在外部定义的排序规则,话不所说,看代码:<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ComparatorDemo</span> </span>&#123;</div><div class="line">    <span class="comment">//外部的排序</span></div><div class="line">    <span class="comment">//内部的比较排序</span></div><div class="line">    <span class="comment">//name,age,set/get,toString</span></div><div class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//比较明了</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        Person a = <span class="keyword">new</span> Person(<span class="number">12</span>, <span class="string">"Jim"</span>);</div><div class="line">        Person b = <span class="keyword">new</span> Person(<span class="number">22</span>, <span class="string">"Bob"</span>);</div><div class="line">        Person c = <span class="keyword">new</span> Person(<span class="number">17</span>, <span class="string">"Lisa"</span>);</div><div class="line">        List&lt;Person&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">        list.add(a);</div><div class="line">        list.add(b);</div><div class="line">        list.add(c);</div><div class="line">        System.out.println(list);</div><div class="line">       </div><div class="line">        <span class="comment">//顺序的话可以采用comparingInt方法</span></div><div class="line">        <span class="comment">// Collections.sort(list,(Comparator.comparingInt(o -&gt; o.age)));</span></div><div class="line">       </div><div class="line">        <span class="comment">//同样是逆序</span></div><div class="line">        <span class="comment">//Collections.sort(list,((o1, o2) -&gt; o2.age-o1.age));</span></div><div class="line">       </div><div class="line">        <span class="comment">//可以通过这么定义来调用reversed方法来实现逆序</span></div><div class="line">        Comparator&lt;Person&gt; comparator = Comparator.comparingInt(Person::getAge);</div><div class="line">        Collections.sort(list, comparator.reversed());</div><div class="line">        System.out.println(list);</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>大部分的代码都可以在git上找到</p>
+
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2017/01/09/SpringMVC/" class="archive-article-date">
-  	<time datetime="2017-01-09T00:57:37.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-01-09</time>
+      <a href="/2017/07/04/知识点/" class="archive-article-date">
+  	<time datetime="2017-07-04T08:51:44.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-07-04</time>
 </a>
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SpringMVC/">SpringMVC</a></li></ul>
-	</div>
-
       
 
       <div class="clearfix"></div>
@@ -191,18 +176,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/01/18/Collection家族/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/08/22/锁/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Collection家族
+          Java中的锁
         
       </div>
     </a>
   
   
-    <a href="/2016/12/13/Redis/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Redis</div>
+    <a href="/2017/06/14/kafka/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Kafka</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -236,7 +221,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="SpringMVC" data-title="SpringMVC" data-url="http://tiltcat.com/2017/01/09/SpringMVC/"></div>
+	<div class="ds-thread" data-thread-key="知识点" data-title="" data-url="http://tiltcat.com/2017/07/04/知识点/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

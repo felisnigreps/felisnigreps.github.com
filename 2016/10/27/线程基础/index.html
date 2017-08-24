@@ -6,21 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>SpringMVC | Let&#39;s do this</title>
+  <title>Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="我们先看一下流程图：">
-<meta name="keywords" content="SpringMVC">
+  <meta name="description" content="线程基础 title: 线程基础date: 2017-8-14 10:12:05 tags: Thread优先级每个线程都有一个优先级，分布在Thread.MIN_PRIORITY和Thread.MAX_PRIORITY之间（分别为1和10）默认情况下，新创建的线程都拥有和创建它的线程相同的优先级。main方法所关联的初始化线程拥有一个默认的优先级，这个优先级是Thread.NORM_PRIORI">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SpringMVC">
-<meta property="og:url" content="http://tiltcat.com/2017/01/09/SpringMVC/index.html">
+<meta property="og:title" content="Let&#39;s do this">
+<meta property="og:url" content="http://tiltcat.com/2016/10/27/线程基础/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
-<meta property="og:description" content="我们先看一下流程图：">
-<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/SpringMVC%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%E5%9B%BE.JPG">
-<meta property="og:updated_time" content="2017-03-27T12:02:39.000Z">
+<meta property="og:description" content="线程基础 title: 线程基础date: 2017-8-14 10:12:05 tags: Thread优先级每个线程都有一个优先级，分布在Thread.MIN_PRIORITY和Thread.MAX_PRIORITY之间（分别为1和10）默认情况下，新创建的线程都拥有和创建它的线程相同的优先级。main方法所关联的初始化线程拥有一个默认的优先级，这个优先级是Thread.NORM_PRIORI">
+<meta property="og:updated_time" content="2017-08-24T01:48:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SpringMVC">
-<meta name="twitter:description" content="我们先看一下流程图：">
-<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/SpringMVC%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%E5%9B%BE.JPG">
+<meta name="twitter:title" content="Let&#39;s do this">
+<meta name="twitter:description" content="线程基础 title: 线程基础date: 2017-8-14 10:12:05 tags: Thread优先级每个线程都有一个优先级，分布在Thread.MIN_PRIORITY和Thread.MAX_PRIORITY之间（分别为1和10）默认情况下，新创建的线程都拥有和创建它的线程相同的优先级。main方法所关联的初始化线程拥有一个默认的优先级，这个优先级是Thread.NORM_PRIORI">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -133,54 +130,44 @@
 </nav>
 
       <div class="body-wrap">
-        <article id="post-SpringMVC" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-线程基础" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
     
     
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      SpringMVC
-    </h1>
-  
-
-      </header>
-    
     <div class="article-entry" itemprop="articleBody">
       
-        <p>我们先看一下流程图：</p>
-<p><img src="http://ogeojkg3t.bkt.clouddn.com/SpringMVC%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%E5%9B%BE.JPG" alt=""></p>
-<a id="more"></a>
-<p>SpringMVC运行原理<br>1.客户端请求提交到DispatcherServlet </p>
-<ol>
-<li>由DispatcherServlet控制器查询一个或多个HandlerMapping，找到处理请求的Controller<br>3.DispatcherServlet将请求提交到Controller<br>4.Controller调用业务逻辑处理后，返回ModelAndView<br>5.DispatcherServlet查询一个或多个ViewResoler视图解析器，找到ModelAndView指定的视图<br>6.视图负责将结果显示到客户端</li>
-</ol>
-<!--more-->
-<h2 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h2><h3 id="DispatcherServlet"><a href="#DispatcherServlet" class="headerlink" title="DispatcherServlet"></a>DispatcherServlet</h3><p>前端控制器，用户请求到达前端的控制器，相当于mvc中的c,dispatcherServlet是整个流程控制的核心，由他调用其他组件来满足用户的请求，由于他的存在降低了组件之间的耦合性。</p>
-<h3 id="HandlerMapping"><a href="#HandlerMapping" class="headerlink" title="HandlerMapping"></a>HandlerMapping</h3><p>映射处理器，负责根据用户的请求找到相应的handler（controller）.</p>
-<h3 id="Handler"><a href="#Handler" class="headerlink" title="Handler"></a>Handler</h3><p>处理器，包含具体的业务逻辑，就是controller</p>
-<h3 id="HandlerAdapter"><a href="#HandlerAdapter" class="headerlink" title="HandlerAdapter"></a>HandlerAdapter</h3><p>适配器，负责处理Handler,返回modelandview</p>
-<h3 id="ViewResolver"><a href="#ViewResolver" class="headerlink" title="ViewResolver"></a>ViewResolver</h3><p>负责将处理结果生成View视图，ViewResolver首先根据逻辑视图名解析成物理视图名即具体的页面地址，再生成View视图对象，最后对View进行渲染将处理结果通过页面展示给用户.</p>
-<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><h3 id="静态文件的请求"><a href="#静态文件的请求" class="headerlink" title="静态文件的请求"></a>静态文件的请求</h3><pre><code>&lt;mvc:default-servlet-handler/&gt;
-&lt;mvc:annotation-driven /&gt;
-</code></pre><p>default-servlet-handler 将在 SpringMVC 上下文中定义一个 DefaultServletHttpRequestHandler， 它会对进入 DispatcherServlet 的请求进行筛选<br>如果发现是没有经过映射处理的请求，将该请求交由 WEB 应用服务器默认的Servlet处理。 如果不是静态资源的请求， 才由 DispatcherServlet 继续处理<br>一般 WEB 应用服务器默认的 Servlet 的名称都是 default。</p>
-<h3 id="ModelMap和ModelandView"><a href="#ModelMap和ModelandView" class="headerlink" title="ModelMap和ModelandView"></a>ModelMap和ModelandView</h3>
+        <h1 id="线程基础"><a href="#线程基础" class="headerlink" title="线程基础"></a>线程基础</h1><hr>
+<p>title: 线程基础<br>date: 2017-8-14 10:12:05</p>
+<h2 id="tags-Thread"><a href="#tags-Thread" class="headerlink" title="tags: Thread"></a>tags: Thread</h2><h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><p>每个线程都有一个优先级，分布在Thread.MIN_PRIORITY和Thread.MAX_PRIORITY之间（分别为1和10）<br>默认情况下，新创建的线程都拥有和创建它的线程相同的优先级。main方法所关联的初始化线程拥有一个默认的优先级，这个优先级是Thread.NORM_PRIORITY (5).<br>线程的当前优先级可以通过getPriority方法获得。<br>线程的优先级可以通过setPriority方法来动态的修改，一个线程的最高优先级由其所在的线程组限定。<br><a id="more"></a><br>当可运行的线程数超过了可用的CPU数目的时候，线程调度器更偏向于去执行那些拥有更高优先级的线程。具体的策略因平台而异。比如有些Java虚拟机实现总是选择当前优先级最高的线程执行。有些虚拟机实现将Java中的十个优先级映射到系统所支持的更小范围的优先级上，因此，拥有不同优先级的线程可能最终被同等对待。还有些虚拟机会使用老化策略（随着时间的增长，线程的优先级逐渐升高）动态调整线程优先级，另一些虚拟机实现的调度策略会确保低优先级的线程最终还是能够有机会运行。设置线程优先级可以影响在同一台机器上运行的程序之间的调度结果，但是这不是必须的。每个线程都有一个优先级</p>
+<h3 id="线程组"><a href="#线程组" class="headerlink" title="线程组"></a>线程组</h3><p>Java中每一个线程都归属于某个线程组管理的一员，如果在main函数里产生了一个线程，那么这个线程就属于main这个管理组的议员，是类java.lang.ThreadGroup类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line">ThreadGroup group = <span class="keyword">new</span> ThreadGroup(<span class="string">"group"</span>);</div><div class="line">Thread thread = <span class="keyword">new</span> Thread(group,<span class="string">"the first thread of group"</span>)</div></pre></td></tr></table></figure>
+<h3 id="同步方法和同步块"><a href="#同步方法和同步块" class="headerlink" title="同步方法和同步块"></a>同步方法和同步块</h3><p>使用synchronized关键字，有两种语法结构：同步代码块和同步方法。同步代码块需要提供一个作为锁的对象参数。这就允许了任意方法可以去锁任一一个对象。但在同步代码块中使用的最普通的参数却是this。</p>
+<p>同步代码块被认为比同步方法更加的基础。如下两种声明方式是等同的：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="comment">/* body */</span> &#125;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span> </span>&#123; <span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123; <span class="comment">/* body */</span> &#125; &#125;</div></pre></td></tr></table></figure>
+<p>synchronized关键字并不是方法签名的一部分。所以当子类覆写父类中的同步方法或是接口中声明的同步方法的时候，synchronized修饰符是不会被自动继承的，另外，构造方法不可能是真正同步的（尽管可以在构造方法中使用同步块）。</p>
+<p>同步实例方法在其子类和父类中使用同样的锁。但是内部类方法的同步却独立于其外部类， 然而一个非静态的内部类方法可以通过下面这种方式锁住其外部类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">synchronized</span>(OuterClass.<span class="keyword">this</span>) &#123; <span class="comment">/* body */</span> &#125;</div></pre></td></tr></table></figure>
+<h2 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h2><p>这个概念我们已经很熟悉了，空间换时间，为每个对象创建副本。相关代码在git上。<br>而ThreadLocal正好相反，使用的是空间换时间。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;SimpleDateFormat&gt; formatter = <span class="keyword">new</span> ThreadLocal&lt;SimpleDateFormat&gt;()&#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">protected</span> SimpleDateFormat <span class="title">initialValue</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> String <span class="title">formatIt</span><span class="params">(Date date)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> formatter.get().format(date);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用synchronized的话，表示当前只有1个线程才能访问方法，其他线程都会被阻塞。当访问的线程也阻塞的时候，其他所有访问该方法的线程全部都会阻塞，这个方法相当地 “耗时”。<br>使用ThreadLocal的话，表示每个线程的本地变量中都有SimpleDateFormat这个实例的引用，也就是各个线程之间完全没有关系，也就不存在同步问题了。</p>
+<p>如果让我们实现，思路大约应该是这样的，为每个ThreadLocal创建map，key是线程id，value就是实例对象。</p>
+<p>但是当我们看了源码之后发现流程是这样的:</p>
+<p>1.首先获取当前线程<br>2.根据当前线程获取一个Map<br>3.如果获取的Map不为空，则在Map中以ThreadLocal的引用作为key来在Map中获取对应的value e，否则转到5<br>4.如果e不为null，则返回e.value，否则转到5<br>5.Map为空或者e为空，则通过initialValue函数获取初始值value，然后用ThreadLocal的引用和value作为firstKey和firstValue创建一个新的Map</p>
+<p>整理一下ThreadLocalMap的getEntry函数的流程：</p>
+<p>1.首先从ThreadLocal的直接索引位置(通过ThreadLocal.threadLocalHashCode &amp; (len-1)运算得到)获取Entry e，如果e不为null并且key相同则返回e；<br>2.如果e为null或者key不一致则向下一个位置查询，如果下一个位置的key和当前需要查询的key相等，则返回对应的Entry，否则，如果key值为null，则擦除该位置的Entry，否则继续向下一个位置查询.</p>
+<p>在这个过程中遇到的key为null的Entry都会被擦除，那么Entry内的value也就没有强引用链，自然会被回收。仔细研究代码可以发现，set操作也有类似的思想，将key为null的这些Entry都删除，防止内存泄露。 但是光这样还是不够的，上面的设计思路依赖一个前提条件：要调用ThreadLocalMap的genEntry函数或者set函数。这当然是不可能任何情况都成立的，所以很多情况下需要使用者手动调用ThreadLocal的remove函数，手动删除不再需要的ThreadLocal，防止内存泄露。所以JDK建议将ThreadLocal变量定义成private static的，这样的话ThreadLocal的生命周期就更长，由于一直存在ThreadLocal的强引用，所以ThreadLocal也就不会被回收，也就能保证任何时候都能根据ThreadLocal的弱引用访问到Entry的value值，然后remove它，防止内存泄露。</p>
+<p>ps:弱引用不会导致内存泄露</p>
+
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2017/01/09/SpringMVC/" class="archive-article-date">
-  	<time datetime="2017-01-09T00:57:37.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-01-09</time>
+      <a href="/2016/10/27/线程基础/" class="archive-article-date">
+  	<time datetime="2016-10-26T16:01:01.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-27</time>
 </a>
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SpringMVC/">SpringMVC</a></li></ul>
-	</div>
-
       
 
       <div class="clearfix"></div>
@@ -191,18 +178,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/01/18/Collection家族/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/10/27/SpringAOP/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Collection家族
+          Spring AOP
         
       </div>
     </a>
   
   
-    <a href="/2016/12/13/Redis/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Redis</div>
+    <a href="/2016/10/27/面试题/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -236,7 +223,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="SpringMVC" data-title="SpringMVC" data-url="http://tiltcat.com/2017/01/09/SpringMVC/"></div>
+	<div class="ds-thread" data-thread-key="线程基础" data-title="" data-url="http://tiltcat.com/2016/10/27/线程基础/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
