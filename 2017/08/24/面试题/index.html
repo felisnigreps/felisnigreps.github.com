@@ -15,7 +15,7 @@
 <meta property="og:url" content="http://tiltcat.com/2017/08/24/面试题/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
 <meta property="og:description" content="Java面试题面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
-<meta property="og:updated_time" content="2017-08-24T09:14:22.000Z">
+<meta property="og:updated_time" content="2017-08-24T09:19:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="面试题">
 <meta name="twitter:description" content="Java面试题面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
@@ -170,7 +170,7 @@
 <h4 id="检查一段字符串中左右括号是否全部匹配"><a href="#检查一段字符串中左右括号是否全部匹配" class="headerlink" title="检查一段字符串中左右括号是否全部匹配"></a>检查一段字符串中左右括号是否全部匹配</h4><p>使用栈,扫描到左括号就压栈,右括号就和栈顶元素比较.</p>
 <h4 id="如何防止SQL注入攻击"><a href="#如何防止SQL注入攻击" class="headerlink" title="如何防止SQL注入攻击"></a>如何防止SQL注入攻击</h4><p>PreparedStatement,正则表达式过滤,前台过滤等.</p>
 <h4 id="快速排序的复杂度"><a href="#快速排序的复杂度" class="headerlink" title="快速排序的复杂度"></a>快速排序的复杂度</h4><p>O(logN)</p>
-<h4 id="问什么是跨域攻击XSS"><a href="#问什么是跨域攻击XSS" class="headerlink" title="问什么是跨域攻击XSS"></a>问什么是跨域攻击XSS</h4><p>xss表示Cross Site Scripting(跨站脚本攻击)，通过插入恶意脚本，实现对用户游览器的控制.<br>假如用户提交的数据含有js代码，不做任何处理就保存到了数据库，读出来的时候这段js代码就变成了可执行的代码，将会产生意向不到的效果。一般用户提交的数据永远被认为是不安全的，在保存之前要做对应的处理。<br>我提交的内容<script>alert(1111)</script>,或者<a href="www.baidu.com">百度</a>,读出来的时候，将直接弹出1111，或者百度是有效的超链接，这个显然是不行的。<br>就是要注意过滤html里面的javascript标签就可以了，否则后果很严重，还是给一段代码吧 </p>
+<h4 id="问什么是跨域攻击XSS"><a href="#问什么是跨域攻击XSS" class="headerlink" title="问什么是跨域攻击XSS"></a>问什么是跨域攻击XSS</h4><p>xss表示Cross Site Scripting(跨站脚本攻击)，通过插入恶意脚本，实现对用户游览器的控制.<br>假如用户提交的数据含有js代码，不做任何处理就保存到了数据库，读出来的时候这段js代码就变成了可执行的代码，将会产生意向不到的效果。一般用户提交的数据永远被认为是不安全的，在保存之前要做对应的处理。<br>我提交的内容<br><del><script>alert(1111)</script>,或者<a href="www.baidu.com">百度</a>,</del>读出来的时候，将直接弹出1111，或者百度是有效的超链接，这个显然是不行的。<br>就是要注意过滤html里面的javascript标签就可以了，否则后果很严重，还是给一段代码吧 </p>
 <h4 id="stackoverflow"><a href="#stackoverflow" class="headerlink" title="stackoverflow"></a>stackoverflow</h4><p>JVM里会有两种StackOverflowError, 一种是对应JVM stack, 一种是对应Native Method stack. 我们一般说的都是JVM stack.<br>每一个JVM线程维护自己的JVM stack. JVM stack里面存放 JVM栈帧. 栈帧中存放 数据和中间结果(本地变量数组, 操作符栈, 和对runtime 常量池的引用). 这些数据都比较小(对象都在堆中, 栈帧仅存放对象引用), 所以想单纯通过 在栈帧中存放大数据的方法 去引入StackOverflowError, 基本是不现实的.一般都是因为方法调用嵌套层数过大.</p>
 <p>JVM stack的大小是可以调节的, -Xss1024k来调节.</p>
 <h4 id="Foreigh-key-和-Primary-Key"><a href="#Foreigh-key-和-Primary-Key" class="headerlink" title="Foreigh key 和 Primary Key"></a>Foreigh key 和 Primary Key</h4><p>主键是能确定一条记录的唯一标识，比如，一条记录包括身份正号，姓名，年龄。<br>外键用于与另一张表的关联。是能确定另一张表记录的字段，用于保持数据的一致性。</p>
