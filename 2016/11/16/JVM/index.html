@@ -17,7 +17,7 @@
 <meta property="og:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。   JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.jpg">
-<meta property="og:updated_time" content="2017-08-16T01:27:12.000Z">
+<meta property="og:updated_time" content="2017-08-31T08:23:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM">
 <meta name="twitter:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。   JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
@@ -198,29 +198,12 @@
 <p>从抽象角度来看，JMM定义了线程和主内存（堆内存）之间的抽象关系：线程之间的共享变量存储在主内存中，每个线程都有自己的本地内存（抽象概念，物理上不存在）存储该线程变量的共享副本。</p>
 <p>所以线程A,B之间要进行通信的话，需要经过以下两个步骤：<br>1.线程A把本地内存中更新过的共享变量刷新到主内存中。<br>2.线程B到主内存中读取线程A之前更新过的共享变量。</p>
 <h3 id="类加载机制"><a href="#类加载机制" class="headerlink" title="类加载机制"></a>类加载机制</h3><p>JVM把class文件进行解析，校验，初始化等工作，最终形成JVM可以直接使用的java文件的过程就是类加载。</p>
-<p>一个Person类从创建到使用：<br>1.编译器把Person.java文件转换成Person.class字节码文件。<br>2.ClassLoader负责将字节码文件转换为转换为JVM中的Class<person>对象<br>3.JVM负责把Class<person>对象实例化为Person对象</person></person></p>
 <p>类加载的生命周期分为七步，依次为：加载，验证，准备，解析，初始化，执行，卸载。</p>
-<blockquote>
-<p>这七步其实很好记，和其他熟悉的事物类比一下，比如说我玩炉石<br>加载–&gt;战网loading<br>验证–&gt;输入account登录<br>准备–&gt;选择deck<br>解析–&gt;根据级别匹配<br>初始化–&gt;开战<br>执行–&gt;被神抽打翻<br>卸载–&gt;辣鸡游戏全靠运气，毁我青春果断卸载！</p>
-</blockquote>
-<p>我们来说说各阶段的作用：</p>
-<blockquote>
-<ul>
-<li><p>加载：<br>1.根据类全名来获取类的二进制字节流信息。<br>2.将静态的二进制字节流转化为方法区运行时的数据结构。<br>3.在Java堆中创建一个代表这个类的java.lang.Class对象，作为数据的入口。<br>相对于类的其他阶段而言，加载阶段是可控性最强的阶段，因为开发人员及可以使用系统提供的类加载器来实现架子，而可以自定义自己的类加载器来完成加载。</p>
-</li>
-<li><p>验证：确保被加载类的正确性。验证是连接阶段的第一步，这一阶段的目的是为了确保Class文件的字节流包含的信息符合当前虚拟机的要求，并且不会危害虚拟机的自身安全。<br>1.文件格式严验证:验证字节流是否符合Class文件格式的规范，例如是否已0xCAFEBABE开头，主次版本号是否在当前虚拟机的处理范围之内，常量池里的常量是否有不被支持的类型。<br>2.元数据验证：对字节码描述的信息进行语义分析，以保证其描述的信息符合Java语言规范的要求。<br>3.字节码验证：通过数据流和控制流分析，确定程序语义是合法的。<br>4.符号引用验证：确保动作能正确的执行。</p>
-</li>
-<li><p>准备：为类的静态变量分配内存，并将其初始化为默认值。准备阶段是正式为类变量分配内存并设置类变脸初始值的阶段，这些内存都将在方法区中分配，有一些几点需要注意：<br>1.这时候进项内存分配的仅包括类变量(static),而不包括实例变量，实例变量会在对象实例化的时候随着对象一块分配到Java堆中。<br>2.这里所设置的初始值通常情况下是默认的0值(0,0L,null等)，而不是在Java代码中被显式赋予的值。</p>
-</li>
-<li><p>解析：</p>
-</li>
-<li><p>初始化：</p>
-</li>
-<li>执行：</li>
-<li>卸载：</li>
-</ul>
-</blockquote>
-<p>有些具体的没说，因为我觉得现在我说了也记不住，过一段时间得忘记。等啥时候理解透彻了，再回来补上吧。</p>
+<p>加载： 是类加载的一个阶段，完成如下功能：</p>
+<pre><code>1. 通过类的全限定名来获取定义此类的二进制字节流
+2. 将此二进制字节流所代表的静态存储结构转化成为方法区的运行时数据结构
+3. 在内存中生成代表此类的java.lang.Class对象作为入口
+</code></pre><p>验证： 目的是确保Class文件的字节流中信息符合虚拟机的要求，不会危害虚拟机安全，使得虚拟机免受共计，有四个校验动作： 文件格式 源数据 字节码 符号引用<br>准备：为类变量分配内存并设置变量的初始值<br>解析：虚拟机将常量池中的符号引用替换为直接引用<br>初始化：执行类构造器<br>使用：使用<br>卸载：从内存中释放</p>
 <h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><p>类加载器的分类:</p>
 <p><img src="http://ogeojkg3t.bkt.clouddn.com/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.jpg" alt=""></p>
 <h3 id="启动类加载器"><a href="#启动类加载器" class="headerlink" title="启动类加载器"></a>启动类加载器</h3><p>Bootstrap ClassLoader,这个类加载器使用C++语言实现，并非ClassLoader的子类。主要负责加载存放在JAVA_HOME/jre/lib/rt.jar里面所有的class文件，或者被-Xbootclasspath参数所指定路径中以rt.jar命名的文件。</p>
@@ -376,7 +359,7 @@
 <p>-XX:SurvivorRatio=8  设置young generation中Eden区域和每个Survivor区域的比值。在这个例子中，Eden:from:to = 8:1:1</p>
 <p>-XX:PretenureSizeThreshold=3145728 大于这个数值的对象直接进入老年代</p>
 <p>下面程序做测试，然后调整栈大小，会发现无论如何都会报出StackOverflow错误。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StackLeak</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> threadLength = <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">leakTest</span><span class="params">()</span> </span>&#123;</div><div class="line">        threadLength++;</div><div class="line">        leakTest();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">        StackLeak leak = <span class="keyword">new</span> StackLeak();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            leak.leakTest();</div><div class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</div><div class="line">            System.out.println(<span class="string">"Thread length is "</span> + leak.threadLength);</div><div class="line">            <span class="keyword">throw</span> e;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Thread length is <span class="number">2459</span></div><div class="line">Exception in thread <span class="string">"main"</span> java.lang.StackOverflowError</div><div class="line">	at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">7</span>)</div><div class="line">	at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">8</span>)</div><div class="line">	at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">8</span>)</div><div class="line">	....</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StackLeak</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> threadLength = <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">leakTest</span><span class="params">()</span> </span>&#123;</div><div class="line">        threadLength++;</div><div class="line">        leakTest();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</div><div class="line">        StackLeak leak = <span class="keyword">new</span> StackLeak();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            leak.leakTest();</div><div class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</div><div class="line">            System.out.println(<span class="string">"Thread length is "</span> + leak.threadLength);</div><div class="line">            <span class="keyword">throw</span> e;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Thread length is <span class="number">2459</span></div><div class="line">Exception in thread <span class="string">"main"</span> java.lang.StackOverflowError</div><div class="line">  at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">7</span>)</div><div class="line">  at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">8</span>)</div><div class="line">  at com.company.StackLeak.leakTest(StackLeak.java:<span class="number">8</span>)</div><div class="line">  ....</div></pre></td></tr></table></figure>
 <p>结果表明， 在单线程情况下，无论虚拟机栈太小还是栈帧太大，虚拟器无法分配的时候都会报出stackOverflow异常。</p>
 <p>大对象直接进入老年代.</p>
 <h3 id="内存泄露"><a href="#内存泄露" class="headerlink" title="内存泄露"></a>内存泄露</h3><p>GC在一般情况下会进行垃圾清理,但是如果程序有问题的话会出现一部分不会使用的对象占用内存无法被回收,这样就造成了内存泄露.</p>

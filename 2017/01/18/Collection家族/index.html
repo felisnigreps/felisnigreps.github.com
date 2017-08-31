@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://img.blog.csdn.net/20150501235138962?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20150502000405642?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/collection.png">
-<meta property="og:updated_time" content="2017-08-28T13:30:57.000Z">
+<meta property="og:updated_time" content="2017-08-31T08:24:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Collection家族">
 <meta name="twitter:description" content="这是Java基础中不可缺少的部分，以前看过很多次，但总是记不牢，这次在这边简单总结下。方便复习。 Collection也包含了基本的数据结构，这边也会在介绍的时候简单同提一下。 很多图片和内容都是抄自于网上的博客，侵删。">
@@ -185,7 +185,8 @@
 </li>
 </ul>
 </blockquote>
-<h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><p>Map接口，没有继承Collection接口，它是独立的一个接口。它使用key-value的键值对存储数据。常用的两个子类是HashMap和TreeMap。 </p>
+<h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><p>Map接口，没有继承Collection接口，它是独立的一个接口。它使用key-value的键值对存储数据。子类有HashMap，TreeMap，LinkedHashMap等。 </p>
+<p>HashMap是无序的，TreeMap和LinkedHashMap是有序的，TreeMap实现了SortMap接口，默认根据key的升序进行排序。而LinkedHashMap是保存的插入的顺序。</p>
 <p><img src="http://img.blog.csdn.net/20150501235138962?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""></p>
 <h3 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h3><p>什么会影响HashMap的性能?</p>
 <p>首先我们要知道有两点,初始容量和加载因子. 首先容量要是2的次幂,为什么这么做?因为可以减少碰撞,这和根据key算hashcode的算法有关,详情可以参见源码. 第二点就是容量,比如说，我们有1000个元素new HashMap(1000), 但是理论上来讲new HashMap(1024)更合适，不过上面已经说过，即使是1000，hashmap也自动会将其设置为1024。 但是new HashMap(1024)还不是更合适的，因为0.75<em>1000 &lt; 1000, 也就是说为了让0.75 </em> size &gt; 1000, 我们必须这样new HashMap(2048)才最合适，既考虑了&amp;的问题，也避免了resize的问题。</p>

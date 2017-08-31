@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Let&#39;s do this">
 <meta property="og:description" content="concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~  部分细节文中没有提到，请查询 API   Executors      ThreadPoolExecutor Semaphore                 ReentrantLock             Bl">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/aqs.png">
-<meta property="og:updated_time" content="2017-08-29T03:31:11.000Z">
+<meta property="og:updated_time" content="2017-08-31T08:24:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java.util.concurrent">
 <meta name="twitter:description" content="concurrent是一个在并发编程中的工具类包，学习之后简单记录下，内容都是API或者网络上博客的一些整理，我尽量按照自己的理解描述的清晰一点，内容比较浅，初识嘛，问题不大~  部分细节文中没有提到，请查询 API   Executors      ThreadPoolExecutor Semaphore                 ReentrantLock             Bl">
@@ -213,7 +213,7 @@
 <p>One point that nobody has yet mentioned is that, in a CyclicBarrier, if a thread has a problem (timeout, interrupted…), all the others that have reached await() get an exception. </p>
 <p>CountDownLatch: 一个线程(或者多个),等待另外N个线程完成某个事情之后才能执行。<br>CyclicBarrier: N个线程相互等待,任何一个线程完成之前,所有的线程都必须等待。</p>
 <p>这样应该就清楚一点了，对于CountDownLatch来说,重点是那个“一个线程”, 是它在等待,而另外那N的线程在把“某个事情”做完之后可以继续等待,可以终止. 而对于CyclicBarrier来说,重点是那N个线程,他们之间任何一个没有完成,所有的线程都必须等待。</p>
-<p>CountDownLatch不能reused,CyclicBarrier可以.</p>
+<p>CountDownLatch不能reused,CyclicBarrier可以.<br>CyclicBarrier还提供其他有用的方法，比如getNumberWaiting方法可以获得CyclicBarrier阻塞的线程数量。isBroken方法用来知道阻塞的线程是否被中断。比如以下代码执行完之后会返回true。</p>
 <h3 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h3><p>这个接口代表了线程运行之后的返回结果，一般和<code>Callable</code>一起用。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CallableFuture</span> </span>&#123;</div><div class="line">    <span class="comment">//callable和future的简单实现</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        ExecutorService service = Executors.newCachedThreadPool();</div><div class="line">        Future&lt;Integer&gt; future = service.submit(<span class="keyword">new</span> Task());</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            System.out.println(<span class="string">"the result is "</span> + future.get());</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">        service.shutdown();</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//声明一个线程类</span></div><div class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Task</span> <span class="keyword">implements</span> <span class="title">Callable</span> </span>&#123;</div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="function"><span class="keyword">public</span> Integer <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">            System.out.println(<span class="string">"begin sum function"</span>);</div><div class="line">            Thread.sleep(<span class="number">1000</span>);</div><div class="line">            <span class="keyword">int</span> result = <span class="number">0</span>;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">100</span>; i++) &#123;</div><div class="line">                result += i;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">return</span> result;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="ScheduledExecutorService"><a href="#ScheduledExecutorService" class="headerlink" title="ScheduledExecutorService"></a>ScheduledExecutorService</h3><p>是一个可以定时执行的ExecutorService，有四个方法，具体情况可以找找API看看，通过下面的例子应该比较好理解。</p>
@@ -227,7 +227,7 @@
 <blockquote>
 <ul>
 <li>getState()</li>
-<li>setStare()</li>
+<li>setStart()</li>
 <li>compareAndSetState()</li>
 </ul>
 </blockquote>
@@ -235,10 +235,10 @@
 <p>不同的自定义同步器征用资源的方式也不同，<code>自定义同步器在实现的时候只需要实现共享资源state的获取和释放即可</code>，至于队列的维护（比如获取资源失败入队，唤醒出队等，AQS已经实现好了），自定义同步器在实现时主要实现以下几种方法：</p>
 <blockquote>
 <ul>
-<li>isHeldExclusively() :该线程是否在独占资源，只有用到condition才需要实现它<br>condition控制了一个信号量,使用signal和await方法来开始和释放.</li>
+<li>isHeldExclusively() :该线程是否在独占资源，只有用到condition才需要实现它.condition控制了一个信号量,使用signal和await方法来开始和释放.</li>
 <li>tryAcquire(int): 独占方式获取资源，成功返回TRUE，反之</li>
 <li>tryRelease(int): 独占方式释放资源，成功返回TRUE，反之</li>
-<li>tryAcquireShared(int): 共享方式获取资源，负数表示失败；0表示成功，但是没有剩余可用资源；整数表示成功，且有剩余资源。<br>什么是成功但是没有剩余资源？</li>
+<li>tryAcquireShared(int): 共享方式获取资源，负数表示失败；0表示成功，但是没有剩余可用资源；整数表示成功，且有剩余资源。</li>
 <li>tryReleaseShared(int): 共享方式释放资源，成功true，失败false.</li>
 </ul>
 </blockquote>
