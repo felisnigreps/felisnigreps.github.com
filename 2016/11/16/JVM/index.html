@@ -17,7 +17,7 @@
 <meta property="og:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。   JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.jpg">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.jpg">
-<meta property="og:updated_time" content="2017-08-31T08:23:54.000Z">
+<meta property="og:updated_time" content="2017-09-11T06:17:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM">
 <meta name="twitter:description" content="JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。   JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。">
@@ -199,11 +199,11 @@
 <p>所以线程A,B之间要进行通信的话，需要经过以下两个步骤：<br>1.线程A把本地内存中更新过的共享变量刷新到主内存中。<br>2.线程B到主内存中读取线程A之前更新过的共享变量。</p>
 <h3 id="类加载机制"><a href="#类加载机制" class="headerlink" title="类加载机制"></a>类加载机制</h3><p>JVM把class文件进行解析，校验，初始化等工作，最终形成JVM可以直接使用的java文件的过程就是类加载。</p>
 <p>类加载的生命周期分为七步，依次为：加载，验证，准备，解析，初始化，执行，卸载。</p>
-<p>加载： 是类加载的一个阶段，完成如下功能：</p>
+<p>加载:是类加载的一个阶段，完成如下功能：</p>
 <pre><code>1. 通过类的全限定名来获取定义此类的二进制字节流
-2. 将此二进制字节流所代表的静态存储结构转化成为方法区的运行时数据结构
+2. 将此二进制字节流所代表的静态存储结构转化成为方法区的运行时数据结构.
 3. 在内存中生成代表此类的java.lang.Class对象作为入口
-</code></pre><p>验证： 目的是确保Class文件的字节流中信息符合虚拟机的要求，不会危害虚拟机安全，使得虚拟机免受共计，有四个校验动作： 文件格式 源数据 字节码 符号引用<br>准备：为类变量分配内存并设置变量的初始值<br>解析：虚拟机将常量池中的符号引用替换为直接引用<br>初始化：执行类构造器<br>使用：使用<br>卸载：从内存中释放</p>
+</code></pre><p>验证:目的是确保Class文件的字节流中信息符合虚拟机的要求，不会危害虚拟机安全，使得虚拟机免受攻击，有四个校验动作,文件格式 源数据 字节码 符号引用<br>准备:为类变量分配内存并设置变量的初始值<br>解析:虚拟机将常量池中的符号引用替换为直接引用<br>初始化:执行类构造器<br>使用:使用<br>卸载:从内存中释放</p>
 <h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><p>类加载器的分类:</p>
 <p><img src="http://ogeojkg3t.bkt.clouddn.com/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.jpg" alt=""></p>
 <h3 id="启动类加载器"><a href="#启动类加载器" class="headerlink" title="启动类加载器"></a>启动类加载器</h3><p>Bootstrap ClassLoader,这个类加载器使用C++语言实现，并非ClassLoader的子类。主要负责加载存放在JAVA_HOME/jre/lib/rt.jar里面所有的class文件，或者被-Xbootclasspath参数所指定路径中以rt.jar命名的文件。</p>
@@ -229,6 +229,7 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">protected</span> <span class="keyword">final</span> Class&lt;?&gt; defineClass(String name, <span class="keyword">byte</span>[] b, <span class="keyword">int</span> off, <span class="keyword">int</span> len,  </div><div class="line">                     ProtectionDomain protectionDomain)  </div><div class="line">    <span class="keyword">throws</span> ClassFormatError  </div><div class="line">    &#123;  </div><div class="line">         <span class="keyword">return</span> defineClassCond(name, b, off, len, protectionDomain, <span class="keyword">true</span>);  </div><div class="line">    &#125;  </div><div class="line"> </div><div class="line">    <span class="comment">// Private method w/ an extra argument for skipping class verification  </span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Class&lt;?&gt; defineClassCond(String name,  </div><div class="line">                                           <span class="keyword">byte</span>[] b, <span class="keyword">int</span> off, <span class="keyword">int</span> len,  </div><div class="line">                                           ProtectionDomain protectionDomain,  </div><div class="line">                                           <span class="keyword">boolean</span> verify)  </div><div class="line">        <span class="keyword">throws</span> ClassFormatError  </div><div class="line">    &#123;  </div><div class="line">    protectionDomain = preDefineClass(name, protectionDomain);  </div><div class="line"> </div><div class="line">    Class c = <span class="keyword">null</span>;  </div><div class="line">        String source = defineClassSourceLocation(protectionDomain);  </div><div class="line"> </div><div class="line">    <span class="keyword">try</span> &#123;  </div><div class="line">        c = defineClass1(name, b, off, len, protectionDomain, source,  </div><div class="line">                             verify);  </div><div class="line">    &#125; <span class="keyword">catch</span> (ClassFormatError cfe) &#123;  </div><div class="line">        c = defineTransformedClass(name, b, off, len, protectionDomain, cfe,  </div><div class="line">                                       source, verify);  </div><div class="line">    &#125;  </div><div class="line"> </div><div class="line">    postDefineClass(c, protectionDomain);  </div><div class="line">    <span class="keyword">return</span> c;  </div><div class="line">    &#125;</div><div class="line"><span class="comment">//resolveClass 此方法负责完成Class对象的链接，如果链接过，则直接返回</span></div></pre></td></tr></table></figure>
 <h2 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h2><p>Java按照分代的方式来回收内存空间，这组要针对的是堆区域。<br>堆区域分为新生代，老年代。</p>
 <h3 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h3><p>Young generation,又分Eden, from survivor, to survivor三块区域.他们默认的大小是8:1:1。存入的对象先放在Eden区域，在进行了GC之后，数据会存放到from survivor.就是说在任何状态都会有一个survivor区域是空闲的，就是说Young generation的利用率在90%左右。</p>
+<p>那我们来说说,为什么要两块同样的区域,而且某个时刻只有一个是满的,究竟是为什么呢?<br>一句话来说,避免碎片.<br>我们仔细说说,首先我们要知道为什么要有survivor区域,想像一下,如果没有那区域,young gc(minor gc)产生的数据全部到老年代,那么老年代很快就满了,那时候就会哟full gc,stop the world,这显然是不合适的. survivor的作用就是进行第二次筛选.那好,我们来一个survivor区域,每次yong gc之后存活的对象都放到survivor区域里.这里要注意,minor gc会作用在eden和survivor区域,那么出现的问题就是,如果只有一个survivor区域,那么存储在survivor中的内存地址是不连续的,这样就我了我们最开始说碎片化问题. 那么有了两个survivor,s0 s1之后的区别是什么呢? 每一次young gc的时候,就把eden和s0的gc结果放到s1里面,这样就可以保证没有碎片. 之后的下一次young gc s0和s1互换角色,直到16次之后才会到老年代中.</p>
 <p>通常情况下会有大量的对象需要分配内存，而且他们的生命周期很短，所以新生代的GC吞吐量很高，大部分对象都要被回收，从而，剩下的活跃对象比较少，所以<code>新生代适合使用复制算法来进行GC</code>，这样保证复制的数据的量较小，效率最好。</p>
 <h3 id="老年代"><a href="#老年代" class="headerlink" title="老年代"></a>老年代</h3><p>在一个对象经过多次GC之后都没有被回收，或者新生代的额空间满了的时候，会直接分配到老年代。</p>
 <p>很多对象经过多次GC以后，经过Eden Space，多次经过From Survivor和To Survivor之后才会进入年老代，而且对象在年老代的存活时间比较长，如果进行使用复制算法来进行GC，需要移动大量的对象，导致效率很低。所以，<code>老年代适合使用标记-清除算法（或者标记-清除-整理）</code>，需要被GC的对象很少，那么标记的对象就很少，在对标记的对象进行回收，效率就会很高。</p>
@@ -244,15 +245,14 @@
 <h3 id="CMS收集器"><a href="#CMS收集器" class="headerlink" title="CMS收集器"></a>CMS收集器</h3><p>CMS(Concurrent Mark Sweep)收集器是一种以获取最短回收停顿时间为目标的收集器。目前很大一部分的Java应用都集中在互联网或B/S系统的服务端上，这类应用尤其重视服务的响应速度，希望系统的停顿时间最短，已给用户带来较好的体验。</p>
 <p>mark sweep可以看出CMS收集器是基于标记-清除算法实现的，他的运作过程相对于前面几种收集器要复杂一些，整个过程分为4个步骤。<br>初始标记，并发标记，重新标记，并发清除。</p>
 <p>其中初始标记，并发标记这两个步骤仍然需要stop the world。初始标记只是标记一下GC Roots能直接关联到的对象，速度很快。并发标记就是进行GC Roots Tracing的过程，而重新标记阶段只为了修正并发标记期间用户继续运作导致的一些变动。这个过程要比初始标记的时间稍微长一些，但是远比并发标记的时间短。</p>
-<p>在整个过程中耗时最长的并发标记和并发清除过程中，用户和收集器线程都可以依琼做，所以总体上来说CMS的内存回收过程是与用户线程一起并发的执行（老年代收集器，新生代使用呢ParNew）。</p>
+<p>在整个过程中耗时最长的并发标记和并发清除过程中，用户和收集器线程都可以一起做，所以总体上来说CMS的内存回收过程是与用户线程一起并发的执行（老年代收集器，新生代使用ParNew）。</p>
 <p>优点:并发收集、低停顿<br>缺点：产生大量空间碎片、并发阶段会降低吞吐量</p>
 <p>参数控制：<br>-XX:+UseConcMarkSweepGC  使用CMS收集器<br>-XX:+ UseCMSCompactAtFullCollection FullGC后，进行一次碎片整理；整理过程是独占的，会引起停顿时间变长<br>-XX:+CMSFullGCsBeforeCompaction  设置进行几次Full GC后，进行一次碎片整理<br>-XX:ParallelCMSThreads  设定CMS的线程数量（一般情况约等于可用CPU数量） </p>
-<h3 id="G1收集器"><a href="#G1收集器" class="headerlink" title="G1收集器"></a>G1收集器</h3><p>G1收集器可以在java7后配置使用。G1是目前最前沿的成果之一，他的使命是替换掉java5中发布的CMS收集器。与CMS收集器相比，G1有以下特点：</p>
-<p>1.空间整合，G1采取标记整理算法，不会产生内存空间碎片，分配打不对象时不会因为无法找到连续空间而提前触发下一次GC.</p>
-<p>2.可预测停顿，这是G1的另一大优势，降低停顿时间是G1和CMS的共同关注点，但是G1除了追求低停顿外，还能建立可预测的停顿时间模型，能让使用者明确指定在一个长度为N毫秒的时间片段内，使得垃圾收集不得超过N毫秒。这几乎已经是<code>实时java的垃圾收集器</code>的特征了。</p>
-<p>关于<a href="http://www.huihoo.org/rt/rtj/rtj_rta.html" target="_blank" rel="external">实时JAVA</a>有兴趣的少年们可以深入了解。</p>
-<p>在上面提到的垃圾收集器，收集的范围都是整个新生代或者老年代，但是G1在这方面有所不同。G1讲整个Java堆划分为多个大小相等的独立区域(Region),虽然还保留着新生代和老年代的概念，但是新生代和老年代不再是物理隔阂了，他们都是一部分(可以不连续)Region的集合。</p>
-<p>G1新生代收集和ParNew类似，当新生代占用达到一定比例的时候，开始出发收集。和CMS类似，G1收集器收集老年代对象会有短暂停顿。</p>
+<h3 id="G1收集器"><a href="#G1收集器" class="headerlink" title="G1收集器"></a>G1收集器</h3><p>首先，G1的设计原则就是简单可行的性能调优<br>开发人员仅仅需要声明以下参数即可：<br>-XX:+UseG1GC -Xmx32g -XX:MaxGCPauseMillis=200<br>其中-XX:+UseG1GC为开启G1垃圾收集器，-Xmx32g 设计堆内存的最大内存为32G，-XX:MaxGCPauseMillis=200设置GC的最大暂停时间为200ms。如果我们需要调优，在内存大小一定的情况下，我们只需要修改最大暂停时间即可。</p>
+<p>G1收集器可以在java7后配置使用。G1是目前最前沿的成果之一，他的使命是替换掉java5中发布的CMS收集器。与CMS收集器相比，G1有以下特点：<br>1.空间整合，G1采取标记整理算法，不会产生内存空间碎片，分配打不对象时不会因为无法找到连续空间而提前触发下一次GC.<br>2.可预测停顿，这是G1的另一大优势，降低停顿时间是G1和CMS的共同关注点，但是G1除了追求低停顿外，还能建立可预测的停顿时间模型，能让使用者明确指定在一个长度为N毫秒的时间片段内，使得垃圾收集不得超过N毫秒。这几乎已经是<code>实时java的垃圾收集器</code>的特征了。<br>关于<a href="http://www.huihoo.org/rt/rtj/rtj_rta.html" target="_blank" rel="external">实时JAVA</a>有兴趣的少年们可以深入了解。</p>
+<p>在上面提到的垃圾收集器，收集的范围都是整个新生代或者老年代，但是G1在这方面有所不同。<br>注意!!<br>G1将整个Java堆划分为多个大小相等的独立区域(Region),虽然还保留着新生代和老年代的概念，但是新生代和老年代不再是物理隔阂了，他们都是一部分(可以不连续)Region的集合。</p>
+<p>G1提供了两种GC模式，Young GC和Mixed GC，两种都是Stop The World(STW)的.</p>
+<p><a href="http://blog.jobbole.com/109170/" target="_blank" rel="external">http://blog.jobbole.com/109170/</a></p>
 <p>1.标记阶段，首先初始标记，这个标记阶段是停顿的，并且会触发一次Mintor GC.对应GC log:GC pause (young)(intial-mark)<br>2.Root region scanning,程序运行过程中会回收survivor区域（存活到老年代）,这一过程必须在young GC之前完成。<br>3.Concurrent Marking,在整个堆中进行并发标记（和应用程序兵法执行），此过程可能被young GC中断。在并发标记阶段中，如果发现区域对象中的所有对象都是垃圾，那么这个区域会被立即回收。同时，并发标记过程中，会计算每个区域中对象的存活比例。<br>4.再标记，会有短暂的停顿，作用和CMS是一样的，用来标记并发标记中应用程序产生的垃圾，G1中采用了比CMS更快的初始快照算法：snapshot-at-the-beginning(SATB).<br>5.Copy/Clean up,多线程清除失活对象，会有STW。G1将回收区域的存活对象拷贝到新区域，清除remember sets,并发清空回收区域并把它返回到空闲区域链表中。</p>
 <h2 id="GC搭配策略"><a href="#GC搭配策略" class="headerlink" title="GC搭配策略"></a>GC搭配策略</h2><p>在进行JVM调优的过程中，并非任何一种新生代GC策略都可以和另一种年老代GC策略进行配合工作，所以，我们应该知道，哪些种组合可以有效地进行GC，而且应该在什么样的应用场景下选择哪一种组合，如下表所示：</p>
 <table>

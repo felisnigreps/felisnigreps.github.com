@@ -128,60 +128,6 @@
       <div class="body-wrap">
         
   
-    <article id="post-DBMS事务隔离级别" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/23/DBMS事务隔离级别/">DBMS的事务隔离级别</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><p>事务保证了一个操作序列全部执行或者全部不执行(原子性)，从一个状态转变为另一个状态。事务是满足持久性的，所以可以被保存下来。当多个事务操作数据的时候，如果控制不好隔离级别，那么就会出现脏读，重复读，幻读等问题。</p>
-<p>刚开始主要是对幻读的理解不到位，现在讨论一下：</p>
-<p>事务的四种性质ACID,很基础，我们常常所讨论的是一致性和隔离性，解决办法往往是加锁，不过数据库又是一个高并发的应用，锁加多了会造成很大的性能问题，这边通过分析MySQL的InnoDB引擎来分析下事务的级别是什么，数据库在其中又到底做了什么。</p>
-        <p class="article-more-link">
-          <a class="article-more-a"  href="/2017/02/23/DBMS事务隔离级别/#more">more >></a>
-        </p>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2017/02/23/DBMS事务隔离级别/" class="archive-article-date">
-  	<time datetime="2017-02-23T00:56:10.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-02-23</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务管理/">事务管理</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
     <article id="post-newFixedThreadpool(n)" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -416,9 +362,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>这是Java基础中不可缺少的部分，以前看过很多次，但总是记不牢，这次在这边简单总结下。方便复习。</p>
-<p>Collection也包含了基本的数据结构，这边也会在介绍的时候简单同提一下。</p>
-<p>很多图片和内容都是抄自于网上的博客，侵删。<br>
+        <p>这是Java基础中不可缺少的部分,以前看过很多次,但总是记不牢,这次在这边简单总结下。方便复习。</p>
+<p>Collection也包含了基本的数据结构,这边也会在介绍的时候简单同提一下。</p>
+<p>很多图片和内容都是抄自于网上的博客,侵删。<br>
         <p class="article-more-link">
           <a class="article-more-a"  href="/2017/01/18/Collection家族/#more">more >></a>
         </p>
@@ -646,6 +592,61 @@
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IO/">IO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-JVM" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/11/16/JVM/">JVM</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>JVM是作为Java开发者很重要的一部分，以前看过不少次，但是理解的都不够透彻，掌握的也不牢，现在呢就整体的梳理一下。 </p>
+</blockquote>
+<p>JVM代表着Java虚拟机，但是我们常说的理论大部分都是针对于HotSpot,这也是JVM最常用的一个实现。<br>
+        <p class="article-more-link">
+          <a class="article-more-a"  href="/2016/11/16/JVM/#more">more >></a>
+        </p>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2016/11/16/JVM/" class="archive-article-date">
+  	<time datetime="2016-11-16T12:21:08.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-11-16</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/">JVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
 	</div>
 
       

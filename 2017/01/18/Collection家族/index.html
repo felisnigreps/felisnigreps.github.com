@@ -8,22 +8,22 @@
   <link rel="dns-prefetch" href="http://tiltcat.com">
   <title>Collection家族 | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="这是Java基础中不可缺少的部分，以前看过很多次，但总是记不牢，这次在这边简单总结下。方便复习。 Collection也包含了基本的数据结构，这边也会在介绍的时候简单同提一下。 很多图片和内容都是抄自于网上的博客，侵删。">
+  <meta name="description" content="这是Java基础中不可缺少的部分,以前看过很多次,但总是记不牢,这次在这边简单总结下。方便复习。 Collection也包含了基本的数据结构,这边也会在介绍的时候简单同提一下。 很多图片和内容都是抄自于网上的博客,侵删。">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Collection家族">
 <meta property="og:url" content="http://tiltcat.com/2017/01/18/Collection家族/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
-<meta property="og:description" content="这是Java基础中不可缺少的部分，以前看过很多次，但总是记不牢，这次在这边简单总结下。方便复习。 Collection也包含了基本的数据结构，这边也会在介绍的时候简单同提一下。 很多图片和内容都是抄自于网上的博客，侵删。">
+<meta property="og:description" content="这是Java基础中不可缺少的部分,以前看过很多次,但总是记不牢,这次在这边简单总结下。方便复习。 Collection也包含了基本的数据结构,这边也会在介绍的时候简单同提一下。 很多图片和内容都是抄自于网上的博客,侵删。">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/CollectionsMind.png">
 <meta property="og:image" content="http://img.blog.csdn.net/20150501233345854?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20150501235138962?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20150502000405642?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/collection.png">
-<meta property="og:updated_time" content="2017-08-31T08:24:25.000Z">
+<meta property="og:updated_time" content="2017-09-11T06:16:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Collection家族">
-<meta name="twitter:description" content="这是Java基础中不可缺少的部分，以前看过很多次，但总是记不牢，这次在这边简单总结下。方便复习。 Collection也包含了基本的数据结构，这边也会在介绍的时候简单同提一下。 很多图片和内容都是抄自于网上的博客，侵删。">
+<meta name="twitter:description" content="这是Java基础中不可缺少的部分,以前看过很多次,但总是记不牢,这次在这边简单总结下。方便复习。 Collection也包含了基本的数据结构,这边也会在介绍的时候简单同提一下。 很多图片和内容都是抄自于网上的博客,侵删。">
 <meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/CollectionsMind.png">
   
   
@@ -155,47 +155,49 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>这是Java基础中不可缺少的部分，以前看过很多次，但总是记不牢，这次在这边简单总结下。方便复习。</p>
-<p>Collection也包含了基本的数据结构，这边也会在介绍的时候简单同提一下。</p>
-<p>很多图片和内容都是抄自于网上的博客，侵删。<br><a id="more"></a></p>
+        <p>这是Java基础中不可缺少的部分,以前看过很多次,但总是记不牢,这次在这边简单总结下。方便复习。</p>
+<p>Collection也包含了基本的数据结构,这边也会在介绍的时候简单同提一下。</p>
+<p>很多图片和内容都是抄自于网上的博客,侵删。<br><a id="more"></a></p>
 <h2 id="集合体系"><a href="#集合体系" class="headerlink" title="集合体系"></a>集合体系</h2><p><img src="http://ogeojkg3t.bkt.clouddn.com/CollectionsMind.png" alt=""></p>
 <h2 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h2><p><img src="http://img.blog.csdn.net/20150501233345854?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""></p>
-<p>Set:一种不包含重复元素Collection,他维持自己内部的顺序，所以随机访问对他没有意义（无序）。可以存在null值但是只能存在一个。</p>
+<p>Set:一种不包含重复元素Collection,他维持自己内部的顺序,所以随机访问对他没有意义（无序）。可以存在null值但是只能存在一个。</p>
 <blockquote>
 <ul>
-<li><p>HashSet: 号称查询速度最快的集合，其内部是HashCode实现的，他不保证set的顺序。也不保证顺序的不变。<br>不允许出现重复元素；<br>不保证集合中元素的顺序。哈希算法来的~<br>允许包含值为null的元素，但最多只能有一个null元素。</p>
+<li><p>HashSet: 号称查询速度最快的集合,其内部是HashCode实现的,他不保证set的顺序。也不保证顺序的不变。<br>不允许出现重复元素；<br>不保证集合中元素的顺序。哈希算法来的~<br>允许包含值为null的元素,但最多只能有一个null元素。</p>
 </li>
-<li><p>LinkedHashSet: 他介于HashSet和TreeSet之间，他是一个Hash表，同时也维护了一个双链表来记录顺序。</p>
+<li><p>LinkedHashSet: 他介于HashSet和TreeSet之间,他是一个Hash表,同时也维护了一个双链表来记录顺序。</p>
 </li>
-<li><p>TreeSet: 是一个总处于排序装的set,内部以TreeMap作为实现（使用红黑树算法）。元素按照顺序排列，但是add()/remove()等方法的复杂度为O(logn). </p>
+<li><p>TreeSet: 是一个总处于排序装的set,内部以TreeMap作为实现（使用红黑树算法）。元素按照顺序排列,但是add()/remove()等方法的复杂度为O(logn). </p>
 </li>
 <li><p>TreeSet<br>不允许出现重复元素；<br>集合中元素的顺序按某种规则进行排序<br>不允许包含值为null的元素</p>
 </li>
 </ul>
 </blockquote>
 <p>List:是一个接口</p>
-<p>代表有序的Collection,他按照某种特定的插入顺序来维护排列顺序。可以根据位置精确的插入数据，并且可以根据索引访问元素,以下是他的实现。</p>
+<p>代表有序的Collection,他按照某种特定的插入顺序来维护排列顺序。可以根据位置精确的插入数据,并且可以根据索引访问元素,以下是他的实现。</p>
 <blockquote>
 <ul>
-<li><p>ArrayList：一个动态数组，是我们最常用的集合。它可以插入null,重复的数据。每个ArrayList都有一额默认大小（10），每次插入元素的时候都会进行容量检查。当快要达到容量的时候就会进行扩容，如果知道需要的ArrayList的大小的话，最好在初始化的时候就声明他的大小来节省资源。<br>ArrayList擅长随机访问，ArrayList是非同步的。</p>
+<li><p>ArrayList：一个动态数组,是我们最常用的集合。它可以插入null,重复的数据。每个ArrayList都有一额默认大小（10）,每次插入元素的时候都会进行容量检查。当快要达到容量的时候就会进行扩容,如果知道需要的ArrayList的大小的话,最好在初始化的时候就声明他的大小来节省资源。<br>ArrayList擅长随机访问,ArrayList是非同步的。</p>
 </li>
-<li><p>Vector： 和Array几乎一致，不过区别在于他是线程安全的。但是效率很低，不建议使用。</p>
+<li><p>Vector： 和Array几乎一致,不过区别在于他是线程安全的。但是效率很低,不建议使用。</p>
 </li>
-<li><p>LinkedList：它是一个双向链表，可以更好的进行插入和删除，除了ArrayList提供的方法之外，他还有get/remove等方法获取头部的元素。它查找的方式和ArrayList有所不同，他不支持随机查找，每次查找都需要从头/尾进行遍历来查找元素。</p>
+<li><p>LinkedList：它是一个双向链表,可以更好的进行插入和删除,除了ArrayList提供的方法之外,他还有get/remove等方法获取头部的元素。它查找的方式和ArrayList有所不同,他不支持随机查找,每次查找都需要从头/尾进行遍历来查找元素。</p>
 </li>
 </ul>
 </blockquote>
-<h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><p>Map接口，没有继承Collection接口，它是独立的一个接口。它使用key-value的键值对存储数据。子类有HashMap，TreeMap，LinkedHashMap等。 </p>
-<p>HashMap是无序的，TreeMap和LinkedHashMap是有序的，TreeMap实现了SortMap接口，默认根据key的升序进行排序。而LinkedHashMap是保存的插入的顺序。</p>
+<h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><p>Map接口,没有继承Collection接口,它是独立的一个接口。它使用key-value的键值对存储数据。子类有,TreeMap,LinkedHashMap等。 </p>
+<p>HashMap是无序的,TreeMap和LinkedHashMap是有序的,TreeMap实现了SortMap接口,默认根据key的升序进行排序。而LinkedHashMap是保存的插入的顺序。</p>
 <p><img src="http://img.blog.csdn.net/20150501235138962?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""></p>
 <h3 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h3><p>什么会影响HashMap的性能?</p>
-<p>首先我们要知道有两点,初始容量和加载因子. 首先容量要是2的次幂,为什么这么做?因为可以减少碰撞,这和根据key算hashcode的算法有关,详情可以参见源码. 第二点就是容量,比如说，我们有1000个元素new HashMap(1000), 但是理论上来讲new HashMap(1024)更合适，不过上面已经说过，即使是1000，hashmap也自动会将其设置为1024。 但是new HashMap(1024)还不是更合适的，因为0.75<em>1000 &lt; 1000, 也就是说为了让0.75 </em> size &gt; 1000, 我们必须这样new HashMap(2048)才最合适，既考虑了&amp;的问题，也避免了resize的问题。</p>
-<p>HashMap的迭代器(Iterator)是fail-fast迭代器,Hashtable的enumerator迭代器不是fail-fast的.所以当其他线程改变了HashMap的结构,将会抛出ConcurrentModificationException.<br>当一个或多个线程正在遍历一个集合Collection，此时另一个线程修改了这个集合的内容（添加，删除或者修改）。这就是并发修改</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HashMapFailFast</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="comment">//如果改成ConcurrentHashMap就不会出现快速失败</span></div><div class="line">        Map&lt;String, String&gt; premiumPhone = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</div><div class="line">        premiumPhone.put(<span class="string">"Apple"</span>, <span class="string">"iPhone"</span>);</div><div class="line">        premiumPhone.put(<span class="string">"HTC"</span>, <span class="string">"HTC one"</span>);</div><div class="line">        premiumPhone.put(<span class="string">"Samsung"</span>, <span class="string">"S5"</span>);</div><div class="line">        Iterator iterator = premiumPhone.keySet().iterator();</div><div class="line">        <span class="keyword">while</span> (iterator.hasNext()) &#123;</div><div class="line">            System.out.println(premiumPhone.get(iterator.next()));</div><div class="line">            <span class="comment">//在这修改了map结构 会发生fail-fast</span></div><div class="line">            <span class="comment">//维持了一个modecount,每次修改会做对比,如果不一致,抛出异常</span></div><div class="line">            <span class="comment">//注意 remove()方法会让expectModcount和modcount 相等，所以不会抛出这个异常。</span></div><div class="line">            premiumPhone.put(<span class="string">"Sony"</span>, <span class="string">"Xperia Z"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先我们要知道有两点,初始容量和加载因子. 首先容量要是2的次幂,为什么这么做?因为可以减少碰撞,这和根据key算hashcode的算法有关,详情可以参见源码. 第二点就是容量,比如说,我们有1000个元素new HashMap(1000), 但是理论上来讲new HashMap(1024)更合适,不过上面已经说过,即使是1000,hashmap也自动会将其设置为1024。 但是new HashMap(1024)还不是更合适的,因为0.75<em>1000 &lt; 1000, 也就是说为了让0.75 </em> size &gt; 1000, 我们必须这样new HashMap(2048)才最合适,既考虑了&amp;的问题,也避免了resize的问题。</p>
+<p>HashMap和HashTable的区别</p>
+<p>1.HashMap的迭代器(Iterator)是fail-fast迭代器,Hashtable的enumerator迭代器不是fail-fast的.所以当其他线程改变了HashMap的结构,将会抛出ConcurrentModificationException.<br>当一个或多个线程正在遍历一个集合Collection,此时另一个线程修改了这个集合的内容（添加,删除或者修改）。这就是并发修改</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HashMapFailFast</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        <span class="comment">//如果改成ConcurrentHashMap就不会出现快速失败</span></div><div class="line">        Map&lt;String, String&gt; premiumPhone = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</div><div class="line">        premiumPhone.put(<span class="string">"Apple"</span>, <span class="string">"iPhone"</span>);</div><div class="line">        premiumPhone.put(<span class="string">"HTC"</span>, <span class="string">"HTC one"</span>);</div><div class="line">        premiumPhone.put(<span class="string">"Samsung"</span>, <span class="string">"S5"</span>);</div><div class="line">        Iterator iterator = premiumPhone.keySet().iterator();</div><div class="line">        <span class="keyword">while</span> (iterator.hasNext()) &#123;</div><div class="line">            System.out.println(premiumPhone.get(iterator.next()));</div><div class="line">            <span class="comment">//在这修改了map结构 会发生fail-fast</span></div><div class="line">            <span class="comment">//维持了一个modecount,每次修改会做对比,如果不一致,抛出异常</span></div><div class="line">            <span class="comment">//注意 remove()方法会让expectModcount和modcount 相等,所以不会抛出这个异常。</span></div><div class="line">            premiumPhone.put(<span class="string">"Sony"</span>, <span class="string">"Xperia Z"</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2.key和value,HashMap可以为空,HashTable不行.<br>3.HashTable是同步的,HashMap不是</p>
 <h2 id="工具类"><a href="#工具类" class="headerlink" title="工具类"></a>工具类</h2><p><img src="http://img.blog.csdn.net/20150502000405642?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGFvdmlwMTIz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt=""></p>
-<h2 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h2><p>所有的集合类，都实现了Iterator接口，这是一个用于遍历集合中元素的接口，主要包含以下三种方法：<br>1.hasNext()是否还有下一个元素。<br>2.next()返回下一个元素。<br>3.remove()删除当前元素。</p>
+<h2 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h2><p>所有的集合类,都实现了Iterator接口,这是一个用于遍历集合中元素的接口,主要包含以下三种方法：<br>1.hasNext()是否还有下一个元素。<br>2.next()返回下一个元素。<br>3.remove()删除当前元素。</p>
 <h2 id="一张图"><a href="#一张图" class="headerlink" title="一张图"></a>一张图</h2><p><img src="http://ogeojkg3t.bkt.clouddn.com/collection.png" alt=""></p>
-<p>其实看多了，梳理一下，其实还是很好理解的。</p>
+<p>其实看多了,梳理一下,其实还是很好理解的。</p>
 
       
     </div>
