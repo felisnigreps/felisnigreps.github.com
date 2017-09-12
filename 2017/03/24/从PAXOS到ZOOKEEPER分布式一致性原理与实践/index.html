@@ -17,7 +17,7 @@
 <meta property="og:description" content="要搞互联网，分布式的，zookeeper挺重要的，但是问题在于目前我几乎什么都不知道，有人推荐了这么一本书，现在还没有系统的总结，就当做学习笔记用吧！">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/zookeeper.png">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/DDNS.png">
-<meta property="og:updated_time" content="2017-06-14T07:48:32.000Z">
+<meta property="og:updated_time" content="2017-09-12T02:31:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从PAXOS到ZOOKEEPER分布式一致性原理与实践.">
 <meta name="twitter:description" content="要搞互联网，分布式的，zookeeper挺重要的，但是问题在于目前我几乎什么都不知道，有人推荐了这么一本书，现在还没有系统的总结，就当做学习笔记用吧！">
@@ -175,22 +175,22 @@
 <h3 id="阶段一：提交事务请求"><a href="#阶段一：提交事务请求" class="headerlink" title="阶段一：提交事务请求"></a>阶段一：提交事务请求</h3><p>角色：协调者（a），参与者们(b)</p>
 <p>1.事务询问：a向b发送事务内容，并且询问是否可以进行提交，等待相应。<br>2.执行事务：b执行事务，并且将Undo和Redo信息记录与事务日志中。</p>
 <blockquote>
-<p>Undo日志记录某数据被修改前的值，可以用来在事务失败时进行rollback；Redo日志记录某数据块被修改后的值，可以用来恢复未写入data file的已成功事务更新的数据。<br>例如某一事务的事务序号为T1，其对数据X进行修改，设X的原值是5，修改后的值为15，那么Undo日志为<t1, 5="" x,="">，Redo日志为<t1, 15="" x,="">。<br>也有把undo和redo结合起来的做法，叫做Undo/Redo日志，在这个例子中Undo/Redo日志为<t1, 15="" x,="" 5,="">。</t1,></t1,></t1,></p>
+<p>Undo日志记录某数据被修改前的值，可以用来在事务失败时进行rollback；Redo日志记录某数据块被修改后的值，可以用来恢复未写入data file的已成功事务更新的数据。<br>例如某一事务的事务序号为T1，其对数据X进行修改，设X的原值是5，修改后的值为15，那么Undo日志为&lt;T1, X, 5-&gt;，Redo日志为&lt;T1, X, 15&gt;。<br>也有把undo和redo结合起来的做法，叫做Undo/Redo日志，在这个例子中Undo/Redo日志为<t1, 15="" x,="" 5,="">。</t1,></p>
 </blockquote>
 <p>3.b向a发送反馈，成功执行了事务发送Yes响应，失败发送No响应。</p>
 <p>此阶段叶恒做投票阶段，a会根据b的反馈来进行决定。</p>
 <h3 id="阶段二：执行事务提交"><a href="#阶段二：执行事务提交" class="headerlink" title="阶段二：执行事务提交"></a>阶段二：执行事务提交</h3><p>在此阶段，a会根据b的响应来决定是否可以进行提交操作，一般情况下包含以下两种可能：</p>
-<h4 id="执行事务提交"><a href="#执行事务提交" class="headerlink" title="执行事务提交"></a>执行事务提交</h4><p>如果返回的都是Yes,那么a会向b发送commit请求–&gt;b接收到了commit请求后，会进行提交擦操作，在完成后释放资源–&gt;b完成提交后向a发送Ack消息（响应）–&gt;a接收到ack消息后，完成事务。</p>
-<h4 id="中断事务"><a href="#中断事务" class="headerlink" title="中断事务"></a>中断事务</h4><p>如果任何一个b返回了No响应或者等待超时之后，那么a就会中断事务，向所有节点发出Rollback请求–&gt;参与者接收到rollback请求后，会用Undo信息来进行回滚操作。并且在回滚之后释放资源，向a发送Ack消息–&gt;a接收到所有参与者 Ack消息后完成事务中断。</p>
+<h4 id="执行事务提交"><a href="#执行事务提交" class="headerlink" title="执行事务提交"></a>执行事务提交</h4><p>如果返回的都是Yes,那么a会向b发送commit请求-&gt;b接收到了commit请求后，会进行提交操作，在完成后释放资源-&gt;b完成提交后向a发送Ack消息（响应）-&gt;a接收到ack消息后，完成事务。</p>
+<h4 id="中断事务"><a href="#中断事务" class="headerlink" title="中断事务"></a>中断事务</h4><p>如果任何一个b返回了No响应或者等待超时之后，那么a就会中断事务，向所有节点发出Rollback请求-&gt;参与者接收到rollback请求后，会用Undo信息来进行回滚操作。并且在回滚之后释放资源，向a发送Ack消息-&gt;a接收到所有参与者 Ack消息后完成事务中断。</p>
 <p>这个协议理解起来很简单，但是也存在以下缺点：</p>
 <p>同步阻塞：参与者在等待响应中无法进行其他操作<br>单点问题：a在整个过程中起到了很重要的作用，几乎是单一实效点，而且如果在阶段二a出现了问题，那么其他参与者会一直处于锁定资源的状态中<br>数据不一致：在阶段二中a向b发送了commit请求，在期间自身或者网络发生问题，那么只会有一部分b接收到请求，这就造成了数据不一致性。<br>太过保守：没有设置比较完善的容错机制，任意一个节点的失败都会导致整个事物的失败。</p>
 <h2 id="3PC"><a href="#3PC" class="headerlink" title="3PC"></a>3PC</h2><p>三阶段提交协议是在二阶段的基础上进行了改进，将二阶段的<code>提交事务请求</code>一分为二，形成了CanCommit,PreCommit和do Commit三个阶段组成的事务处理协议。</p>
 <h3 id="阶段一-CanCommit"><a href="#阶段一-CanCommit" class="headerlink" title="阶段一:CanCommit"></a>阶段一:CanCommit</h3><p>1.事物询问<br>a向b发送一个包含事物内容的canCommit请求，询问是否可以执行事物提交操作，并等待响应。<br>3.b向a反馈事物询问<br>b接收到canCommit请求后，如果其自身认为可以顺利执行，那么就反馈Yes响应，反之反馈No.</p>
-<h3 id="阶段二：PreCommit"><a href="#阶段二：PreCommit" class="headerlink" title="阶段二：PreCommit"></a>阶段二：PreCommit</h3><h4 id="执行事务预提交"><a href="#执行事务预提交" class="headerlink" title="执行事务预提交"></a>执行事务预提交</h4><p>假设a从b中获得的都是Yes响应，那么就会执行事务预提交。<br>a向所有b发送precommit请求，进入prepared阶段–&gt;b接收到preCommit请求后，会执行任务操作，记录undo和redo信息到日志中–&gt;如果b成功的执行了事务操作，那么就会反馈给aAck响应，同时等待最终的指令，提交或者中止</p>
-<h4 id="中断事务-1"><a href="#中断事务-1" class="headerlink" title="中断事务"></a>中断事务</h4><p>如果任何一个b反馈了No响应或者a等待超时，那么a就会像所有的b发送中断请求–&gt;无论b是接到中断请求或者等待超时，b都会中断事务</p>
+<h3 id="阶段二：PreCommit"><a href="#阶段二：PreCommit" class="headerlink" title="阶段二：PreCommit"></a>阶段二：PreCommit</h3><h4 id="执行事务预提交"><a href="#执行事务预提交" class="headerlink" title="执行事务预提交"></a>执行事务预提交</h4><p>假设a从b中获得的都是Yes响应，那么就会执行事务预提交。<br>a向所有b发送precommit请求，进入prepared阶段-&gt;b接收到preCommit请求后，会执行任务操作，记录undo和redo信息到日志中-&gt;如果b成功的执行了事务操作，那么就会反馈给aAck响应，同时等待最终的指令，提交或者中止</p>
+<h4 id="中断事务-1"><a href="#中断事务-1" class="headerlink" title="中断事务"></a>中断事务</h4><p>如果任何一个b反馈了No响应或者a等待超时，那么a就会像所有的b发送中断请求-&gt;无论b是接到中断请求或者等待超时，b都会中断事务</p>
 <h3 id="阶段三：doCommit"><a href="#阶段三：doCommit" class="headerlink" title="阶段三：doCommit"></a>阶段三：doCommit</h3><p>该阶段进行真正的事物提交，有以下两种情况</p>
-<h4 id="执行提交"><a href="#执行提交" class="headerlink" title="执行提交"></a>执行提交</h4><p>假设a处于正常工作状态，并且接收到了所有b的Ack响应，那么他会从预提交转变为提交状态，并且向所有b发送doCommit请求–&gt;b接收到doCommit请求后，会执行事务的提交操作，释放资源，向a发送Ack消息–&gt;a接收到Ack之后完成后事务</p>
-<h4 id="中断事务-2"><a href="#中断事务-2" class="headerlink" title="中断事务"></a>中断事务</h4><p>假设a正常工作，并且任意一个b返回了No或者等待超时，那么就会中断事务，向所有b发送abort请求–&gt;b接收到abort请求后，会利用undo日志来进行回滚，释放资源，向a发送Ack消息–&gt;a接收到Ack消息后中断事务</p>
+<h4 id="执行提交"><a href="#执行提交" class="headerlink" title="执行提交"></a>执行提交</h4><p>假设a处于正常工作状态，并且接收到了所有b的Ack响应，那么他会从预提交转变为提交状态，并且向所有b发送doCommit请求-&gt;b接收到doCommit请求后，会执行事务的提交操作，释放资源，向a发送Ack消息-&gt;a接收到Ack之后完成后事务</p>
+<h4 id="中断事务-2"><a href="#中断事务-2" class="headerlink" title="中断事务"></a>中断事务</h4><p>假设a正常工作，并且任意一个b返回了No或者等待超时，那么就会中断事务，向所有b发送abort请求-&gt;b接收到abort请求后，会利用undo日志来进行回滚，释放资源，向a发送Ack消息-&gt;a接收到Ack消息后中断事务</p>
 <p>在阶段三可能会出现下面两种故障，a出现问题或者ab之间的网络出现问题。这两种情况都会导致b无法接收到a的doCommit或者abort请求，针对这样的情况b都会在等待超时之后继续进行事务的提交。</p>
 <p>相对于2PC，3PC最大的优点就是降低了b的阻塞范围，当出现单点故障后可以继续打达成一致。不过问题还是多多，传输的过程中依旧会出现问题。</p>
 <p>简单说下，3PC将2PC的第二步分为两步，2PC是a直接给b发送提交信号，然后b就提交，然后反馈。3PC是把commit分为preCommit和doCommit,a先给b发送preCommit信号，b接到了说ok，我准备好了，然后a在发送doCommit信号。</p>
@@ -257,8 +257,8 @@
 <p>多个Instance怎么运作？我们先构建最简单的模式，各个Instance独立运作。P&amp;A:prepre and accept<br>|Instance|1|2|3|4|5|6|<br>|–<br>|paxos|P&amp;A|P&amp;A|P&amp;A|P&amp;A|P&amp;A|P&amp;A|</p>
 <p>每个instance独立运作一个朴素paxos算法，我们保证仅当instance i的值被确定后，放可进行下一个paxos算法，这样我们就保证了Instance的有序性。</p>
 <p>但是这样的效率是比较差的，朴素paxos算法的latency很高，multi-paxos算法希望找到多个Instance的paxos算法之间的联系，从而尝试在某些情况去掉prepare步骤。</p>
-<hr>
-<h2 id="目前对于paxos的理解只限于纸面层面，而multi-paxos则是几乎不理解，这块还需要深入的理解和补充，目前先往下进行zookeeper"><a href="#目前对于paxos的理解只限于纸面层面，而multi-paxos则是几乎不理解，这块还需要深入的理解和补充，目前先往下进行zookeeper" class="headerlink" title="目前对于paxos的理解只限于纸面层面，而multi paxos则是几乎不理解，这块还需要深入的理解和补充，目前先往下进行zookeeper"></a>目前对于paxos的理解只限于纸面层面，而multi paxos则是几乎不理解，这块还需要深入的理解和补充，目前先往下进行zookeeper</h2><h2 id="zookeeper-和-paxos"><a href="#zookeeper-和-paxos" class="headerlink" title="zookeeper 和 paxos"></a>zookeeper 和 paxos</h2><p>Apache ZooLeeper是Apache Hadoop的子项目发展而来，他为分布式应用提供了高效并且可靠的分布式协调服务，提供了诸如统一命名服务，配置管理和分布式锁等分布式基础服务。在解决分布式数据一致性方面，zk斌没有直接采用paxos算法，而是采用了ZAB(zookeeper atomic broadcast)的一致性协议。</p>
+<p>目前对于paxos的理解只限于纸面层面，而multi paxos则是几乎不理解，这块还需要深入的理解和补充，目前先往下进行zookeeper</p>
+<h2 id="zookeeper-和-paxos"><a href="#zookeeper-和-paxos" class="headerlink" title="zookeeper 和 paxos"></a>zookeeper 和 paxos</h2><p>Apache ZooLeeper是Apache Hadoop的子项目发展而来，他为分布式应用提供了高效并且可靠的分布式协调服务，提供了诸如统一命名服务，配置管理和分布式锁等分布式基础服务。在解决分布式数据一致性方面，zk斌没有直接采用paxos算法，而是采用了ZAB(zookeeper atomic broadcast)的一致性协议。</p>
 <p>zk是一个典型的分布式数据一致性的解决方案，分布式应用程序可以基于他实现诸如数据发布/订阅，负载均衡，命名服务，分布式协调/通知，集群管理，Master选举，分布式锁和分布式队列等功能。zk可以保证如下分布式一致性：</p>
 <p><code>顺序一致性</code>：从一个客户端发起的事务请求，最终将会严格的按照其发起顺序被应用到zookeepr中去。<br><code>原子性</code>:所有的事务请求结果在整个集群中所有机器山的应用情况是一致的，也就是说，要么整个集群所有机器都成功的应用了某一个事务，要么都没有应用。一定不会出现集群中的部分机器用了该事务，而另外一部分并没有应用的情况。<br><code>单一视图</code>:无论客户端连接的是哪个zk服务器，其看到的服务端的数据模型都是一致的。<br><code>可靠性</code>:一旦服务端成功的应用了一个事务，并完成了对客户端的响应，那么该事物所引起的服务端状态会一致巴博留下来，除非与另一个事务又对其进行了变更。<br><code>实时性</code>：一般的实时性指的是一个事务被成功应用，那么客户端应该理解从服务端上个读取这个事务变更后的状态，这里需要注意的是，zk仅仅保证在一定时间内，客户端最终能够从服务器上读取到最新的数据状态。</p>
 <h3 id="zk的设计目标"><a href="#zk的设计目标" class="headerlink" title="zk的设计目标"></a>zk的设计目标</h3><p>zk致力于提供一个高性能，高可用，并且具有严格的顺序访问空感知能力的分布式协调服务。</p>
@@ -335,7 +335,7 @@
 <p>Monitor负责收集服务信息以及对DDNS自身状态的监控</p>
 <p>Controller是一个后台管理的console,负责授权管理，流量控制，静态配置服务和手动屏蔽服务等功能。另外，系统运维人员也可以在上面管理Register/Dispatcher/Scanner等集群。</p>
 <h3 id="域名注册"><a href="#域名注册" class="headerlink" title="域名注册"></a>域名注册</h3><p>域名注册主要是针对服务提供者来说的，过程可以简单概括为：每个服务提供者在启动的过程中，都会把自己的域名信息注册到Register集群中去。</p>
-<p>1.服务提供者通过SDK提供的API接口，将域名/IP地址/端口发送给register集群。<br>例如，A机器用于提供serviceA.xxx.com,于是他就像Register发送一个域名–&gt; ip:port的映射：serviceA.xxx.com–&gt;192.168.0.1:8080</p>
+<p>1.服务提供者通过SDK提供的API接口，将域名/IP地址/端口发送给register集群。<br>例如，A机器用于提供serviceA.xxx.com,于是他就像Register发送一个域名-&gt; ip:port的映射：serviceA.xxx.com-&gt;192.168.0.1:8080</p>
 <h3 id="域名解析-1"><a href="#域名解析-1" class="headerlink" title="域名解析"></a>域名解析</h3><p>域名解析是针对服务消费者来说的，正好与域名注册的过程相反：服务消费者在使用域名的时候，回想Dispatcher发出域名解析的请求。Dispatcher收到请求后，会从zk上指定域名节点读取相应的ip:port裂变，通过一定的策略选取其中一个返回给前端应用。</p>
 <h3 id="域名探测"><a href="#域名探测" class="headerlink" title="域名探测"></a>域名探测</h3><p>这是指DDNS要对域名下所有注册ip地址和端口进行可用性检测，俗称健康度检测。一般有两种方式，第一总是服务端主动发起健康度心跳检测，这种方式一般需要在服务端和客户端之间建立一个TCP长连接；第二种泽施客户端主动向服务端发起健康度心跳检测。在DDNS的策略中是使用的第二种，每个服务提供者都回定时向Scanner汇报自己的状态。Scanner会负责记录每个服务提供者最近一次的状态汇报时间，一旦超过5s没有收到状态汇报，那么就认为该IP地址和端口已经不可用，于是开始进行域名清理过程。Scanner会在zk中找到该域名对应域名节点，然后将该IP地址和端口从节点的内容中移除。</p>
 <h2 id="命名服务"><a href="#命名服务" class="headerlink" title="命名服务"></a>命名服务</h2><p>命名服务是分布式系统中最基本的公共服务，再分不是系统中，被命名的实体通常是集群中的机器，提供服务的远程对象等。Java中的JNDI(java naming and directory interface)是一种典型的命名服务，是J2EE体系中最重要的规范之一，标准的J2EE容器都对JNDI规范进行了实现，因此开发中可以使用容器自带的规范，开发人员可以完全脱离命名服务。</p>
