@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>面试题 | Let&#39;s do this</title>
+  <title>知识点 | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Java面试题面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
-<meta name="keywords" content="面试题">
+  <meta name="description" content="知识点面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
+<meta name="keywords" content="知识点">
 <meta property="og:type" content="article">
-<meta property="og:title" content="面试题">
-<meta property="og:url" content="http://tiltcat.com/2017/08/24/面试题/index.html">
+<meta property="og:title" content="知识点">
+<meta property="og:url" content="http://tiltcat.com/2017/08/24/知识点/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
-<meta property="og:description" content="Java面试题面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
-<meta property="og:updated_time" content="2017-09-11T06:15:59.000Z">
+<meta property="og:description" content="知识点面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
+<meta property="og:updated_time" content="2017-09-13T05:37:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="面试题">
-<meta name="twitter:description" content="Java面试题面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
+<meta name="twitter:title" content="知识点">
+<meta name="twitter:description" content="知识点面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -131,7 +131,7 @@
 </nav>
 
       <div class="body-wrap">
-        <article id="post-面试题" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-知识点" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -141,7 +141,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      面试题
+      知识点
     </h1>
   
 
@@ -149,7 +149,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Java面试题"><a href="#Java面试题" class="headerlink" title="Java面试题"></a>Java面试题</h2><p>面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~</p>
+        <h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~</p>
 <a id="more"></a>
 <h4 id="重载和覆盖"><a href="#重载和覆盖" class="headerlink" title="重载和覆盖"></a>重载和覆盖</h4><p>重载用于构造方法等,同样的方法有不同的形式,覆盖一般用于父类子类. 重载的方法明必须相同,参数类型和个数或者顺序必须要有一个不同,返回值不在考虑之内.覆盖的方法名参数等必须相同,异常&lt;=父类,访问修饰符&gt;=父类</p>
 <h4 id="值传递-引用传递"><a href="#值传递-引用传递" class="headerlink" title="值传递/引用传递:"></a>值传递/引用传递:</h4><p>首先要明确Java中是没有引用传递的,全部都是值传递.<br>如果参数是基本变量,那么传递的是参数的值的拷贝.<br>如果参数是非基本变量,那么传递的是参数在堆中的内存地址.<br><code>对象实例化了，栈内存中存放的是对象的引用，也就是对象在堆内存中的地址</code></p>
@@ -160,7 +160,10 @@
 <h4 id="semaphore与lock的区别"><a href="#semaphore与lock的区别" class="headerlink" title="semaphore与lock的区别"></a>semaphore与lock的区别</h4><p>semaphore维护一组信号量,是非独占锁(none-exclusive lock). Lock是juc下的一个接口,提供了lock,unlock,trylock等方法.ReetrantLock等实现了Lock接口</p>
 <h4 id="避免死锁"><a href="#避免死锁" class="headerlink" title="避免死锁"></a>避免死锁</h4><p>死锁是多个线程同事尝试获取一个锁,引起了等待而完成的.我们可以通过明确获取顺序来避免死锁,可以使用同步,队列等.</p>
 <h4 id="list-vector区别"><a href="#list-vector区别" class="headerlink" title="list/vector区别"></a>list/vector区别</h4><p>vector线程同步,其余一样</p>
-<h4 id="红黑树的-复杂度？"><a href="#红黑树的-复杂度？" class="headerlink" title="红黑树的**复杂度？"></a>红黑树的**复杂度？</h4><p>红黑树的操作时间跟二叉查找树的时间复杂度是一样的，执行查找、插入、删除等操作的时间复杂度为O（logn）</p>
+<h4 id="红黑树的-复杂度？"><a href="#红黑树的-复杂度？" class="headerlink" title="红黑树的**复杂度？"></a>红黑树的**复杂度？</h4><p>这边先简单说下,以后有机会单独写红黑树.<br>我觉得目前不太可能让你拿个白板去写红黑树,那么简单说说它的原理.</p>
+<p>首先他和BST(Binary serach tree)有什么区别,好处是什么?BST面对的最大的问题就是删除之后的树的层次不能保持平衡,最坏的情况是O(N). 而红黑树呢,他会根据节点的颜色进行左旋和右旋来对树的层次进行优化,这就是我们采用红黑树的原因了.</p>
+<p>只有在父节点为红色节点的时候是需要插入修复操作的.删除修复操作是针对删除黑色节点才有的.</p>
+<p>红黑树的操作时间跟二叉查找树的时间复杂度是一样的，执行查找、插入、删除等操作的时间复杂度为O（logn）</p>
 <h4 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h4><p>简单来说反射就是可以让你调用你没有实例化的东西。记得你使用IDE的时候，对象.会有提示是吧？</p>
 <p>几种方式实现：</p>
 <blockquote>
@@ -215,21 +218,26 @@
 <h4 id="多线程如何在多个CPU上分布-它们是如何保持同步的"><a href="#多线程如何在多个CPU上分布-它们是如何保持同步的" class="headerlink" title="多线程如何在多个CPU上分布? 它们是如何保持同步的?"></a>多线程如何在多个CPU上分布? 它们是如何保持同步的?</h4><p>这是我当时面试的时候遇到的一个问题,我查了一下,但是,目前并没有一个明确的答案,慢慢补充吧.</p>
 <p>我们常用的JVM实现,HotSpot,他是采用1:1模型来实现Java线程的,也就是说一个Java线程是直接通过一个OS线程来实现的,中间并没有额外的间接结构.而且HotSpot自己不干涉线程的调度,全权交给底下的OS去处理.所以OS想把某个线程调度到某个CPU/核上,他自己就弄了.<br>“在具有多个处理器的机器上，每一个处理器运行一个线程，可以有多个线程并行运行。当然，如果线程的数目多于处理器的数目，调度器依然采用时间片机制”</p>
 <p>当时有点蒙,现在看来,锁的是资源,并不是线程乱七八糟的cpu多核又怎么样,资源的门关上了,当然可以实现安全.如果是集群,那么就用持久层来同步,就是这样.</p>
+<h4 id="线程调度算法有哪些？"><a href="#线程调度算法有哪些？" class="headerlink" title="线程调度算法有哪些？"></a>线程调度算法有哪些？</h4><p>1.批处理中的调度算法<br>    a.先来先服务 FCFS:非抢占式,进程按照他们请求CPU的顺序使用CPU,使用一个队列来管理. 缺点:对长作业有利(CPU密集有利).I/O处理时间很长,而这时CPU处于无事可做的等待.<br>    b.最短作业优先 SJF:也属于非抢占式,之所以最短,肯定运行时间是可以预测的.长期运行对长作业不公平.<br>    c.最短剩余时间优先:属于SJF的抢占式版本,如果新的进程比当前进程需要更少的时间,当前进程就被挂起.可以让后面的新的短作业获得良好服务.<br>2.交互系统中的调度<br>    a.时间片轮转:系统将所有的就绪进程按照先来先服务算法排成一个队列,每次调度的时候,系统首先分给首进程一个时间片(操作系统给每条线程分配不同长度的时间片),当时间片用完时,由一个计时器发出时钟中断请求,调度程序根据这个请求终止该进程的运行并移到队尾.<br>    b.优先级调度:根据优先级来运行,可以设置时间中断.<br>    c.多级队列:最高优先级运行一个时间片,次高运行第二个.以此类推.<br>    d.彩票调度: 随机调度,系统生成彩票,谁抢到谁用</p>
+<h4 id="在一个数组中，有若干个数，每个数字都出现两次，也就是说数组中如果出现了一个2，那必定存在另一个2，除了一个数仅仅出现了一次，如何在空间复杂度为O-1-的情况下找出这个数。"><a href="#在一个数组中，有若干个数，每个数字都出现两次，也就是说数组中如果出现了一个2，那必定存在另一个2，除了一个数仅仅出现了一次，如何在空间复杂度为O-1-的情况下找出这个数。" class="headerlink" title="在一个数组中，有若干个数，每个数字都出现两次，也就是说数组中如果出现了一个2，那必定存在另一个2，除了一个数仅仅出现了一次，如何在空间复杂度为O(1)的情况下找出这个数。"></a>在一个数组中，有若干个数，每个数字都出现两次，也就是说数组中如果出现了一个2，那必定存在另一个2，除了一个数仅仅出现了一次，如何在空间复杂度为O(1)的情况下找出这个数。</h4><p>两个相等的数异或是0,不相等的数异或是1,从头到尾异或剩下的就好了.</p>
+<h4 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h4><p>new<br>runnable (new之后调用start方法)<br>running(系统调度从runable到running)<br>stoped<br>block(获取锁失败)<br>wait(调用wait/join等方法)</p>
+<h4 id="为什么内部类引用的外部变量必须是final的"><a href="#为什么内部类引用的外部变量必须是final的" class="headerlink" title="为什么内部类引用的外部变量必须是final的?"></a>为什么内部类引用的外部变量必须是final的?</h4><p>刚刚写了一个测试代码发现有报错,为什么会出现题目中的这个情况呢?<br>原因是内部类和外部类在JVM中处于同一级别,换句话说就是有不同的生命周期.如果外部类执行完被GC了,内部类还没执行完,就会出现引用失效,所以需要声明final而保证不被回收.</p>
+<h4 id="线程安全的ArrayList"><a href="#线程安全的ArrayList" class="headerlink" title="线程安全的ArrayList?"></a>线程安全的ArrayList?</h4><p>首先说第一点vector被弃用了,效果太差.<br>我们可以使用Collections.synchronizedList(new ArrayList&lt;&gt;());<br>还有我们可以使用CopyOnWrite容器,比如CopyOnWriteArrayList.他适合多读少写的情况,缺点是不能保证实时一致性和占用空间.</p>
 <p>12.Java NIO你了解么？讲一讲你最熟悉的部分？</p>
 <p>6.spring的bean的创建时机？依赖注入的时机？</p>
-<p>11.线程调度算法有哪些？<br>14.说一下TreeMap的实现原理？红黑树的性质？红黑树遍历方式有哪些？如果key冲突如何解决？setColor()方法在什么时候用？什么时候会进行旋转和颜色转换？</p>
+<p>14.说一下TreeMap的实现原理？红黑树的性质？红黑树遍历方式有哪些？如果key冲突如何解决？setColor()方法在什么时候用？什么时候会进行旋转和颜色转换？</p>
 
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2017/08/24/面试题/" class="archive-article-date">
+      <a href="/2017/08/24/知识点/" class="archive-article-date">
   	<time datetime="2017-08-24T06:08:26.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-08-24</time>
 </a>
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试题/">面试题</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/知识点/">知识点</a></li></ul>
 	</div>
 
       
@@ -278,7 +286,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="面试题" data-title="面试题" data-url="http://tiltcat.com/2017/08/24/面试题/"></div>
+	<div class="ds-thread" data-thread-key="知识点" data-title="知识点" data-url="http://tiltcat.com/2017/08/24/知识点/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
@@ -355,7 +363,7 @@
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Concurrent-HashMap/" style="font-size: 10px;">Concurrent HashMap</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Lock/" style="font-size: 10px;">Lock</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/Thread/" style="font-size: 10px;">Thread</a> <a href="/tags/事务管理/" style="font-size: 15px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/发布-订阅系统/" style="font-size: 10px;">发布-订阅系统</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a> <a href="/tags/面试题/" style="font-size: 10px;">面试题</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Concurrent-HashMap/" style="font-size: 10px;">Concurrent HashMap</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Lock/" style="font-size: 10px;">Lock</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/Thread/" style="font-size: 10px;">Thread</a> <a href="/tags/事务管理/" style="font-size: 15px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/发布-订阅系统/" style="font-size: 10px;">发布-订阅系统</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/知识点/" style="font-size: 10px;">知识点</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     			</div>
     	</section>
     
