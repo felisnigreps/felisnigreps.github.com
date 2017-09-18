@@ -15,7 +15,7 @@
 <meta property="og:url" content="http://tiltcat.com/2017/03/01/ThreadPoolExecutor/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
 <meta property="og:description" content="本来打算在j.u.c开一章来写这个东西的，但是发现可能篇幅有点多，所以这边重开写一下。">
-<meta property="og:updated_time" content="2017-03-01T10:18:00.000Z">
+<meta property="og:updated_time" content="2017-09-18T01:57:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ThreadPoolExecutor">
 <meta name="twitter:description" content="本来打算在j.u.c开一章来写这个东西的，但是发现可能篇幅有点多，所以这边重开写一下。">
@@ -234,12 +234,13 @@
 <li>如果线程池满了，查看队列是否满了，如果没满加入队列。</li>
 <li>如果线程池和队列都满了，看线程数目是否大于最大线程数目，没有的话创建线程处理，大于的话交给失败策略。</li>
 </ol>
-<p>这个过程说明，并不是先加入任务就一定会先执行。假设队列大小为 4，corePoolSize为2，maximumPoolSize为6，那么当加入15个任务时，执行的顺序类似这样：首先执行任务 1、2，然后任务3~6被放入队列。这时候队列满了，任务7、8、9、10 会被马上执行，而任务 11~15 则会抛出异常。最终顺序是：1、2、7、8、9、10、3、4、5、6。当然这个过程是针对指定大小的ArrayBlockingQueue&lt;Runnable&gt;来说，如果是LinkedBlockingQueue&lt;Runnable&gt;，因为该队列无大小限制，所以不存在上述问题。<br>　不过在java doc中，并不提倡我们直接使用ThreadPoolExecutor，而是使用Executors类中提供的几个静态方法来创建线程池：<br><figure class="highlight java"><table><tr><td class="code"><pre><div class="line">Executors.newCachedThreadPool();        <span class="comment">//创建一个缓冲池，缓冲池容量大小为Integer.MAX_VALUE</span></div><div class="line">Executors.newSingleThreadExecutor();   <span class="comment">//创建容量为1的缓冲池</span></div><div class="line">Executors.newFixedThreadPool(<span class="keyword">int</span>);    <span class="comment">//创建固定容量大小的缓冲池</span></div></pre></td></tr></table></figure></p>
+<p>这个过程说明，并不是先加入任务就一定会先执行。假设队列大小为 4，corePoolSize为2，maximumPoolSize为6，那么当加入15个任务时，执行的顺序类似这样：首先执行任务 1、2，然后任务3~6被放入队列。这时候队列满了，任务7、8、9、10 会被马上执行，而任务 11~15 则会抛出异常。最终顺序是：1、2、7、8、9、10、3、4、5、6。当然这个过程是针对指定大小的ArrayBlockingQueue&lt;Runnable&gt;来说，如果是LinkedBlockingQueue&lt;Runnable&gt;，因为该队列无大小限制，所以不存在上述问题。<br>　不过在java doc中，并不提倡我们直接使用ThreadPoolExecutor，而是使用Executors类中提供的几个静态方法来创建线程池：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><div class="line">Executors.newCachedThreadPool();        <span class="comment">//创建一个缓冲池，缓冲池容量大小为Integer.MAX_VALUE</span></div><div class="line">Executors.newSingleThreadExecutor();   <span class="comment">//创建容量为1的缓冲池</span></div><div class="line">Executors.newFixedThreadPool(<span class="keyword">int</span>);    <span class="comment">//创建固定容量大小的缓冲池</span></div></pre></td></tr></table></figure>
 <p>newFixedThreadPool创建的线程池corePoolSize和maximumPoolSize值是相等的，它使用的LinkedBlockingQueue；</p>
-<p>　　newSingleThreadExecutor将corePoolSize和maximumPoolSize都设置为1，也使用的LinkedBlockingQueue；</p>
-<p>　　newCachedThreadPool将corePoolSize设置为0，将maximumPoolSize设置为Integer.MAX_VALUE，使用的SynchronousQueue，也就是说来了任务就创建线程运行，当线程空闲超过60秒，就销毁线程。</p>
-<p>　　实际中，如果Executors提供的三个静态方法能满足要求，就尽量使用它提供的三个方法，因为自己去手动配置ThreadPoolExecutor的参数有点麻烦，要根据实际任务的类型和数量来进行配置。</p>
-<p>　　另外，如果ThreadPoolExecutor达不到要求，可以自己继承ThreadPoolExecutor类进行重写。</p>
+<p>newSingleThreadExecutor将corePoolSize和maximumPoolSize都设置为1，也使用的LinkedBlockingQueue；</p>
+<p>newCachedThreadPool将corePoolSize设置为0，将maximumPoolSize设置为Integer.MAX_VALUE，使用的SynchronousQueue，也就是说来了任务就创建线程运行，当线程空闲超过60秒，就销毁线程。</p>
+<p>实际中，如果Executors提供的三个静态方法能满足要求，就尽量使用它提供的三个方法，因为自己去手动配置ThreadPoolExecutor的参数有点麻烦，要根据实际任务的类型和数量来进行配置。</p>
+<p>另外，如果ThreadPoolExecutor达不到要求，可以自己继承ThreadPoolExecutor类进行重写。</p>
 <p>线程池的执行逻辑<br>线程池状态的判定<br>锁<br>并发下的多次判定</p>
 
       
