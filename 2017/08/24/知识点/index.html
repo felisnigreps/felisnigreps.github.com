@@ -15,7 +15,7 @@
 <meta property="og:url" content="http://tiltcat.com/2017/08/24/知识点/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
 <meta property="og:description" content="面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
-<meta property="og:updated_time" content="2017-09-13T05:40:10.000Z">
+<meta property="og:updated_time" content="2017-09-14T04:08:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="知识点">
 <meta name="twitter:description" content="面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
@@ -223,6 +223,7 @@
 <h4 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h4><p>new<br>runnable (new之后调用start方法)<br>running(系统调度从runable到running)<br>stoped<br>block(获取锁失败)<br>wait(调用wait/join等方法)</p>
 <h4 id="为什么内部类引用的外部变量必须是final的"><a href="#为什么内部类引用的外部变量必须是final的" class="headerlink" title="为什么内部类引用的外部变量必须是final的?"></a>为什么内部类引用的外部变量必须是final的?</h4><p>刚刚写了一个测试代码发现有报错,为什么会出现题目中的这个情况呢?<br>原因是内部类和外部类在JVM中处于同一级别,换句话说就是有不同的生命周期.如果外部类执行完被GC了,内部类还没执行完,就会出现引用失效,所以需要声明final而保证不被回收.</p>
 <h4 id="线程安全的ArrayList"><a href="#线程安全的ArrayList" class="headerlink" title="线程安全的ArrayList?"></a>线程安全的ArrayList?</h4><p>首先说第一点vector被弃用了,效果太差.<br>我们可以使用Collections.synchronizedList(new ArrayList&lt;&gt;());<br>还有我们可以使用CopyOnWrite容器,比如CopyOnWriteArrayList.他适合多读少写的情况,缺点是不能保证实时一致性和占用空间.</p>
+<h4 id="两条相交的单向链表，如何求他们的第一个公共节点"><a href="#两条相交的单向链表，如何求他们的第一个公共节点" class="headerlink" title="两条相交的单向链表，如何求他们的第一个公共节点"></a>两条相交的单向链表，如何求他们的第一个公共节点</h4><p>首先要知道,两个单向链表相交,他们的形状肯定是Y而不是X.<br>其次,如果相交,则最后一个节点相等.<br>好,我们先求出两个链表的长度,在长的先遍历Math.abs(La-Lb)个长度,然后两边一起遍历,相等的第一个节点就是所求节点</p>
 <p>12.Java NIO你了解么？讲一讲你最熟悉的部分？</p>
 <p>6.spring的bean的创建时机？依赖注入的时机？</p>
 <p>14.说一下TreeMap的实现原理？红黑树的性质？红黑树遍历方式有哪些？如果key冲突如何解决？setColor()方法在什么时候用？什么时候会进行旋转和颜色转换？</p>
