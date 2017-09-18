@@ -15,7 +15,7 @@
 <meta property="og:url" content="http://tiltcat.com/2017/08/24/知识点/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
 <meta property="og:description" content="面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
-<meta property="og:updated_time" content="2017-09-14T04:08:14.000Z">
+<meta property="og:updated_time" content="2017-09-18T09:01:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="知识点">
 <meta name="twitter:description" content="面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
@@ -157,6 +157,11 @@
 <h4 id="什么是继承"><a href="#什么是继承" class="headerlink" title="什么是继承"></a>什么是继承</h4><p>Java中是单继承,代表子类可以拥有父类的一些属性或者方法,父类更抽象,子类更具体,所有类继承Object.</p>
 <h4 id="避免内存泄漏"><a href="#避免内存泄漏" class="headerlink" title="避免内存泄漏"></a>避免内存泄漏</h4><p>GC Roots的使用不当会导致内存泄露,包括final,static. String就是final calss.<br>Map,list等引用不清空也会导致内存泄露</p>
 <h4 id="Linux下的-proc是什么"><a href="#Linux下的-proc是什么" class="headerlink" title="Linux下的/proc是什么"></a>Linux下的/proc是什么</h4><p>是linux提供的一个伪文件系统,里面包含了系统的运行状态信息,存储内核运行状态的一系列文件,用户可以查看这些文件来找到硬件和进程信息.</p>
+<h4 id="Linux如何修改进程优先级"><a href="#Linux如何修改进程优先级" class="headerlink" title="Linux如何修改进程优先级"></a>Linux如何修改进程优先级</h4><p>优先级从-20到19,越大优先级越低,改变优先级有两个办法:</p>
+<ol>
+<li>top,NI的数值就是优先级,输入r,然后根据提示输入pid和优先级</li>
+<li>renice -n 2 -p 3142  (n是优先级 p是pid)</li>
+</ol>
 <h4 id="semaphore与lock的区别"><a href="#semaphore与lock的区别" class="headerlink" title="semaphore与lock的区别"></a>semaphore与lock的区别</h4><p>semaphore维护一组信号量,是非独占锁(none-exclusive lock). Lock是juc下的一个接口,提供了lock,unlock,trylock等方法.ReetrantLock等实现了Lock接口</p>
 <h4 id="避免死锁"><a href="#避免死锁" class="headerlink" title="避免死锁"></a>避免死锁</h4><p>死锁是多个线程同事尝试获取一个锁,引起了等待而完成的.我们可以通过明确获取顺序来避免死锁,可以使用同步,队列等.</p>
 <h4 id="list-vector区别"><a href="#list-vector区别" class="headerlink" title="list/vector区别"></a>list/vector区别</h4><p>vector线程同步,其余一样</p>

@@ -198,7 +198,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>这个文章主要复习一下以前学习的mysql相关知识，在onenote上还有一个笔记，这边也会转移过来。</p>
+        <h2 id="存储引擎概述"><a href="#存储引擎概述" class="headerlink" title="存储引擎概述"></a>存储引擎概述</h2><p>他们之间的区别:</p>
+<ol>
+<li>MyISAM:是mysql的默认引擎，当你创建表的时候会默认选择它.</li>
+<li>InnoDB:提供了提交，回滚和崩溃恢复的能力，事物安全，但是比起来Myisam,它占用的空间会大一些（管理索引），处理效率也相对差一些.</li>
+<li>InnoDB支持行锁.</li>
+</ol>
+<p>那我们该怎么选择存储引擎呢？<br>
         <p class="article-more-link">
           <a class="article-more-a"  href="/2017/02/16/MySQL/#more">more >></a>
         </p>

@@ -8,17 +8,17 @@
   <link rel="dns-prefetch" href="http://tiltcat.com">
   <title>MySQL | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="这个文章主要复习一下以前学习的mysql相关知识，在onenote上还有一个笔记，这边也会转移过来。">
+  <meta name="description" content="存储引擎概述他们之间的区别:  MyISAM:是mysql的默认引擎，当你创建表的时候会默认选择它. InnoDB:提供了提交，回滚和崩溃恢复的能力，事物安全，但是比起来Myisam,它占用的空间会大一些（管理索引），处理效率也相对差一些. InnoDB支持行锁.  那我们该怎么选择存储引擎呢？">
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL">
 <meta property="og:url" content="http://tiltcat.com/2017/02/16/MySQL/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
-<meta property="og:description" content="这个文章主要复习一下以前学习的mysql相关知识，在onenote上还有一个笔记，这边也会转移过来。">
-<meta property="og:updated_time" content="2017-08-28T09:03:23.000Z">
+<meta property="og:description" content="存储引擎概述他们之间的区别:  MyISAM:是mysql的默认引擎，当你创建表的时候会默认选择它. InnoDB:提供了提交，回滚和崩溃恢复的能力，事物安全，但是比起来Myisam,它占用的空间会大一些（管理索引），处理效率也相对差一些. InnoDB支持行锁.  那我们该怎么选择存储引擎呢？">
+<meta property="og:updated_time" content="2017-09-18T02:08:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL">
-<meta name="twitter:description" content="这个文章主要复习一下以前学习的mysql相关知识，在onenote上还有一个笔记，这边也会转移过来。">
+<meta name="twitter:description" content="存储引擎概述他们之间的区别:  MyISAM:是mysql的默认引擎，当你创建表的时候会默认选择它. InnoDB:提供了提交，回滚和崩溃恢复的能力，事物安全，但是比起来Myisam,它占用的空间会大一些（管理索引），处理效率也相对差一些. InnoDB支持行锁.  那我们该怎么选择存储引擎呢？">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -149,14 +149,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>这个文章主要复习一下以前学习的mysql相关知识，在onenote上还有一个笔记，这边也会转移过来。</p>
-<a id="more"></a>
-<h2 id="存储引擎概述"><a href="#存储引擎概述" class="headerlink" title="存储引擎概述"></a>存储引擎概述</h2><p>本来应该写全了有多少存储引擎和他们的区别，不过记不住，就写点常用的，有两个：</p>
+        <h2 id="存储引擎概述"><a href="#存储引擎概述" class="headerlink" title="存储引擎概述"></a>存储引擎概述</h2><p>他们之间的区别:</p>
 <ol>
-<li>MyISAM:是mysql的默认引擎，当你创建表的时候会默认选择它。</li>
-<li>InnoDB:提供了提交，回滚和崩溃恢复的能力，事物安全，但是比起来Myisam,它占用的空间会大一些（管理索引），处理效率也相对差一些。</li>
+<li>MyISAM:是mysql的默认引擎，当你创建表的时候会默认选择它.</li>
+<li>InnoDB:提供了提交，回滚和崩溃恢复的能力，事物安全，但是比起来Myisam,它占用的空间会大一些（管理索引），处理效率也相对差一些.</li>
+<li>InnoDB支持行锁.</li>
 </ol>
-<p>那我们该怎么选择存储引擎呢？</p>
+<p>那我们该怎么选择存储引擎呢？<br><a id="more"></a></p>
 <blockquote>
 <ul>
 <li>myisam:默认的mysql引擎，是在web，数据仓储中最常用的引擎。</li>
