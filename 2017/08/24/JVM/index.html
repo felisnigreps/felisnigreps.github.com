@@ -12,10 +12,10 @@
 <meta name="keywords" content="知识点">
 <meta property="og:type" content="article">
 <meta property="og:title" content="知识点">
-<meta property="og:url" content="http://tiltcat.com/2017/08/24/知识点/index.html">
+<meta property="og:url" content="http://tiltcat.com/2017/08/24/JVM/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
 <meta property="og:description" content="面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
-<meta property="og:updated_time" content="2017-09-21T07:50:48.000Z">
+<meta property="og:updated_time" content="2017-09-19T02:29:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="知识点">
 <meta name="twitter:description" content="面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
@@ -131,7 +131,7 @@
 </nav>
 
       <div class="body-wrap">
-        <article id="post-知识点" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-JVM" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -231,7 +231,6 @@
 <h4 id="多线程如何在多个CPU上分布-它们是如何保持同步的"><a href="#多线程如何在多个CPU上分布-它们是如何保持同步的" class="headerlink" title="多线程如何在多个CPU上分布? 它们是如何保持同步的?"></a>多线程如何在多个CPU上分布? 它们是如何保持同步的?</h4><p>这是我当时面试的时候遇到的一个问题,我查了一下,但是,目前并没有一个明确的答案,慢慢补充吧.</p>
 <p>我们常用的JVM实现,HotSpot,他是采用1:1模型来实现Java线程的,也就是说一个Java线程是直接通过一个OS线程来实现的,中间并没有额外的间接结构.而且HotSpot自己不干涉线程的调度,全权交给底下的OS去处理.所以OS想把某个线程调度到某个CPU/核上,他自己就弄了.<br>“在具有多个处理器的机器上，每一个处理器运行一个线程，可以有多个线程并行运行。当然，如果线程的数目多于处理器的数目，调度器依然采用时间片机制”</p>
 <p>当时有点蒙,现在看来,锁的是资源,并不是线程乱七八糟的cpu.多核又怎么样,资源的门关上了,当然可以实现安全.如果是集群,那么就用持久层来同步,就是这样.</p>
-<p>后来又面了一个,发现我的回答是错的. 这次面试官说的很清楚,假设对象分布在多个JVM里,那怎么办?<br>我后来又问了一下,是个开放性问题:<br>我当时回答的是,使用版本号来控制,就像数据库乐观锁一样.<br>他又问,通过什么来判断这个版本号呢?我表示可以用zk当monitor.他说,中间件是吧.<br>我问他正确答案是什么,他表示,这是一个开放性问题. 也可以用中间件,比如说MQ来控制.</p>
 <h4 id="线程调度算法有哪些？"><a href="#线程调度算法有哪些？" class="headerlink" title="线程调度算法有哪些？"></a>线程调度算法有哪些？</h4><ol>
 <li>批处理中的调度算法<br> a.先来先服务 FCFS:非抢占式,进程按照他们请求CPU的顺序使用CPU,使用一个队列来管理. 缺点:对长作业有利(CPU密集有利).I/O处理时间很长,而这时CPU处于无事可做的等待.<br> b.最短作业优先 SJF:也属于非抢占式,之所以最短,肯定运行时间是可以预测的.长期运行对长作业不公平.<br> c.最短剩余时间优先:属于SJF的抢占式版本,如果新的进程比当前进程需要更少的时间,当前进程就被挂起.可以让后面的新的短作业获得良好服务.</li>
 <li>交互系统中的调度<br> a.时间片轮转:系统将所有的就绪进程按照先来先服务算法排成一个队列,每次调度的时候,系统首先分给首进程一个时间片(操作系统给每条线程分配不同长度的时间片),当时间片用完时,由一个计时器发出时钟中断请求,调度程序根据这个请求终止该进程的运行并移到队尾.<br> b.优先级调度:根据优先级来运行,可以设置时间中断.<br> c.多级队列:最高优先级运行一个时间片,次高运行第二个.以此类推.<br> d.彩票调度: 随机调度,系统生成彩票,谁抢到谁用</li>
@@ -241,24 +240,12 @@
 <h4 id="为什么内部类引用的外部变量必须是final的"><a href="#为什么内部类引用的外部变量必须是final的" class="headerlink" title="为什么内部类引用的外部变量必须是final的?"></a>为什么内部类引用的外部变量必须是final的?</h4><p>刚刚写了一个测试代码发现有报错,为什么会出现题目中的这个情况呢?<br>原因是内部类和外部类在JVM中处于同一级别,换句话说就是有不同的生命周期.如果外部类执行完被GC了,内部类还没执行完,就会出现引用失效,所以需要声明final而保证不被回收.</p>
 <h4 id="线程安全的ArrayList"><a href="#线程安全的ArrayList" class="headerlink" title="线程安全的ArrayList?"></a>线程安全的ArrayList?</h4><p>首先说第一点vector被弃用了,效果太差.<br>我们可以使用Collections.synchronizedList(new ArrayList&lt;&gt;());<br>还有我们可以使用CopyOnWrite容器,比如CopyOnWriteArrayList.他适合多读少写的情况,缺点是不能保证实时一致性和占用空间.</p>
 <h4 id="两条相交的单向链表，如何求他们的第一个公共节点"><a href="#两条相交的单向链表，如何求他们的第一个公共节点" class="headerlink" title="两条相交的单向链表，如何求他们的第一个公共节点"></a>两条相交的单向链表，如何求他们的第一个公共节点</h4><p>首先要知道,两个单向链表相交,他们的形状肯定是Y而不是X.<br>其次,如果相交,则最后一个节点相等.<br>好,我们先求出两个链表的长度,在长的先遍历Math.abs(La-Lb)个长度,然后两边一起遍历,相等的第一个节点就是所求节点</p>
-<h4 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h4><p>我其实一点都不懂NIO, 被问蒙了, 要看还是要看.</p>
-<h4 id="StringBuffer-StringBuilder"><a href="#StringBuffer-StringBuilder" class="headerlink" title="StringBuffer!!!!!StringBuilder!!!!"></a>StringBuffer!!!!!StringBuilder!!!!</h4><p>竟然答错了,答错了…<br>StringBuffer是常用的对吧,他是线程安全的. StringBuilder是线程不安全的.</p>
-<h3 id="JVM创建线程默认大小"><a href="#JVM创建线程默认大小" class="headerlink" title="JVM创建线程默认大小"></a>JVM创建线程默认大小</h3><p>我们知道每个线程都有一个栈，这个栈默认大小是多少？</p>
-<p>百度了半天没找到，还是得stakOverflow. 一下就被我找到了，我当时竟然蒙对了。<br>You can use a VM option named ss to adjust the maximum stack size. A VM option is usually passed using -X{option}. So you can use java -Xss 1M to set the maximum of stack size to 1M.<br>Windows IA32 : 64 KB<br>Linux IA32 : 128 KB<br>Windows x86_64 : 128 KB<br>Linux x86_64 : 256 KB</p>
-<h4 id="find命令"><a href="#find命令" class="headerlink" title="find命令"></a>find命令</h4><p>竟然错了…顺序记错了<br>正确的是<br>find 目录 -name stringPlatform</p>
-<h4 id="Java-延迟加载"><a href="#Java-延迟加载" class="headerlink" title="Java 延迟加载"></a>Java 延迟加载</h4><p>延迟加载机制是为了避免一些无谓的性能开销而提出来的，所谓延迟加载就是当在真正需要数据的时候，才真正执行数据加载操作。可以简单理解为，只有在使用的时候，才会发出sql语句进行查询。  </p>
-<p>effective Java中写到: 就像大多数的优化方式一样,除非绝对必要,否则就不要这么做.<br>他降低了初始化类的开销,取提高了访问被延迟初始化类的开销.<br>根据延迟初始化与所需要的初始化比例,初始化这些域的开销,以及初始化这些域的次数,实际上延迟加载会降低效率.</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">FieldHolder</span> </span>&#123;</div><div class="line">    <span class="keyword">static</span> <span class="keyword">final</span> FieldType field = computeFieldValue();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">static</span> FieldType <span class="title">getField3</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> FieldHolder.field;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> FieldType <span class="title">computeFieldValue</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> FieldType();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="tomcat-classloader"><a href="#tomcat-classloader" class="headerlink" title="tomcat classloader"></a>tomcat classloader</h4><p>以前知道这个知识点,最近面试的时候问完JVM的classloader之后被问到了tomcat的classloader, 蒙了. 在这先过一下吧!<br>在网上找了一下，讲清楚的不是很多，还是得stackoverflow.<br><a href="https://stackoverflow.com/questions/19559210/just-how-tomcat-classloader-separate-different-webapps-object-scope-in-same-jvm" target="_blank" rel="external">https://stackoverflow.com/questions/19559210/just-how-tomcat-classloader-separate-different-webapps-object-scope-in-same-jvm</a></p>
-<p>As we know tomcat can load more than one webapp at once, and those webapps can work separate, and do not disturb each other, and they work in same JVM.</p>
-<p>这个问题就直接给了一个很明白的回答, 为什么tomcat要实现自己的classloader.我们可以自己尝试一下定一个java.lang.Object 会发现是无法被加载的,为什么呢? 因为JVM的双亲委托模型,classloader加载类都要往上层去找,找到了bootstrap,一看, 有Object,那就bootstrap来加载. 如果tomcat也按照这个逻辑来进行,那么就会出现不同web app之间的干扰了.</p>
-<p>Remember that a class in Java in identified by its full qulified name and class loader that load it. Tomcat use seprate classloadrs for each context(web application) that you deploy,thus keeping them seperate. In addition, the system classloader loads the tomcat sepcific libraries and JVM bootstrap loader load the Java Core libraries.</p>
-<h4 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h4>
+
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2017/08/24/知识点/" class="archive-article-date">
+      <a href="/2017/08/24/JVM/" class="archive-article-date">
   	<time datetime="2017-08-24T06:08:26.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-08-24</time>
 </a>
       
@@ -277,9 +264,18 @@
   
 <nav id="article-nav">
   
+    <a href="/2017/08/24/知识点/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          知识点
+        
+      </div>
+    </a>
   
-    <a href="/2017/08/24/JVM/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">知识点</div>
+  
+    <a href="/2017/08/22/锁/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Java中的锁</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -313,7 +309,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="知识点" data-title="知识点" data-url="http://tiltcat.com/2017/08/24/知识点/"></div>
+	<div class="ds-thread" data-thread-key="JVM" data-title="知识点" data-url="http://tiltcat.com/2017/08/24/JVM/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">

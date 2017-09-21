@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Let&#39;s do this">
 <meta property="og:description" content="我们先看一下流程图：">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/SpringMVC%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%E5%9B%BE.JPG">
-<meta property="og:updated_time" content="2017-03-27T12:02:39.000Z">
+<meta property="og:updated_time" content="2017-09-19T03:14:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringMVC">
 <meta name="twitter:description" content="我们先看一下流程图：">
@@ -154,9 +154,13 @@
         <p>我们先看一下流程图：</p>
 <p><img src="http://ogeojkg3t.bkt.clouddn.com/SpringMVC%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B%E5%9B%BE.JPG" alt=""></p>
 <a id="more"></a>
-<p>SpringMVC运行原理<br>1.客户端请求提交到DispatcherServlet </p>
+<p>SpringMVC运行原理 </p>
 <ol>
-<li>由DispatcherServlet控制器查询一个或多个HandlerMapping，找到处理请求的Controller<br>3.DispatcherServlet将请求提交到Controller<br>4.Controller调用业务逻辑处理后，返回ModelAndView<br>5.DispatcherServlet查询一个或多个ViewResoler视图解析器，找到ModelAndView指定的视图<br>6.视图负责将结果显示到客户端</li>
+<li>客户端请求提交到DispatcherServlet.</li>
+<li>由DispatcherServlet控制器查询一个或多个HandlerMapping，找到处理请求的Controller  </li>
+<li>DispatcherServlet将请求提交到Controller </li>
+<li>Controller调用业务逻辑处理后，返回ModelAndView </li>
+<li>DispatcherServlet查询一个或多个ViewResoler视图解析器，找到ModelAndView指定的视图<br>6.视图负责将结果显示到客户端</li>
 </ol>
 <!--more-->
 <h2 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h2><h3 id="DispatcherServlet"><a href="#DispatcherServlet" class="headerlink" title="DispatcherServlet"></a>DispatcherServlet</h3><p>前端控制器，用户请求到达前端的控制器，相当于mvc中的c,dispatcherServlet是整个流程控制的核心，由他调用其他组件来满足用户的请求，由于他的存在降低了组件之间的耦合性。</p>
@@ -313,7 +317,7 @@
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Concurrent-HashMap/" style="font-size: 10px;">Concurrent HashMap</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/JVM/" style="font-size: 10px;">JVM</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Lock/" style="font-size: 10px;">Lock</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/Thread/" style="font-size: 10px;">Thread</a> <a href="/tags/事务管理/" style="font-size: 15px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/发布-订阅系统/" style="font-size: 10px;">发布-订阅系统</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/知识点/" style="font-size: 10px;">知识点</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    				<a href="/tags/AOP/" style="font-size: 10px;">AOP</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/Concurrent/" style="font-size: 15px;">Concurrent</a> <a href="/tags/Concurrent-HashMap/" style="font-size: 10px;">Concurrent HashMap</a> <a href="/tags/Design-Pattern/" style="font-size: 10px;">Design Pattern</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/IO/" style="font-size: 10px;">IO</a> <a href="/tags/IoC/" style="font-size: 10px;">IoC</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Lock/" style="font-size: 10px;">Lock</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/Netty/" style="font-size: 10px;">Netty</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/Thread/" style="font-size: 10px;">Thread</a> <a href="/tags/事务管理/" style="font-size: 15px;">事务管理</a> <a href="/tags/分布式/" style="font-size: 10px;">分布式</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/发布-订阅系统/" style="font-size: 10px;">发布-订阅系统</a> <a href="/tags/数据类型/" style="font-size: 10px;">数据类型</a> <a href="/tags/知识点/" style="font-size: 15px;">知识点</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     			</div>
     	</section>
     
