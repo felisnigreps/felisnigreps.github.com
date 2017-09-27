@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/I:O%20multiplexing.jpg">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/JavaIO.png">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/channel&buffer.png">
-<meta property="og:updated_time" content="2017-09-27T09:09:51.000Z">
+<meta property="og:updated_time" content="2017-09-27T09:11:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java IO &amp; NIO">
 <meta name="twitter:description" content="一次面试关于NIO的东西被问蒙了， 现在来补补课吧！">
@@ -157,7 +157,7 @@
       
         <p>一次面试关于NIO的东西被问蒙了， 现在来补补课吧！<br><a id="more"></a></p>
 <h3 id="Linux下的5种线程模型"><a href="#Linux下的5种线程模型" class="headerlink" title="Linux下的5种线程模型"></a>Linux下的5种线程模型</h3><p>因为我们的服务器一般情况下都是linux的，我们在这来探讨下线程模型，以理解概念为主。</p>
-<p>####文件描述符<br>在Linux下一切皆文件，文件描述符是内核为文件所创建的索引，所有的IO操作都通过调用文件描述符（索引）来执行，包括下面我们要提到的socket.Linux刚启动的时候会自动设置0是标准输入，1是标准输出，2是标准错误。</p>
+<h4 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h4><p>在Linux下一切皆文件，文件描述符是内核为文件所创建的索引，所有的IO操作都通过调用文件描述符（索引）来执行，包括下面我们要提到的socket.Linux刚启动的时候会自动设置0是标准输入，1是标准输出，2是标准错误。</p>
 <h4 id="程序空间与内核空间"><a href="#程序空间与内核空间" class="headerlink" title="程序空间与内核空间"></a>程序空间与内核空间</h4><p>在Linux中，对于一次读IO的操作，<code>数据并不会直接拷贝到程序的程序缓冲区，首先他会被拷贝到内核的缓冲区，然后会从内核的缓冲区拷贝到程序的缓冲区</code>.<br>这个概念很重要，我们来说一遍：</p>
 <ol>
 <li>Waiting for the data to be ready (等待数据到达内核缓冲区)</li>
