@@ -8,20 +8,23 @@
   <link rel="dns-prefetch" href="http://tiltcat.com">
   <title>Java IO &amp; NIO | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="刚开始看IO的时候还没有这个blog,昨天用到感觉没有以前那么熟练了。在公司想找以前练习时候的源码还没找到，不过问题不大，今天过一遍复习一下。">
+  <meta name="description" content="一次面试关于NIO的东西被问蒙了， 现在来补补课吧！">
 <meta name="keywords" content="Java,IO">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java IO &amp; NIO">
 <meta property="og:url" content="http://tiltcat.com/2016/12/06/JavaIO&NIO/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
-<meta property="og:description" content="刚开始看IO的时候还没有这个blog,昨天用到感觉没有以前那么熟练了。在公司想找以前练习时候的源码还没找到，不过问题不大，今天过一遍复习一下。">
+<meta property="og:description" content="一次面试关于NIO的东西被问蒙了， 现在来补补课吧！">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/blocking%20IO.jpg">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/nonblocking%20IO.jpg">
+<meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/I:O%20multiplexing.jpg">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/JavaIO.png">
 <meta property="og:image" content="http://ogeojkg3t.bkt.clouddn.com/channel&buffer.png">
-<meta property="og:updated_time" content="2017-08-07T09:07:15.000Z">
+<meta property="og:updated_time" content="2017-09-27T09:09:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java IO &amp; NIO">
-<meta name="twitter:description" content="刚开始看IO的时候还没有这个blog,昨天用到感觉没有以前那么熟练了。在公司想找以前练习时候的源码还没找到，不过问题不大，今天过一遍复习一下。">
-<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/JavaIO.png">
+<meta name="twitter:description" content="一次面试关于NIO的东西被问蒙了， 现在来补补课吧！">
+<meta name="twitter:image" content="http://ogeojkg3t.bkt.clouddn.com/blocking%20IO.jpg">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -152,17 +155,51 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>刚开始看IO的时候还没有这个blog,昨天用到感觉没有以前那么熟练了。在公司想找以前练习时候的源码还没找到，不过问题不大，今天过一遍复习一下。<br><a id="more"></a><br><img src="http://ogeojkg3t.bkt.clouddn.com/JavaIO.png" alt="JavaIO概览"></p>
-</blockquote>
+        <p>一次面试关于NIO的东西被问蒙了， 现在来补补课吧！<br><a id="more"></a></p>
+<h3 id="Linux下的5种线程模型"><a href="#Linux下的5种线程模型" class="headerlink" title="Linux下的5种线程模型"></a>Linux下的5种线程模型</h3><p>因为我们的服务器一般情况下都是linux的，我们在这来探讨下线程模型，以理解概念为主。</p>
+<p>####文件描述符<br>在Linux下一切皆文件，文件描述符是内核为文件所创建的索引，所有的IO操作都通过调用文件描述符（索引）来执行，包括下面我们要提到的socket.Linux刚启动的时候会自动设置0是标准输入，1是标准输出，2是标准错误。</p>
+<h4 id="程序空间与内核空间"><a href="#程序空间与内核空间" class="headerlink" title="程序空间与内核空间"></a>程序空间与内核空间</h4><p>在Linux中，对于一次读IO的操作，<code>数据并不会直接拷贝到程序的程序缓冲区，首先他会被拷贝到内核的缓冲区，然后会从内核的缓冲区拷贝到程序的缓冲区</code>.<br>这个概念很重要，我们来说一遍：</p>
+<ol>
+<li>Waiting for the data to be ready (等待数据到达内核缓冲区)</li>
+<li>Copying the data from the kernel to the process(从内核缓冲区拷贝数据到程序缓冲区)</li>
+</ol>
+<h4 id="阻塞与非阻塞"><a href="#阻塞与非阻塞" class="headerlink" title="阻塞与非阻塞"></a>阻塞与非阻塞</h4><p>很容易理解，阻塞就是说我们某一个请求不能立即得到返回值，否则就可以理解为非阻塞。</p>
+<h4 id="5种网络IO模型"><a href="#5种网络IO模型" class="headerlink" title="5种网络IO模型"></a>5种网络IO模型</h4><ol>
+<li>阻塞IO：一直等待直到数据返回之前，线程都是block的。<br><img src="http://ogeojkg3t.bkt.clouddn.com/blocking%20IO.jpg" alt="blocking IO"></li>
+<li>非阻塞IO：当我们设置一个socket为非阻塞，相当于告诉内核当我们请求的IO操作不能立即返回得到结果，不要把进程设置为sleep状态，而是返回一个错误信息<br><img src="http://ogeojkg3t.bkt.clouddn.com/nonblocking%20IO.jpg" alt="non-blocking IO"></li>
+<li>IO复用(IO multiplexing)：IO复用的好处是我们可以通过（select/epoll/poll）一个时刻处理多个文件描述符。我们可以看到这里有两个return，可以和blocking IO作对比。<br><img src="http://ogeojkg3t.bkt.clouddn.com/I:O%20multiplexing.jpg" alt="IO复用"></li>
+<li>信号驱动IO</li>
+<li>异步IO</li>
+</ol>
+<h3 id="select-pool-epool"><a href="#select-pool-epool" class="headerlink" title="select/pool/epool"></a>select/pool/epool</h3><p>在Linux上进程/线程之间的切换依然还是很大一笔开销，这个时候我们可以考虑使用上面提到的多路IO复用，他的原理是：一个进程可以监视多个<code>文件描述符</code>,一旦某个文件描述符就绪（读/写就绪）,能够通知程序进行相应的读写操作。</p>
+<p>select<br><figure class="highlight c"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">select</span> <span class="params">(<span class="keyword">int</span> maxfdp1, fd_set *readset, fd_set *writeset, fd_set *exceptset,<span class="keyword">const</span> struct timeval *timeout)</span></span>;</div></pre></td></tr></table></figure></p>
+<p>对应上面的方法所示，select监听三类描述符:readset,writeset，exceptionset。我们变成的时候可以制定这三个参数监听对应的文件描述符。正如前面提到的，select调用后进程会堵塞，当select返回后，可以通过遍历fd_set来找到就绪的描述符。</p>
+<p>select的优点在于它的跨平台，但是显著缺点是单个线程可以监视的文件的描述符存在最大限制值，默认1024/2048. 虽然可以设置超过这个限制，但是效率会变差，而且select扫描的时候需要采用轮询，算法复杂度为O(n）。</p>
+<p>下面总结下select的三个缺点，之后我们看看epool是怎么解决这些缺点的：</p>
+<ol>
+<li>每次调用select，都需要将fd_set从用户态拷贝到内核态。</li>
+<li>每次调用select都要在内核遍历传递过来的所有fd_set看哪些状态已经准备就绪。</li>
+<li>有1024的容量限制。</li>
+</ol>
+<h4 id="pool"><a href="#pool" class="headerlink" title="pool"></a>pool</h4><figure class="highlight c"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll</span> <span class="params">(struct pollfd *fdarray, <span class="keyword">unsigned</span> <span class="keyword">long</span> nfds, <span class="keyword">int</span> timeout)</span></span>;</div></pre></td></tr></table></figure>
+<p>poll和select并没有太大的区别，但是它是基于链表实现的所以并没有最大数量限制，它将用户传入的数据拷贝到内核空间，然后查询每个fd对应的设备状态，如果设备就绪则在设备等待队列中加入一项并继续遍历，如果遍历完所有fd后没有发现就绪设备，则挂起当前进程，直到设备就绪或者主动超时，被唤醒后它又要再次遍历fd。这个过程经历了多次的遍历。算法复杂度也是O(n)。</p>
+<h4 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h4><figure class="highlight c"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_create</span><span class="params">(<span class="keyword">int</span> size)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_ctl</span><span class="params">(<span class="keyword">int</span> epfd, <span class="keyword">int</span> op, <span class="keyword">int</span> fd, struct epoll_event *event)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">epoll_wait</span><span class="params">(<span class="keyword">int</span> epfd, struct epoll_event * events, <span class="keyword">int</span> maxevents, <span class="keyword">int</span> timeout)</span></span>;</div></pre></td></tr></table></figure>
+<p>select和poll都只提供了一个函数，而epoll提供了三个：epoll_create是创建一个epoll句柄,epoll_ctl是是注册要监听的事件类型，epoll_wait则是等待时间的产生。 与select相比，epoll几乎没有描述符的限制大小(cat /proc/sys/fs/file-max可查看)。它采用一个文件描述符管理多个描述符，将用户的文件描述符事先存放到kernel的一个事件列表中。这样在程序空间和内核空间只需要做一次拷贝，他去掉了遍历文件符这一步骤，采用更加先进的回调机制，算法复杂度降低到了O(1).<br>ps:虽然表面看起来epoll非常好，但是对于少数连接而且十分活跃的情况下，select和poll的性能可能比epoll好，因为epoll是建立在大量的回调函数之上。</p>
+<p>总结一下epoll是如何解决select的三个缺点的：</p>
+<ol>
+<li>直接将文件符存储到内核里，只需要一次拷贝</li>
+<li>epoll_ctl为每个fd指定一个回调函数，当设备就绪就会调用这个回调函数，而这个回调函数会把准备就绪的fd加入一个就绪链表，而不用像select那样去重新遍历一次看有哪些准备就绪的文件描述符。</li>
+<li>无大小限制 (cat /proc/sys/fs/file-max)</li>
+</ol>
+<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><p><img src="http://ogeojkg3t.bkt.clouddn.com/JavaIO.png" alt="JavaIO概览"></p>
 <p>以上是一些处理IO的类，我们根据情况来选择不同的方式来处理问题。</p>
-<h2 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h2><h3 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h3><p>FileReader和FileInputStream</p>
+<h3 id="读文件"><a href="#读文件" class="headerlink" title="读文件"></a>读文件</h3><p>FileReader和FileInputStream</p>
 <h3 id="取文件"><a href="#取文件" class="headerlink" title="取文件"></a>取文件</h3><p>FileWriter和FileOutputStream</p>
 <h3 id="随机存取文件"><a href="#随机存取文件" class="headerlink" title="随机存取文件"></a>随机存取文件</h3><p>使用RandomAccessFile对文件进行存取，这个存取并不是‘随机’，而是可以让你跳过某些字符来进行读写。</p>
 <h3 id="文件和目录信息的获取"><a href="#文件和目录信息的获取" class="headerlink" title="文件和目录信息的获取"></a>文件和目录信息的获取</h3><p>通过File类来获取文件和目录的信息。</p>
 <h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><p>管道可以为JVM中两个线程进行通讯。管道是PipedInputStream和PipedOutputStream. 一个PIS流应该和一个POS流相关联。一个通过PIS流写入的数据可以被另一个和其相关联的POS流读取出来。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PipedStreamTest</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        PipedInputStream inputStream = <span class="keyword">new</span> PipedInputStream();</div><div class="line">        PipedOutputStream outputStream = <span class="keyword">new</span> PipedOutputStream();</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            inputStream.connect(outputStream);</div><div class="line">            Thread a = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        outputStream.write(<span class="string">"wub lad dup dup"</span>.getBytes());</div><div class="line">                        outputStream.close();</div><div class="line">                    &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                        e.printStackTrace();</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">            Thread b = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    <span class="keyword">try</span> &#123;</div><div class="line">                        <span class="keyword">int</span> data = inputStream.read();</div><div class="line">                        <span class="keyword">while</span> (data != -<span class="number">1</span>) &#123;</div><div class="line">                            System.out.print((<span class="keyword">char</span>) data);</div><div class="line">                            data = inputStream.read();</div><div class="line">                        &#125;</div><div class="line">                        inputStream.close();</div><div class="line">                    &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                        e.printStackTrace();</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">            a.start();</div><div class="line">            b.start();</div><div class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>尝试着用try-with-resource来关闭流，结果未遂。各种错误都有。上网搜索了一圈也未果。</p>
+<p>尝试着用try-with-resource来关闭流，结果未遂。各种错误都有。上网搜索了一圈也未果。<br>后来才知道try-catch-resouce必须要用基本的类..等会试下</p>
 <p>字节流一般用*Stream来命名，字符流一般用Reader/Writer来命名。</p>
 <h2 id="RandomAccessFile"><a href="#RandomAccessFile" class="headerlink" title="RandomAccessFile"></a>RandomAccessFile</h2><p>RAF允许你来回读写文件，也可以替换文件中的某些部分。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RandomAccessFileDemo</span> </span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        RandomAccessFile file = <span class="keyword">new</span> RandomAccessFile(<span class="string">"C:\\temp\\1.txt"</span>,<span class="string">"rw"</span>);</div><div class="line">        <span class="comment">//设置开始读取的指针</span></div><div class="line">        file.seek(<span class="number">20</span>);</div><div class="line">        <span class="comment">//获取指针</span></div><div class="line">        <span class="keyword">long</span> pointer = file.getFilePointer();</div><div class="line">        System.out.println(pointer);</div><div class="line">        <span class="comment">//读取内容</span></div><div class="line">        <span class="keyword">int</span> a = file.read();</div><div class="line">        <span class="keyword">while</span> (a!=-<span class="number">1</span>)&#123;</div><div class="line">            System.out.print((<span class="keyword">char</span>) a);</div><div class="line">            a = file.read();</div><div class="line">        &#125;</div><div class="line">        System.out.println(file.length());</div><div class="line">        <span class="comment">//指定位置写入</span></div><div class="line">        file.seek(<span class="number">66</span>);</div><div class="line">        file.write(<span class="string">"ssssssssssssssssssssssss"</span>.getBytes());</div><div class="line">        file.close();</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
