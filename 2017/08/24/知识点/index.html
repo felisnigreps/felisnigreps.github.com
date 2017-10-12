@@ -15,7 +15,7 @@
 <meta property="og:url" content="http://tiltcat.com/2017/08/24/知识点/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
 <meta property="og:description" content="面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
-<meta property="og:updated_time" content="2017-09-27T06:59:16.000Z">
+<meta property="og:updated_time" content="2017-10-12T06:02:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="知识点">
 <meta name="twitter:description" content="面试之前总会去复习一下知识点,有些小的知识点很零碎,每次查还不如在这记录一下,都很简单,只不过多熟悉下概念~">
@@ -253,6 +253,11 @@
 <p>As we know tomcat can load more than one webapp at once, and those webapps can work separate, and do not disturb each other, and they work in same JVM.</p>
 <p>这个问题就直接给了一个很明白的回答, 为什么tomcat要实现自己的classloader.我们可以自己尝试一下定一个java.lang.Object 会发现是无法被加载的,为什么呢? 因为JVM的双亲委托模型,classloader加载类都要往上层去找,找到了bootstrap,一看, 有Object,那就bootstrap来加载. 如果tomcat也按照这个逻辑来进行,那么就会出现不同web app之间的干扰了.</p>
 <p>Remember that a class in Java in identified by its full qulified name and class loader that load it. Tomcat use seprate classloadrs for each context(web application) that you deploy,thus keeping them seperate. In addition, the system classloader loads the tomcat sepcific libraries and JVM bootstrap loader load the Java Core libraries.</p>
+<h4 id="我们需要在for循环外定义变量么？"><a href="#我们需要在for循环外定义变量么？" class="headerlink" title="我们需要在for循环外定义变量么？"></a>我们需要在for循环外定义变量么？</h4><p>以前写代码觉得应该把变量定义在for循环外面，所以这样不会不停的生成对象，会节省栈空间，那么，究竟对不对呢？<br>先说答案，不对，需要把变量定义到循环中，为的是减小scope.<br>知识点来源stackOverFlow(真是强大，google一下比百度一百下都好用).</p>
+<p><a href="https://stackoverflow.com/questions/8803674/declaring-variables-inside-or-outside-of-a-loop" target="_blank" rel="external">https://stackoverflow.com/questions/8803674/declaring-variables-inside-or-outside-of-a-loop</a></p>
+<p>since str is not used outside the loop, the smallest possible scope for str is within the while loop.</p>
+<p>So, the answer is emphatically that str absolutely ought to be declared within the while loop. No ifs, no ands, no buts.</p>
+<p>两种方式写不同的例子， 然后javap -c XXX去看java编译器生成改的字节码，会发现两种方式生成的字节码没有区别</p>
 <h4 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h4>
       
     </div>
