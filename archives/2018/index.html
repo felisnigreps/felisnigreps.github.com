@@ -6,19 +6,14 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://tiltcat.com">
-  <title>Java中的锁 | Let&#39;s do this</title>
+  <title>Archives: 2018 | Let&#39;s do this</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="并发的文章中会有各种各样的锁，在这就通过功能，设计，特性等来对名词进行下解释。   公平锁 非公平锁 重入锁 独享锁 共享锁 乐观锁 悲观锁 分段锁 自旋锁">
-<meta name="keywords" content="Lock">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Java中的锁">
-<meta property="og:url" content="http://tiltcat.com/2017/08/22/锁/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Let&#39;s do this">
+<meta property="og:url" content="http://tiltcat.com/archives/2018/index.html">
 <meta property="og:site_name" content="Let&#39;s do this">
-<meta property="og:description" content="并发的文章中会有各种各样的锁，在这就通过功能，设计，特性等来对名词进行下解释。   公平锁 非公平锁 重入锁 独享锁 共享锁 乐观锁 悲观锁 分段锁 自旋锁">
-<meta property="og:updated_time" content="2017-09-13T05:43:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java中的锁">
-<meta name="twitter:description" content="并发的文章中会有各种各样的锁，在这就通过功能，设计，特性等来对名词进行下解释。   公平锁 非公平锁 重入锁 独享锁 共享锁 乐观锁 悲观锁 分段锁 自旋锁">
+<meta name="twitter:title" content="Let&#39;s do this">
   
   
     <link rel="icon" href="/images/favicon.jpg">
@@ -131,133 +126,54 @@
 </nav>
 
       <div class="body-wrap">
-        <article id="post-锁" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      Java中的锁
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2018" class="archive-year">2018</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2018/02/24/PMbook/" class="archive-article-date">
+  	<time datetime="2018-02-24T03:53:43.000Z" itemprop="datePublished"><i class="icon-clock"></i>2018-02-24</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2018/02/24/PMbook/">PMbook相关</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>并发的文章中会有各种各样的锁，在这就通过功能，设计，特性等来对名词进行下解释。</p>
-<blockquote>
-<ul>
-<li>公平锁 非公平锁</li>
-<li>重入锁</li>
-<li>独享锁 共享锁</li>
-<li>乐观锁 悲观锁</li>
-<li>分段锁</li>
-<li>自旋锁</li>
-</ul>
-</blockquote>
-<a id="more"></a>
-<h3 id="公平锁-非公平锁"><a href="#公平锁-非公平锁" class="headerlink" title="公平锁 非公平锁"></a>公平锁 非公平锁</h3><p>公平锁是指多个线程按照申请锁的顺序来获取锁，非公平锁则不保证优先级。<br>ReentrantLock而言，可以通过构造函数来制定是否为公平锁，非公平锁的优势在于吞吐量较大。<br>对于Synchronized而言，它是非公平锁，并不像AQS那样来实现进程调度，所有没有任何办法使其变成公平锁。</p>
-<h3 id="可重入锁"><a href="#可重入锁" class="headerlink" title="可重入锁"></a>可重入锁</h3><p>可重入锁又名递归锁，是指在同一个线程在外层方法获取锁的时候，在进入内层会继续获取锁。好处是可以避免死锁，ReentrantLock和Synchronized都是可重入锁。</p>
-<p>重入进一步提升了加锁行为的封装性，因而简化了面向对象并发代码的开发。在以下程序中，子类改写了父类的 synchronized 方法，然后调用父类中的方法，此时如果内置锁不是可重入的，那么这段代码将产生死锁。由于 Widget 和 LoggingWidget 中 doSomething 方法都是 synchronized 方法，因此每个每个 doSomething 方法在执行前都会获取 Widget 上的锁。然而如果内置锁不是可重入的，那么调用 super.doSomething( )时无法获得 Widget 上的锁，因为这个锁已经被持有，从而线程将永远停顿下去，等待一个永远也无法获得的锁。重入则避免了这种死锁情况的发生。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Widget</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</div><div class="line">        ........</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoggingWidget</span> <span class="keyword">extends</span> <span class="title">Widget</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">super</span>.doSomething();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="独享锁-共享锁"><a href="#独享锁-共享锁" class="headerlink" title="独享锁 共享锁"></a>独享锁 共享锁</h3><p>独享锁是指该锁一次只能被一个线程所持有。<br>共享锁是指该锁可被多个线程所持有。</p>
-<p>ReentrantLock就是独占锁，ReadWriteLock就是共享锁，读锁可以保证并发读是高效的，写写，写读，读写是互斥的。</p>
-<h3 id="乐观锁-悲观锁"><a href="#乐观锁-悲观锁" class="headerlink" title="乐观锁 悲观锁"></a>乐观锁 悲观锁</h3><p>悲观锁认为并发操作一定会发生更改，什么都加锁，乐观则相反。<br>悲观锁适合写多的情况，乐观锁适合读多的情况。乐观锁通常用版本号来实现，更新的时候对比版本号，如果一致就更新。CAS算法也是采用了乐观锁来实现的。</p>
-<h3 id="分段锁"><a href="#分段锁" class="headerlink" title="分段锁"></a>分段锁</h3><p>分段锁是一种锁的设计理念，比如曾经的ConcurrentHashMap,或者mysql中的next-key锁(参见DBMS的事务隔离级别)。应该比较熟悉了，不多说。</p>
-<h3 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h3><p>Java中的自旋锁是指尝试获取锁的线程不会立即阻塞而是采用循环的方式尝试获取锁，好处是减少上下文切换，坏处是消耗CPU.</p>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2017/08/22/锁/" class="archive-article-date">
-  	<time datetime="2017-08-22T05:50:13.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-08-22</time>
-</a>
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Lock/">Lock</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PMbook/">PMbook</a></li></ul>
 	</div>
 
-      
+          
 
-      <div class="clearfix"></div>
-    </div>
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2017/08/24/知识点/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          知识点
-        
-      </div>
-    </a>
   
   
-    <a href="/2017/08/14/线程基础/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">线程基础</div>
-      <i class="icon-circle-right"></i>
-    </a>
+    </div></section>
   
-</nav>
 
-
-
-
-<div class="share_jia">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-		<span class="jiathis_txt">Share to: &nbsp; </span>
-		<a class="jiathis_button_facebook"></a> 
-	    <a class="jiathis_button_twitter"></a>
-	    <a class="jiathis_button_plus"></a> 
-	    <a class="jiathis_button_tsina"></a>
-		<a class="jiathis_button_cqq"></a>
-		<a class="jiathis_button_douban"></a>
-		<a class="jiathis_button_weixin"></a>
-		<a class="jiathis_button_tumblr"></a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	</div>
-	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
-	<!-- JiaThis Button END -->
-</div>
-
-
-
-
-
-
-<div class="duoshuo">
-	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="锁" data-title="Java中的锁" data-url="http://tiltcat.com/2017/08/22/锁/"></div>
-	<!-- 多说评论框 end -->
-	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-	<script type="text/javascript">
-	var duoshuoQuery = {short_name:"true"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-	<!-- 多说公共JS代码 end -->
-</div>
-
-
-
+    
 
 
       </div>
@@ -280,8 +196,8 @@
 		mathjax: false,
 		animate: true,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
